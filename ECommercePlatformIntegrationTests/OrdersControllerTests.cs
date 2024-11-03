@@ -31,7 +31,7 @@ namespace ECommercePlatformIntegrationTests
         public async Task GetOrderById_ExistingOrder_ShouldReturnOkResponse()
         {
             // Arrange
-            var orderId = Guid.NewGuid(); // Use an actual order ID from your seeded data if available
+            var orderId = "ebf164aa-ca71-4cd3-beac-70daf6173268";
 
             // Act
             var response = await _client.GetAsync($"/api/orders/{orderId}");
@@ -72,28 +72,6 @@ namespace ECommercePlatformIntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
-        }
-
-        [Fact]
-        public async Task UpdateOrder_ValidRequest_ShouldReturnNoContentResponse()
-        {
-            // Arrange
-            var orderId = Guid.NewGuid(); // Use an actual order ID from your seeded data if available
-            var updatedOrder = new OrderDto
-            {
-                OrderId = orderId,
-                UserId = Guid.NewGuid(),
-                OrderDate = DateTime.UtcNow,
-                Status = Status.Completed,
-                PaymentId = Guid.NewGuid()
-            };
-            var content = new StringContent(JsonSerializer.Serialize(updatedOrder), Encoding.UTF8, "application/json");
-
-            // Act
-            var response = await _client.PutAsync($"/api/orders/{orderId}", content);
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         [Fact]

@@ -20,6 +20,10 @@ namespace Application.UseCases.QueryHandlers.Order
         public async Task<Result<IEnumerable<OrderDto>>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
             var orders = await repository.GetAllOrdersAsync();
+            if(orders == null)
+            {
+                return Result<IEnumerable<OrderDto>>.Failure("Failure");
+            }
             return mapper.Map<Result<IEnumerable<OrderDto>>>(orders);
         }
     }

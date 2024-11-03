@@ -4,6 +4,7 @@ using Application.UseCases.Queries.PaymentQueries;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ECommercePlatform.Controllers
 {
@@ -20,7 +21,12 @@ namespace ECommercePlatform.Controllers
         [ActionName(nameof(GetPaymentById))]
         public async Task<ActionResult<Result<PaymentDto>>> GetPaymentById(Guid id)
         {
-            return await mediator.Send(new GetPaymentByIdQuery { Id = id });
+            var response = await mediator.Send(new GetPaymentByIdQuery { Id = id });
+            if(response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet("User/{id:guid}")]
         [ActionName(nameof(GetPaymentByUserId))]
