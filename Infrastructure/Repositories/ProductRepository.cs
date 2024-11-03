@@ -1,34 +1,52 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        public Task<Result<Guid>> AddProductAsync(Product product)
+        private readonly ApplicationDbContext context;
+        public ProductRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
         }
 
-        public Task DeleteProductAsync(Guid productId)
+        public async Task<Result<Guid>> AddProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            await context.Products.AddAsync(product);
+            await context.SaveChangesAsync();
+            return Result<Guid>.Success(product.ProductId);
         }
 
-        public Task<Result<IEnumerable<Product>>> GetAllProductsAsync()
+        public async Task DeleteProductAsync(Guid productId)
         {
-            throw new NotImplementedException();
+            var toRemove = context.Products.FirstOrDefault(x => x.ProductId == productId);
+            if (toRemove != null)
+            {
+                context.Products.Remove(toRemove);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public Task<Result<Product>> GetProductByIdAsync(Guid productId)
+        public async Task<Result<IEnumerable<Product>>> GetAllProductsAsync()
         {
-            throw new NotImplementedException();
+            var products = await context.Products.ToListAsync();
+            return Result<IEnumerable<Product>>.Success(products);
         }
 
-        public Task UpdateProductAsync(Product product)
+        public async Task<Result<Product>> GetProductByIdAsync(Guid productId)
         {
-            throw new NotImplementedException();
+            var product = await context.Products.FindAsync(productId);
+            return Result<Product>.Success(product);
+        }
+
+        public async Task UpdateProductAsync(Product product)
+        {
+            context.Entry(product).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }
