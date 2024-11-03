@@ -2,6 +2,7 @@
 using Application.UseCases.Queries.OrderQueries;
 using AutoMapper;
 using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
@@ -18,8 +19,12 @@ namespace Application.UseCases.QueryHandlers.OrderQueryHandlers
         }
         public async Task<Result<IEnumerable<OrderDto>>> Handle(GetOrderByUserIdQuery request, CancellationToken cancellationToken)
         {
-            var payments = await repository.GetOrdersByUserIdAsync(request.Id);
-            return mapper.Map<Result<IEnumerable<OrderDto>>>(payments);
+            var orders = await repository.GetOrdersByUserIdAsync(request.Id);
+            if (orders == null)
+            {
+                return Result<IEnumerable<OrderDto>>.Failure("Failure");
+            }
+            return mapper.Map<Result<IEnumerable<OrderDto>>>(orders);
         }
     }
 }

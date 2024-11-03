@@ -51,6 +51,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var products = await context.Products.ToListAsync();
+                if (products == null)
+                {
+                    throw new Exception();
+                }
                 return Result<IEnumerable<Product>>.Success(products);
             }
             catch (Exception ex)
@@ -64,6 +68,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var product = await context.Products.FindAsync(productId);
+                if (product == null)
+                {
+                    throw new Exception();
+                }
                 return Result<Product>.Success(product);
             }
             catch (Exception ex)
