@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Infrastructure.Repositories
 {
@@ -13,45 +14,90 @@ namespace Infrastructure.Repositories
         {
             this.context = context;
         }
+
         public async Task<Result<Guid>> AddPaymentAsync(Payment payment)
         {
-            await context.Payments.AddAsync(payment);
-            await context.SaveChangesAsync();
-            return Result<Guid>.Success(payment.PaymentId);
+            try
+            {
+                await context.Payments.AddAsync(payment);
+                await context.SaveChangesAsync();
+                return Result<Guid>.Success(payment.PaymentId);
+            }
+            catch (Exception ex)
+            {
+                return Result<Guid>.Failure($"Error adding payment: {ex.Message}");
+            }
         }
 
         public async Task DeletePaymentAsync(Guid paymentId)
         {
-            var toRemove = context.Payments.FirstOrDefault(x => x.PaymentId == paymentId);
-            if (toRemove != null)
+            try
             {
-                context.Payments.Remove(toRemove);
-                await context.SaveChangesAsync();
+                var toRemove = await context.Payments.FirstOrDefaultAsync(x => x.PaymentId == paymentId);
+                if (toRemove != null)
+                {
+                    context.Payments.Remove(toRemove);
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                throw new Exception($"Error deleting payment: {ex.Message}");
             }
         }
 
         public async Task<Result<IEnumerable<Payment>>> GetAllPaymentsAsync()
         {
-            var payments = await context.Payments.ToListAsync();
-            return Result<IEnumerable<Payment>>.Success(payments);
+            try
+            {
+                var payments = await context.Payments.ToListAsync();
+                return Result<IEnumerable<Payment>>.Success(payments);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Payment>>.Failure($"Error retrieving all payments: {ex.Message}");
+            }
         }
 
         public async Task<Result<Payment>> GetPaymentByIdAsync(Guid paymentId)
         {
-            var payments = await context.Payments.FindAsync(paymentId);
-            return Result<Payment>.Success(payments);
+            try
+            {
+                var payment = await context.Payments.FindAsync(paymentId);
+                return Result<Payment>.Success(payment);
+            }
+            catch (Exception ex)
+            {
+                return Result<Payment>.Failure($"Error retrieving payment by ID: {ex.Message}");
+            }
         }
 
         public async Task<Result<IEnumerable<Payment>>> GetPaymentsByUserIdAsync(Guid userId)
         {
-            var payments = await context.Payments.Where(o => o.UserId == userId).ToListAsync();
-            return Result<IEnumerable<Payment>>.Success(payments);
+            try
+            {
+                var payments = await context.Payments.Where(o => o.UserId == userId).ToListAsync();
+                return Result<IEnumerable<Payment>>.Success(payments);
+            }
+            catch (Exception ex)
+            {
+                return Result<IEnumerable<Payment>>.Failure($"Error retrieving payments by user ID: {ex.Message}");
+            }
         }
 
         public async Task UpdatePaymentAsync(Payment payment)
         {
-            context.Entry(payment).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            try
+            {
+                context.Entry(payment).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                throw new Exception($"Error updating payment: {ex.Message}");
+            }
         }
     }
 }
