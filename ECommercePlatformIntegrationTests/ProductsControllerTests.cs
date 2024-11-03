@@ -18,21 +18,21 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetAllProducts_ShouldReturnOkResponse()
+        public async Task GivenProductsExist_WhenGettingAllProducts_ThenShouldReturnOkResponse()
         {
             var response = await _client.GetAsync("/api/products");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
-        public async Task GetProductById_NonExistingProduct_ShouldReturnNotFound()
+        public async Task GivenNonExistingProduct_WhenGettingProductById_ThenShouldReturnNotFound()
         {
             var response = await _client.GetAsync($"/api/products/{Guid.NewGuid()}");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task CreateProduct_ValidRequest_ShouldReturnCreated()
+        public async Task GivenValidProductRequest_WhenCreatingProduct_ThenShouldReturnCreated()
         {
             var product = new ProductDto
             {
@@ -41,7 +41,7 @@ namespace ECommercePlatformIntegrationTests
                 Description = "A sample product description",
                 Price = 99.99M,
                 Stock = 50,
-                Category = Category.Electronics // Use the Category enum value
+                Category = Category.Electronics
             };
             var content = new StringContent(JsonSerializer.Serialize(product), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("/api/products", content);

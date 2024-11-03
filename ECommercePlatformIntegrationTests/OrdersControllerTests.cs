@@ -18,7 +18,7 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetAllOrders_ShouldReturnOkResponse()
+        public async Task GivenOrdersExist_WhenGettingAllOrders_ThenShouldReturnOkResponse()
         {
             // Act
             var response = await _client.GetAsync("/api/orders");
@@ -28,7 +28,7 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetOrderById_ExistingOrder_ShouldReturnOkResponse()
+        public async Task GivenExistingOrder_WhenGettingOrderById_ThenShouldReturnOkResponse()
         {
             // Arrange
             var orderId = "ebf164aa-ca71-4cd3-beac-70daf6173268";
@@ -41,7 +41,7 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetOrderById_NonExistingOrder_ShouldReturnNotFoundResponse()
+        public async Task GivenNonExistingOrder_WhenGettingOrderById_ThenShouldReturnNotFoundResponse()
         {
             // Arrange
             var orderId = Guid.NewGuid();
@@ -54,7 +54,7 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task CreateOrder_ValidRequest_ShouldReturnCreatedResponse()
+        public async Task GivenValidOrderRequest_WhenCreatingOrder_ThenShouldReturnCreatedResponse()
         {
             // Arrange
             var newOrder = new OrderDto
@@ -75,10 +75,10 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task DeleteOrder_ExistingOrder_ShouldReturnNoContentResponse()
+        public async Task GivenExistingOrder_WhenDeletingOrder_ThenShouldReturnNoContentResponse()
         {
             // Arrange
-            var orderId = Guid.NewGuid(); // Use an actual order ID from your seeded data if available
+            var orderId = Guid.NewGuid();
 
             // Act
             var response = await _client.DeleteAsync($"/api/orders/{orderId}");
