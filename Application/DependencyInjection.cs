@@ -1,4 +1,9 @@
-﻿using Application.Utils;
+﻿using Application.UseCases.Commands.OrderCommands;
+using Application.UseCases.Commands.PaymentCommands;
+using Application.UseCases.Commands.ProductCommands;
+using Application.UseCases.Commands.UserCommands;
+using Application.Utils;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -12,9 +17,21 @@ namespace Application
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
-            //add validators here
-            //example :
-            //services.AddValidatorsFromAssemblyContaining<CreateBookCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdateOrderCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeleteOrderCommandValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<CreatePaymentCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdatePaymentCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeletePaymentCommandValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<CreateProductCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdateProductCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeleteProductCommandValidator>();
+
+            services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<UpdateUserCommandValidator>();
+            services.AddValidatorsFromAssemblyContaining<DeleteUserCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             return services;
