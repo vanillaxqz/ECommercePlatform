@@ -19,6 +19,10 @@ namespace Application.UseCases.CommandHandlers.ProductCommandHandlers
         public async Task<Result<Guid>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var product = mapper.Map<Product>(request);
+            if (product == null)
+            {
+                return Result<Guid>.Failure("Failure");
+            }
             return await repository.AddProductAsync(product);
         }
     }

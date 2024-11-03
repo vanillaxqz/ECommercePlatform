@@ -52,6 +52,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var payments = await context.Payments.ToListAsync();
+                if (payments == null)
+                {
+                    throw new Exception();
+                }
                 return Result<IEnumerable<Payment>>.Success(payments);
             }
             catch (Exception ex)
@@ -82,6 +86,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var payments = await context.Payments.Where(o => o.UserId == userId).ToListAsync();
+                if (payments == null)
+                {
+                    throw new Exception();
+                }
                 return Result<IEnumerable<Payment>>.Success(payments);
             }
             catch (Exception ex)

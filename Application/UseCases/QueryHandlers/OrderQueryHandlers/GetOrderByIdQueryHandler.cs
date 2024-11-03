@@ -2,6 +2,7 @@
 using Application.UseCases.Queries;
 using AutoMapper;
 using Domain.Common;
+using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 
@@ -20,6 +21,10 @@ namespace Application.UseCases.QueryHandlers.Order
         public async Task<Result<OrderDto>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
             var order = await repository.GetOrderByIdAsync(request.Id);
+            if(order == null)
+            {
+                return Result<OrderDto>.Failure("Failure");
+            }
             return mapper.Map<Result<OrderDto>>(order);
         }
     }
