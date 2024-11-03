@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands.UserCommands;
-using Application.UseCases.Queries.UserQueries;
+using Application.UseCases.Commands.ProductCommands;
+using Application.UseCases.Queries.ProductQueries;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -9,43 +9,43 @@ namespace ECommercePlatform.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly IMediator mediator;
-        public UsersController(IMediator mediator)
+        public ProductsController(IMediator mediator)
         {
             this.mediator = mediator;
         }
         [HttpGet("{id:guid}")]
-        [ActionName(nameof(GetUserById))]
-        public async Task<ActionResult<Result<UserDto>>> GetUserById(Guid id)
+        [ActionName(nameof(GetProductById))]
+        public async Task<ActionResult<Result<ProductDto>>> GetProductById(Guid id)
         {
-            return await mediator.Send(new GetUserByIdQuery { Id = id });
+            return await mediator.Send(new GetProductByIdQuery { Id = id });
         }
         [HttpGet]
-        public async Task<Result<IEnumerable<UserDto>>> GetAllUsers()
+        public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts()
         {
-            var query = new GetAllUsersQuery();
+            var query = new GetAllProductsQuery();
             return await mediator.Send(query);
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<Result<Guid>>> CreateUser(CreateUserCommand command)
+        public async Task<ActionResult<Result<Guid>>> CreateProduct(CreateProductCommand command)
         {
             var id = await mediator.Send(command);
-            return CreatedAtAction("GetUserById", new { Id = id.Data }, id.Data);
+            return CreatedAtAction("GetProductById", new { Id = id.Data }, id.Data);
         }
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeleteById(Guid id)
+        public async Task<ActionResult> DeleteProductById(Guid id)
         {
-            var query = new DeleteUserCommand { Id = id };
+            var query = new DeleteProductCommand { Id = id };
             await mediator.Send(query);
             return NoContent();
         }
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Update(UpdateUserCommand update)
+        public async Task<ActionResult> Update(UpdateProductCommand update)
         {
             await mediator.Send(update);
             return NoContent();
