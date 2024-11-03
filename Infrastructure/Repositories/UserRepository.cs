@@ -1,34 +1,51 @@
 ﻿using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     internal class UserRepository : IUserRepository
     {
-        public Task<Result<Guid>> AddUserAsync(User user)
+        private readonly ApplicationDbContext context;
+        public UserRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            this.context = context;
+        }
+        public async Task<Result<Guid>> AddUserAsync(User user)
+        {
+            await context.Users.AddAsync(user);
+            await context.SaveChangesAsync();
+            return Result<Guid>.Success(user.UserId);
         }
 
-        public Task DeleteUserAsync(Guid userId)
+        public async Task DeleteUserAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var toRemove = context.Users.FirstOrDefault(x => x.UserId == userId);
+            if (toRemove != null)
+            {
+                context.Users.Remove(toRemove);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public Task<Result<IEnumerable<User>>> GetAllUsersAsync()
+        public async Task<Result<IEnumerable<User>>> GetAllUsersAsync()
         {
-            throw new NotImplementedException();
+            var users = await context.Users.ToListAsync();
+            return Result<IEnumerable<User>>.Success(users);
         }
 
-        public Task<Result<User>> GetUserByIdAsync(Guid userId)
+        public async Task<Result<User>> GetUserByIdAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            var user = await context.Users.FindAsync(userId);
+            return Result<User>.Success(user);
         }
 
-        public Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            context.Entry(user).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }
