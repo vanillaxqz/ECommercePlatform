@@ -32,7 +32,12 @@ namespace ECommercePlatform.Controllers
         [ActionName(nameof(GetPaymentByUserId))]
         public async Task<ActionResult<Result<IEnumerable<PaymentDto>>>> GetPaymentByUserId(Guid id)
         {
-            return await mediator.Send(new GetPaymentByUserIdQuery { Id = id });
+            var response = await mediator.Send(new GetPaymentByUserIdQuery { Id = id });
+            if (response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet]
         public async Task<Result<IEnumerable<PaymentDto>>> GetAllUsers()
