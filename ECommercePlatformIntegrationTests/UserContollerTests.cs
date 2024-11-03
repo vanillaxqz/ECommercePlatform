@@ -17,21 +17,21 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetAllUsers_ShouldReturnOkResponse()
+        public async Task GivenUsersExist_WhenGettingAllUsers_ThenShouldReturnOkResponse()
         {
             var response = await _client.GetAsync("/api/users");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
-        public async Task GetUserById_NonExistingUser_ShouldReturnNotFound()
+        public async Task GivenNonExistingUser_WhenGettingUserById_ThenShouldReturnNotFound()
         {
             var response = await _client.GetAsync($"/api/users/{Guid.NewGuid()}");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task CreateUser_ValidRequest_ShouldReturnCreated()
+        public async Task GivenValidUserRequest_WhenCreatingUser_ThenShouldReturnCreated()
         {
             var user = new UserDto
             {

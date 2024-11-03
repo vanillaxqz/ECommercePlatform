@@ -17,21 +17,21 @@ namespace ECommercePlatformIntegrationTests
         }
 
         [Fact]
-        public async Task GetAllPayments_ShouldReturnOkResponse()
+        public async Task GivenPaymentsExist_WhenGettingAllPayments_ThenShouldReturnOkResponse()
         {
             var response = await _client.GetAsync("/api/payments");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
-        public async Task GetPaymentById_NonExistingPayment_ShouldReturnNotFound()
+        public async Task GivenNonExistingPayment_WhenGettingPaymentById_ThenShouldReturnNotFound()
         {
             var response = await _client.GetAsync($"/api/payments/{Guid.NewGuid()}");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
-        public async Task CreatePayment_ValidRequest_ShouldReturnCreated()
+        public async Task GivenValidPaymentRequest_WhenCreatingPayment_ThenShouldReturnCreated()
         {
             var payment = new PaymentDto
             {
