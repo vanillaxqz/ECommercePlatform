@@ -40,7 +40,7 @@ namespace ECommercePlatformIntegrationTests
                 Email = "john.doe@example.com",
                 Password = "SecurePassword123",
                 Address = "123 Main Street",
-                PhoneNumber = "123-456-7890"
+                PhoneNumber = "123456789"
             };
             var content = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync("/api/users", content);

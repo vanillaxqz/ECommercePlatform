@@ -3,10 +3,14 @@ using NSubstitute;
 using Application.UseCases.QueryHandlers.Order;
 using Application.UseCases.Queries;
 using Domain.Repositories;
-using Domain.Common;
 using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
+using Xunit;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Domain.Common;
+using Application.Utils;
 
 namespace ECommercePlatformUnitTests
 {
@@ -19,7 +23,8 @@ namespace ECommercePlatformUnitTests
         public GetAllOrdersQueryHandlerTests()
         {
             _orderRepository = Substitute.For<IOrderRepository>();
-            _mapper = Substitute.For<IMapper>();
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
+            _mapper = config.CreateMapper();
             _handler = new GetAllOrdersQueryHandler(_orderRepository, _mapper);
         }
 
@@ -29,25 +34,21 @@ namespace ECommercePlatformUnitTests
             // Arrange
             var orders = new List<Order>
             {
-                new Order { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid() },
-                new Order { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid() }
+                new Order { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow, Status = Status.Pending, PaymentId = Guid.NewGuid() },
+                new Order { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow, Status = Status.Completed, PaymentId = Guid.NewGuid() }
             };
-
-            var orderDtos = new List<OrderDto>
-            {
-                new OrderDto { OrderId = orders[0].OrderId, UserId = orders[0].UserId, OrderDate = DateTime.UtcNow, Status = Status.Completed, PaymentId = Guid.NewGuid() },
-                new OrderDto { OrderId = orders[1].OrderId, UserId = orders[1].UserId, OrderDate = DateTime.UtcNow, Status = Status.Pending, PaymentId = Guid.NewGuid() }
-            };
-
             _orderRepository.GetAllOrdersAsync().Returns(Result<IEnumerable<Order>>.Success(orders));
-            _mapper.Map<IEnumerable<OrderDto>>(orders).Returns(orderDtos);
+
+            var query = new GetAllOrdersQuery();
 
             // Act
-            var result = await _handler.Handle(new GetAllOrdersQuery(), CancellationToken.None);
+            var result = await _handler.Handle(query, default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.Data.Should().BeEquivalentTo(orderDtos);
+            result.Data.Should().HaveCount(2);
+            result.Data.Should().ContainSingle(o => o.Status == Status.Pending);
+            result.Data.Should().ContainSingle(o => o.Status == Status.Completed);
         }
     }
 }

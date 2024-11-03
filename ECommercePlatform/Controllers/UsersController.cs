@@ -20,7 +20,12 @@ namespace ECommercePlatform.Controllers
         [ActionName(nameof(GetUserById))]
         public async Task<ActionResult<Result<UserDto>>> GetUserById(Guid id)
         {
-            return await mediator.Send(new GetUserByIdQuery { Id = id });
+            var response = await mediator.Send(new GetUserByIdQuery { Id = id });
+            if(response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet]
         public async Task<Result<IEnumerable<UserDto>>> GetAllUsers()

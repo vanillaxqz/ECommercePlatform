@@ -20,6 +20,10 @@ namespace Application.UseCases.CommandHandlers.OrderCommandHandlers
         public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var order = mapper.Map<Order>(request);
+            if (order == null)
+            {
+                return Result<Guid>.Failure("Failure");
+            }
             return await repository.AddOrderAsync(order);
         }
     }

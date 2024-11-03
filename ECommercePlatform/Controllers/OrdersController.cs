@@ -21,19 +21,30 @@ namespace ECommercePlatform.Controllers
         [ActionName(nameof(GetOrderById))]
         public async Task<ActionResult<Result<OrderDto>>> GetOrderById(Guid id)
         {
-            return await mediator.Send(new GetOrderByIdQuery { Id = id });
+            var response = await mediator.Send(new GetOrderByIdQuery { Id = id });
+            if (response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet("User/{id:guid}")]
         [ActionName(nameof(GetOrderByUserId))]
         public async Task<ActionResult<Result<IEnumerable<OrderDto>>>> GetOrderByUserId(Guid id)
         {
-            return await mediator.Send(new GetOrderByUserIdQuery { Id = id });
+            var response = await mediator.Send(new GetOrderByUserIdQuery { Id = id });
+            if (response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet]
-        public async Task<Result<IEnumerable<OrderDto>>> GetAllUsers()
+        public async Task<Result<IEnumerable<OrderDto>>> GetAllOrders()
         {
             var query = new GetAllOrdersQuery();
-            return await mediator.Send(query);
+            var response = await mediator.Send(query);
+            return response;
         }
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
