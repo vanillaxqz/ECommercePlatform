@@ -51,6 +51,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var orders = await context.Orders.ToListAsync();
+                if(orders == null)
+                {
+                    throw new Exception();
+                }
                 return Result<IEnumerable<Order>>.Success(orders);
             }
             catch (Exception ex)
@@ -64,6 +68,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var order = await context.Orders.FindAsync(orderId);
+                if (order == null)
+                {
+                    throw new Exception();
+                }
                 return Result<Order>.Success(order);
             }
             catch (Exception ex)

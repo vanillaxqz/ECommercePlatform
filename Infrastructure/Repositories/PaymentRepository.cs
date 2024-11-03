@@ -65,6 +65,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var payment = await context.Payments.FindAsync(paymentId);
+                if(payment == null)
+                {
+                    throw new Exception();
+                }
                 return Result<Payment>.Success(payment);
             }
             catch (Exception ex)

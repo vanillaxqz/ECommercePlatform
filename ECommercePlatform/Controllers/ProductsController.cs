@@ -20,7 +20,12 @@ namespace ECommercePlatform.Controllers
         [ActionName(nameof(GetProductById))]
         public async Task<ActionResult<Result<ProductDto>>> GetProductById(Guid id)
         {
-            return await mediator.Send(new GetProductByIdQuery { Id = id });
+            var response = await mediator.Send(new GetProductByIdQuery { Id = id });
+            if(response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
         }
         [HttpGet]
         public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts()
