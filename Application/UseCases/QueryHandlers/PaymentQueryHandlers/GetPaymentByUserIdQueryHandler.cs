@@ -19,6 +19,10 @@ namespace Application.UseCases.QueryHandlers.PaymentQueryHandlers
         public async Task<Result<IEnumerable<PaymentDto>>> Handle(GetPaymentByUserIdQuery request, CancellationToken cancellationToken)
         {
             var payments = await repository.GetPaymentsByUserIdAsync(request.Id);
+            if (payments == null)
+            {
+                return Result<IEnumerable<PaymentDto>>.Failure("Failure");
+            }
             return mapper.Map<Result<IEnumerable<PaymentDto>>>(payments);
         }
     }

@@ -19,6 +19,10 @@ namespace Application.UseCases.CommandHandlers.PaymentCommandHandlers
         public async Task<Result<Guid>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var payment = mapper.Map<Payment>(request);
+            if (payment == null)
+            {
+                return Result<Guid>.Failure("Failure");
+            }
             return await repository.AddPaymentAsync(payment);
         }
     }

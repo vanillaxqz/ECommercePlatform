@@ -19,6 +19,10 @@ namespace Application.UseCases.QueryHandlers.UserQueryHandlers
         public async Task<Result<IEnumerable<UserDto>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await repository.GetAllUsersAsync();
+            if (users == null)
+            {
+                return Result<IEnumerable<UserDto>>.Failure("Failure");
+            }
             return mapper.Map<Result<IEnumerable<UserDto>>>(users);
         }
     }

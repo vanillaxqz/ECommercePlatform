@@ -19,6 +19,10 @@ namespace Application.UseCases.CommandHandlers.UserCommandHandlers
         public async Task<Result<Guid>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             var user = mapper.Map<User>(request);
+            if (user == null)
+            {
+                return Result<Guid>.Failure("Failure");
+            }
             return await repository.AddUserAsync(user);
         }
     }

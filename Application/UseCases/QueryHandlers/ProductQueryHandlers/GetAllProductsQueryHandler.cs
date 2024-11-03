@@ -19,6 +19,10 @@ namespace Application.UseCases.QueryHandlers.ProductQueryHandlers
         public async Task<Result<IEnumerable<ProductDto>>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await repository.GetAllProductsAsync();
+            if (products == null)
+            {
+                return Result<IEnumerable<ProductDto>>.Failure("Failure");
+            }
             return mapper.Map<Result<IEnumerable<ProductDto>>>(products);
         }
     }

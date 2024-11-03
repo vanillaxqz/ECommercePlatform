@@ -52,6 +52,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var users = await context.Users.ToListAsync();
+                if (users == null)
+                {
+                    throw new Exception();
+                }
                 return Result<IEnumerable<User>>.Success(users);
             }
             catch (Exception ex)
@@ -65,6 +69,10 @@ namespace Infrastructure.Repositories
             try
             {
                 var user = await context.Users.FindAsync(userId);
+                if (user == null)
+                {
+                    throw new Exception();
+                }
                 return Result<User>.Success(user);
             }
             catch (Exception ex)
