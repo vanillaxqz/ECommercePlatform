@@ -1,5 +1,5 @@
 team members:
-Iulian Roman
-Mihai Manolache
-Mihnea Zara
-Tudor Roman
+- Iulian Roman
+- Mihai Manolache
+- Mihnea Zara
+- Tudor Roman
