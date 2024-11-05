@@ -16,30 +16,47 @@ namespace ECommercePlatform.Controllers
         {
             this.mediator = mediator;
         }
+
         [HttpGet("{id:guid}")]
         [ActionName(nameof(GetProductById))]
         public async Task<ActionResult<Result<ProductDto>>> GetProductById(Guid id)
         {
             var response = await mediator.Send(new GetProductByIdQuery { Id = id });
-            if(response.Data == null)
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            if (response.Data == null)
             {
                 return NotFound();
             }
             return response;
         }
+
         [HttpGet]
-        public async Task<Result<IEnumerable<ProductDto>>> GetAllProducts()
+        public async Task<ActionResult<Result<IEnumerable<ProductDto>>>> GetAllProducts()
         {
             var query = new GetAllProductsQuery();
-            return await mediator.Send(query);
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return response;
         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<Result<Guid>>> CreateProduct(CreateProductCommand command)
         {
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetProductById", new { Id = id.Data }, id.Data);
+            var response = await mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return CreatedAtAction("GetProductById", new { Id = response.Data }, response.Data);
         }
+
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeleteProductById(Guid id)
@@ -48,6 +65,7 @@ namespace ECommercePlatform.Controllers
             await mediator.Send(query);
             return NoContent();
         }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Update(UpdateProductCommand update)

@@ -16,30 +16,47 @@ namespace ECommercePlatform.Controllers
         {
             this.mediator = mediator;
         }
+
         [HttpGet("{id:guid}")]
         [ActionName(nameof(GetUserById))]
         public async Task<ActionResult<Result<UserDto>>> GetUserById(Guid id)
         {
             var response = await mediator.Send(new GetUserByIdQuery { Id = id });
-            if(response.Data == null)
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            if (response.Data == null)
             {
                 return NotFound();
             }
             return response;
         }
+
         [HttpGet]
-        public async Task<Result<IEnumerable<UserDto>>> GetAllUsers()
+        public async Task<ActionResult<Result<IEnumerable<UserDto>>>> GetAllUsers()
         {
             var query = new GetAllUsersQuery();
-            return await mediator.Send(query);
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return response;
         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<Result<Guid>>> CreateUser(CreateUserCommand command)
         {
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetUserById", new { Id = id.Data }, id.Data);
+            var response = await mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return CreatedAtAction("GetUserById", new { Id = response.Data }, response.Data);
         }
+
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeleteById(Guid id)
@@ -48,6 +65,7 @@ namespace ECommercePlatform.Controllers
             await mediator.Send(query);
             return NoContent();
         }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Update(UpdateUserCommand update)
