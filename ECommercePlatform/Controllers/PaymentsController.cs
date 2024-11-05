@@ -4,7 +4,6 @@ using Application.UseCases.Queries.PaymentQueries;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 
 namespace ECommercePlatform.Controllers
 {
@@ -17,41 +16,63 @@ namespace ECommercePlatform.Controllers
         {
             this.mediator = mediator;
         }
+
         [HttpGet("{id:guid}")]
         [ActionName(nameof(GetPaymentById))]
         public async Task<ActionResult<Result<PaymentDto>>> GetPaymentById(Guid id)
         {
             var response = await mediator.Send(new GetPaymentByIdQuery { Id = id });
-            if(response.Data == null)
+            if (!response.IsSuccess)
             {
-                return NotFound();
+                return BadRequest(response.ErrorMessage);
             }
-            return response;
-        }
-        [HttpGet("User/{id:guid}")]
-        [ActionName(nameof(GetPaymentByUserId))]
-        public async Task<ActionResult<Result<IEnumerable<PaymentDto>>>> GetPaymentByUserId(Guid id)
-        {
-            var response = await mediator.Send(new GetPaymentByUserIdQuery { Id = id });
             if (response.Data == null)
             {
                 return NotFound();
             }
             return response;
         }
+
+        [HttpGet("User/{id:guid}")]
+        [ActionName(nameof(GetPaymentByUserId))]
+        public async Task<ActionResult<Result<IEnumerable<PaymentDto>>>> GetPaymentByUserId(Guid id)
+        {
+            var response = await mediator.Send(new GetPaymentByUserIdQuery { Id = id });
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            if (response.Data == null)
+            {
+                return NotFound();
+            }
+            return response;
+        }
+
         [HttpGet]
-        public async Task<Result<IEnumerable<PaymentDto>>> GetAllUsers()
+        public async Task<ActionResult<Result<IEnumerable<PaymentDto>>>> GetAllUsers()
         {
             var query = new GetAllPaymentsQuery();
-            return await mediator.Send(query);
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return response;
         }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<Result<Guid>>> CreatePayment(CreatePaymentCommand command)
         {
-            var id = await mediator.Send(command);
-            return CreatedAtAction("GetPaymentById", new { Id = id.Data }, id.Data);
+            var response = await mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return CreatedAtAction("GetPaymentById", new { Id = response.Data }, response.Data);
         }
+
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeletePaymentById(Guid id)
@@ -60,6 +81,7 @@ namespace ECommercePlatform.Controllers
             await mediator.Send(query);
             return NoContent();
         }
+
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> Update(UpdatePaymentCommand update)
