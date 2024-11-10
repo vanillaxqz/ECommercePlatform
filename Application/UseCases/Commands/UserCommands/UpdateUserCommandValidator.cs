@@ -13,7 +13,7 @@ namespace Application.UseCases.Commands.UserCommands
             RuleFor(x => x.PhoneNumber).NotEmpty().MaximumLength(10);
             RuleFor(x => x.UserId).NotEmpty().Must(BeAValidGuid).WithMessage("Must be a valid guid");
         }
-        private bool BeAValidGuid(Guid guid)
+        private static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }

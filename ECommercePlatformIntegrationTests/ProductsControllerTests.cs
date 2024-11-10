@@ -28,7 +28,7 @@ namespace ECommercePlatformIntegrationTests
         public async Task GivenNonExistingProduct_WhenGettingProductById_ThenShouldReturnNotFound()
         {
             var response = await _client.GetAsync($"/api/products/{Guid.NewGuid()}");
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]

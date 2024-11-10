@@ -12,7 +12,7 @@ namespace Application.UseCases.Commands.OrderCommands
             RuleFor(x => x.PaymentId).NotEmpty().Must(BeAValidGuid).WithMessage("Must be a valid payment guid");
             RuleFor(x => x.OrderId).NotEmpty().Must(BeAValidGuid).WithMessage("Must be a valid order guid");
         }
-        private bool BeAValidGuid(Guid guid)
+        private static bool BeAValidGuid(Guid guid)
         {
             return Guid.TryParse(guid.ToString(), out _);
         }

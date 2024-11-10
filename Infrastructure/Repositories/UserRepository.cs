@@ -31,68 +31,38 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteUserAsync(Guid userId)
         {
-            try
+            var toRemove = await context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
+            if (toRemove != null)
             {
-                var toRemove = await context.Users.FirstOrDefaultAsync(x => x.UserId == userId);
-                if (toRemove != null)
-                {
-                    context.Users.Remove(toRemove);
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error deleting user: {ex.Message}");
+                context.Users.Remove(toRemove);
+                await context.SaveChangesAsync();
             }
         }
 
         public async Task<Result<IEnumerable<User>>> GetAllUsersAsync()
         {
-            try
+            var users = await context.Users.ToListAsync();
+            if (users == null)
             {
-                var users = await context.Users.ToListAsync();
-                if (users == null)
-                {
-                    throw new Exception();
-                }
-                return Result<IEnumerable<User>>.Success(users);
+                return Result<IEnumerable<User>>.Failure($"Error retrieving all users");
             }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<User>>.Failure($"Error retrieving all users: {ex.Message}");
-            }
+            return Result<IEnumerable<User>>.Success(users);
         }
 
         public async Task<Result<User>> GetUserByIdAsync(Guid userId)
         {
-            try
+            var user = await context.Users.FindAsync(userId);
+            if (user == null)
             {
-                var user = await context.Users.FindAsync(userId);
-                if (user == null)
-                {
-                    throw new Exception();
-                }
-                return Result<User>.Success(user);
+                return Result<User>.Failure($"Error retrieving user by ID");
             }
-            catch (Exception ex)
-            {
-                return Result<User>.Failure($"Error retrieving user by ID: {ex.Message}");
-            }
+            return Result<User>.Success(user);
         }
 
         public async Task UpdateUserAsync(User user)
         {
-            try
-            {
-                context.Entry(user).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error updating user: {ex.Message}");
-            }
+            context.Entry(user).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }

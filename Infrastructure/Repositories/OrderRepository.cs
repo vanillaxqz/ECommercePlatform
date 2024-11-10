@@ -30,54 +30,32 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteOrderAsync(Guid orderId)
         {
-            try
+            var toRemove = await context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
+            if (toRemove != null)
             {
-                var toRemove = await context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
-                if (toRemove != null)
-                {
-                    context.Orders.Remove(toRemove);
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error deleting order: {ex.Message}");
+                context.Orders.Remove(toRemove);
+                await context.SaveChangesAsync();
             }
         }
 
         public async Task<Result<IEnumerable<Order>>> GetAllOrdersAsync()
         {
-            try
+            var orders = await context.Orders.ToListAsync();
+            if (orders == null)
             {
-                var orders = await context.Orders.ToListAsync();
-                if(orders == null)
-                {
-                    throw new Exception();
-                }
-                return Result<IEnumerable<Order>>.Success(orders);
+                return Result<IEnumerable<Order>>.Failure($"Error retrieving all orders");
             }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<Order>>.Failure($"Error retrieving all orders: {ex.Message}");
-            }
+            return Result<IEnumerable<Order>>.Success(orders);
         }
 
         public async Task<Result<Order>> GetOrderByIdAsync(Guid orderId)
         {
-            try
+            var order = await context.Orders.FindAsync(orderId);
+            if (order == null)
             {
-                var order = await context.Orders.FindAsync(orderId);
-                if (order == null)
-                {
-                    throw new Exception();
-                }
-                return Result<Order>.Success(order);
+                return Result<Order>.Failure($"Error retrieving order by ID");
             }
-            catch (Exception ex)
-            {
-                return Result<Order>.Failure($"Error retrieving order by ID: {ex.Message}");
-            }
+            return Result<Order>.Success(order);
         }
 
         public async Task<Result<IEnumerable<Order>>> GetOrdersByUserIdAsync(Guid userId)
@@ -95,16 +73,8 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateOrderAsync(Order order)
         {
-            try
-            {
-                context.Entry(order).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error updating order: {ex.Message}");
-            }
+            context.Entry(order).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }

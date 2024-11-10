@@ -1,0 +1,15 @@
+﻿D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Common\Result.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Admin.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Category.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Order.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\OrderItem.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Payment.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Product.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\ProductImage.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Session.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\Status.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Entities\User.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IOrderRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IPaymentRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IProductRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IUserRepository.cs

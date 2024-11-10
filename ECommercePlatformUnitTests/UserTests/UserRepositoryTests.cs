@@ -185,7 +185,7 @@ public class UserRepositoryTests
     [InlineData("no-uppercase")] // No uppercase
     [InlineData("")] // Empty
     [InlineData(null)] // Null
-    public async Task GivenInvalidPasswordFormat_WhenAddingUser_ThenShouldFail(string password)
+    public async Task GivenInvalidPasswordFormat_WhenAddingUser_ThenShouldFail(string? password)
     {
         // Arrange
         var user = new User
