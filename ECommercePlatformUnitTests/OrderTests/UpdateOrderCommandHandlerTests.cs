@@ -89,7 +89,7 @@ public class UpdateOrderCommandHandlerTests
             PaymentId = Guid.NewGuid()
         };
 
-        _mapper.Map<Order>(command).Returns((Order)null);
+        _mapper.Map<Order>(command).Returns(null as Order);
 
         // Act & Assert
         await _orderRepository.Received(0).UpdateOrderAsync(Arg.Any<Order>());
