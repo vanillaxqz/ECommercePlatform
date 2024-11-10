@@ -11,7 +11,7 @@ namespace ECommercePlatformUnitTests.OrderTests;
 
 public class UpdateOrderCommandHandlerTests
 {
-    private readonly IRequestHandler<UpdateOrderCommand, Unit> _handler;
+    private readonly UpdateOrderCommandHandler _handler;
     private readonly IMapper _mapper;
     private readonly IOrderRepository _orderRepository;
 

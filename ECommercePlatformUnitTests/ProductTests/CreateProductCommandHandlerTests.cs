@@ -113,7 +113,7 @@ public class CreateProductCommandHandlerTests
             Category = Category.Electronics
         };
 
-        _mapper.Map<Product>(command).Returns((Product)null);
+        _mapper.Map<Product>(command).Returns((Product?)null);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
