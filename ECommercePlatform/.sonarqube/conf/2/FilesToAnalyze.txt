@@ -1,0 +1,9 @@
+﻿D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\DependencyInjection.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Migrations\20241102193159_InitialCreate.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Migrations\20241102193159_InitialCreate.Designer.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Migrations\ApplicationDbContextModelSnapshot.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Persistence\ApplicationDbContext.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Repositories\OrderRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Repositories\PaymentRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Repositories\ProductRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Infrastructure\Repositories\UserRepository.cs
