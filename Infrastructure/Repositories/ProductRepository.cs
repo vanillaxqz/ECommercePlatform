@@ -30,68 +30,38 @@ namespace Infrastructure.Repositories
 
         public async Task DeleteProductAsync(Guid productId)
         {
-            try
+            var toRemove = await context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            if (toRemove != null)
             {
-                var toRemove = await context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
-                if (toRemove != null)
-                {
-                    context.Products.Remove(toRemove);
-                    await context.SaveChangesAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error deleting product: {ex.Message}");
+                context.Products.Remove(toRemove);
+                await context.SaveChangesAsync();
             }
         }
 
         public async Task<Result<IEnumerable<Product>>> GetAllProductsAsync()
         {
-            try
+            var products = await context.Products.ToListAsync();
+            if (products == null)
             {
-                var products = await context.Products.ToListAsync();
-                if (products == null)
-                {
-                    throw new Exception();
-                }
-                return Result<IEnumerable<Product>>.Success(products);
+                return Result<IEnumerable<Product>>.Failure($"Error retrieving all products");
             }
-            catch (Exception ex)
-            {
-                return Result<IEnumerable<Product>>.Failure($"Error retrieving all products: {ex.Message}");
-            }
+            return Result<IEnumerable<Product>>.Success(products);
         }
 
         public async Task<Result<Product>> GetProductByIdAsync(Guid productId)
         {
-            try
+            var product = await context.Products.FindAsync(productId);
+            if (product == null)
             {
-                var product = await context.Products.FindAsync(productId);
-                if (product == null)
-                {
-                    throw new Exception();
-                }
-                return Result<Product>.Success(product);
+                return Result<Product>.Failure($"Error retrieving product by ID");
             }
-            catch (Exception ex)
-            {
-                return Result<Product>.Failure($"Error retrieving product by ID: {ex.Message}");
-            }
+            return Result<Product>.Success(product);
         }
 
         public async Task UpdateProductAsync(Product product)
         {
-            try
-            {
-                context.Entry(product).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it as needed
-                throw new Exception($"Error updating product: {ex.Message}");
-            }
+            context.Entry(product).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }

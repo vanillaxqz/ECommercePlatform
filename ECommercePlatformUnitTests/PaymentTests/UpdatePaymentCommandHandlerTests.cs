@@ -11,7 +11,7 @@ namespace ECommercePlatformUnitTests.PaymentTests;
 
 public class UpdatePaymentCommandHandlerTests
 {
-    private readonly IRequestHandler<UpdatePaymentCommand, Unit> _handler;
+    private readonly UpdatePaymentCommandHandler _handler;
     private readonly IMapper _mapper;
     private readonly IPaymentRepository _paymentRepository;
 
@@ -80,7 +80,7 @@ public class UpdatePaymentCommandHandlerTests
             PaymentDate = DateTime.UtcNow
         };
 
-        _mapper.Map<Payment>(command).Returns((Payment)null);
+        _mapper.Map<Payment>(command).Returns((Payment?)null);
 
         // Act & Assert
         await _paymentRepository.Received(0).UpdatePaymentAsync(Arg.Any<Payment>());

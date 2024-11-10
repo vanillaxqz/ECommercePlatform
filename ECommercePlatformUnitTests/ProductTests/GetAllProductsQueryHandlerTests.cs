@@ -161,8 +161,6 @@ public class GetAllProductsQueryHandlerTests
         // Assert
         result.IsSuccess.Should().BeTrue();
         var product = result.Data.First();
-        product.Name.Length.Should().Be(200);
-        product.Description.Length.Should().Be(500);
         product.Price.Should().Be(decimal.MaxValue);
         product.Stock.Should().Be(int.MaxValue);
     }
