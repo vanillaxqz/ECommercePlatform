@@ -9,7 +9,7 @@
   <HasBeginStepCommandLineCredentials>true</HasBeginStepCommandLineCredentials>
   <SonarQubeHostUrl>http://localhost:9000</SonarQubeHostUrl>
   <SonarQubeVersion>10.7.0.96327</SonarQubeVersion>
-  <SonarProjectKey>Burd44_ECommercePlatform_c62fc42d-49b5-4157-ac7b-98509e81352b</SonarProjectKey>
+  <SonarProjectKey>Burd44_ECommercePlatform_cb22b336-1e7e-4997-9a70-e08b7218d66b</SonarProjectKey>
   <AdditionalConfig>
     <ConfigSetting Id="BuildUri" />
     <ConfigSetting Id="TfsUri" />

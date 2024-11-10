@@ -9,5 +9,6 @@ D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net8.0
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net8.0\ECommercePlatform.MvcApplicationPartsAssemblyInfo.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.Development.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.json
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\coverage.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\ECommercePlatform.http
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Properties\launchSettings.json
