@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AnalysisConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
-  <SonarConfigDir>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf</SonarConfigDir>
-  <SonarOutputDir>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\out</SonarOutputDir>
-  <SonarBinDir>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\bin</SonarBinDir>
-  <SonarScannerWorkingDirectory>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform</SonarScannerWorkingDirectory>
+  <SonarConfigDir>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf</SonarConfigDir>
+  <SonarOutputDir>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\out</SonarOutputDir>
+  <SonarBinDir>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\bin</SonarBinDir>
+  <SonarScannerWorkingDirectory>D:\Documents\Dotnet\Project\ECommercePlatform</SonarScannerWorkingDirectory>
   <JavaExePath>C:\Users\mihai\.sonar\cache\4bafe2e94439c8193fc8c68247cb0dbaf4e80265b903288f63f128304f129bbe\OpenJDK17U-jre_x64_windows_hotspot_17.0.11_9.zip_extracted\jdk-17.0.11+9-jre/bin/java.exe</JavaExePath>
   <ScanAllAnalysis>true</ScanAllAnalysis>
   <HasBeginStepCommandLineCredentials>true</HasBeginStepCommandLineCredentials>
@@ -15,7 +15,7 @@
     <ConfigSetting Id="TfsUri" />
     <ConfigSetting Id="VsCoverageConverterToolPath" />
     <ConfigSetting Id="UnchangedFilesPath" />
-    <ConfigSetting Id="sonar.pullrequest.cache.basepath" Value="D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform" />
+    <ConfigSetting Id="sonar.pullrequest.cache.basepath" Value="D:\Documents\Dotnet\Project\ECommercePlatform" />
     <ConfigSetting Id="settings.file.path" Value="C:\Users\mihai\.dotnet\tools\.store\dotnet-sonarscanner\9.0.1\dotnet-sonarscanner\9.0.1\tools\netcoreapp3.1\any\SonarQube.Analysis.xml" />
   </AdditionalConfig>
   <ServerSettings>
@@ -147,8 +147,8 @@
   <AnalyzersSettings>
     <AnalyzerSettings>
       <Language>cs</Language>
-      <RulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\Sonar-cs.ruleset</RulesetPath>
-      <DeactivatedRulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\Sonar-cs-none.ruleset</DeactivatedRulesetPath>
+      <RulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\Sonar-cs.ruleset</RulesetPath>
+      <DeactivatedRulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\Sonar-cs-none.ruleset</DeactivatedRulesetPath>
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
@@ -172,13 +172,13 @@
         </AnalyzerPlugin>
       </AnalyzerPlugins>
       <AdditionalFilePaths>
-        <Path>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\cs\SonarLint.xml</Path>
+        <Path>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\cs\SonarLint.xml</Path>
       </AdditionalFilePaths>
     </AnalyzerSettings>
     <AnalyzerSettings>
       <Language>vbnet</Language>
-      <RulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\Sonar-vbnet.ruleset</RulesetPath>
-      <DeactivatedRulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\Sonar-vbnet-none.ruleset</DeactivatedRulesetPath>
+      <RulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\Sonar-vbnet.ruleset</RulesetPath>
+      <DeactivatedRulesetPath>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\Sonar-vbnet-none.ruleset</DeactivatedRulesetPath>
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
@@ -202,7 +202,7 @@
         </AnalyzerPlugin>
       </AnalyzerPlugins>
       <AdditionalFilePaths>
-        <Path>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\vbnet\SonarLint.xml</Path>
+        <Path>D:\Documents\Dotnet\Project\ECommercePlatform\.sonarqube\conf\vbnet\SonarLint.xml</Path>
       </AdditionalFilePaths>
     </AnalyzerSettings>
   </AnalyzersSettings>

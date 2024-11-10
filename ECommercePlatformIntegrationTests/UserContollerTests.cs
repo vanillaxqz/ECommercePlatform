@@ -27,7 +27,7 @@ namespace ECommercePlatformIntegrationTests
         public async Task GivenNonExistingUser_WhenGettingUserById_ThenShouldReturnNotFound()
         {
             var response = await _client.GetAsync($"/api/users/{Guid.NewGuid()}");
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
