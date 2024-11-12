@@ -3,23 +3,68 @@ using System.Net;
 using System.Text.Json;
 using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Application.DTOs;
 using Domain.Entities;
+using Infrastructure.Persistence;
 
 namespace ECommercePlatformIntegrationTests
 {
-    public class OrdersControllerTests : IClassFixture<WebApplicationFactory<Program>>
+    public class OrdersControllerTests : IClassFixture<WebApplicationFactory<Program>>, IDisposable
     {
+        private readonly WebApplicationFactory<Program> _factory;
+        private readonly ApplicationDbContext _dbContext;
         private readonly HttpClient _client;
 
         public OrdersControllerTests(WebApplicationFactory<Program> factory)
         {
-            _client = factory.CreateClient();
+            _factory = factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    var descriptor = services.SingleOrDefault(
+                        d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
+
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseInMemoryDatabase("InMemoryDbForTesting");
+                    });
+                });
+            });
+
+            var scope = _factory.Services.CreateScope();
+            _dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            _dbContext.Database.EnsureCreated();
+            _client = _factory.CreateClient();
+        }
+
+        public void Dispose()
+        {
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Dispose();
         }
 
         [Fact]
         public async Task GivenOrdersExist_WhenGettingAllOrders_ThenShouldReturnOkResponse()
         {
+            // Arrange
+            var order = new Order
+            {
+                OrderId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+            _dbContext.Orders.Add(order);
+            _dbContext.SaveChanges();
+
             // Act
             var response = await _client.GetAsync("/api/orders");
 
@@ -31,7 +76,17 @@ namespace ECommercePlatformIntegrationTests
         public async Task GivenExistingOrder_WhenGettingOrderById_ThenShouldReturnOkResponse()
         {
             // Arrange
-            var orderId = "ebf164aa-ca71-4cd3-beac-70daf6173268";
+            var orderId = Guid.NewGuid();
+            var order = new Order
+            {
+                OrderId = orderId,
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+            _dbContext.Orders.Add(order);
+            _dbContext.SaveChanges();
 
             // Act
             var response = await _client.GetAsync($"/api/orders/{orderId}");
@@ -53,6 +108,7 @@ namespace ECommercePlatformIntegrationTests
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
+
         [Fact]
         public async Task GivenValidOrderRequest_WhenCreatingOrder_ThenShouldReturnCreatedResponse()
         {
@@ -71,7 +127,7 @@ namespace ECommercePlatformIntegrationTests
             var response = await _client.PostAsync("/api/orders", content);
 
             // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
 
         [Fact]
@@ -79,6 +135,16 @@ namespace ECommercePlatformIntegrationTests
         {
             // Arrange
             var orderId = Guid.NewGuid();
+            var order = new Order
+            {
+                OrderId = orderId,
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+            _dbContext.Orders.Add(order);
+            _dbContext.SaveChanges();
 
             // Act
             var response = await _client.DeleteAsync($"/api/orders/{orderId}");
