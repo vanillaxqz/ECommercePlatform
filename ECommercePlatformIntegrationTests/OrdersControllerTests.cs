@@ -46,8 +46,7 @@ namespace ECommercePlatformIntegrationTests
 
         public void Dispose()
         {
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         [Fact]
