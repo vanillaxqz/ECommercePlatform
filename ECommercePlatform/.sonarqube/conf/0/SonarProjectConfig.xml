@@ -5,5 +5,5 @@
   <FilesToAnalyzePath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\conf\0\FilesToAnalyze.txt</FilesToAnalyzePath>
   <OutPath>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\out\0</OutPath>
   <ProjectType>Product</ProjectType>
-  <TargetFramework>net8.0</TargetFramework>
+  <TargetFramework>net9.0</TargetFramework>
 </SonarProjectConfig>
