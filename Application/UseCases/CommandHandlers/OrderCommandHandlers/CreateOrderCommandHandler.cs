@@ -23,6 +23,7 @@ namespace Application.UseCases.CommandHandlers.OrderCommandHandlers
             if (order == null)
             {
                 return Result<Guid>.Failure("Failure");
+
             }
             return await repository.AddOrderAsync(order);
         }
