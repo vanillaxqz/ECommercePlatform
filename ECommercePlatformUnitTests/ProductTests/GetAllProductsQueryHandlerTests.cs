@@ -108,7 +108,7 @@ public class GetAllProductsQueryHandlerTests
     {
         // Arrange
         var products = new List<Product>();
-        foreach (Category category in Enum.GetValues(typeof(Category)))
+        foreach (Category category in Enum.GetValues<Category>())
             products.Add(new Product
             {
                 ProductId = Guid.NewGuid(),
@@ -130,7 +130,7 @@ public class GetAllProductsQueryHandlerTests
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Data.Select(p => p.Category).Distinct().Count()
-            .Should().Be(Enum.GetValues(typeof(Category)).Length);
+            .Should().Be(Enum.GetValues<Category>().Length);
     }
 
     [Fact]
