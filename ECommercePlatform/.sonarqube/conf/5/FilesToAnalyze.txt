@@ -27,3 +27,4 @@ C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\net
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.visualstudio.testadapter.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.utility.netcoreapp10.dll
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\4dd641a7-6dda-4290-9fed-7da98a65e1b4\coverage.cobertura.xml
