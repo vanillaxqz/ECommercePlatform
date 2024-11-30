@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.DS_Store
+.DS_Store
+.DS_Store
+Application/.DS_Store
+Application/UseCases/.DS_Store
+Application/UseCases/CommandHandlers/.DS_Store
+Application/UseCases/Commands/.DS_Store
+Application/UseCases/Queries/.DS_Store
+Application/UseCases/Queries/ProductQueries/.DS_Store
+Application/UseCases/QueryHandlers/.DS_Store
+Domain/.DS_Store
+Infrastructure/.DS_Store
