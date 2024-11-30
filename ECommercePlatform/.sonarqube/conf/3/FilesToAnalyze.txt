@@ -3,11 +3,16 @@ D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Controllers\Paym
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Controllers\ProductsController.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Controllers\UsersController.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Program.cs
+C:\Users\mihai\.nuget\packages\microsoft.net.test.sdk\17.12.0\build\netcoreapp3.1\Microsoft.NET.Test.Sdk.Program.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net9.0\ECommercePlatform.GlobalUsings.g.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net9.0\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net9.0\ECommercePlatform.AssemblyInfo.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\obj\Debug\net9.0\ECommercePlatform.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\netcoreapp3.1\x64\testhost.exe
+C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\netcoreapp3.1\x64\testhost.dll
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.Development.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\ECommercePlatform.http
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\a28be729-7646-4bbc-b9f0-88f34cfd226f\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\CoverageReports\Cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Properties\launchSettings.json
