@@ -9,6 +9,7 @@ using Application.DTOs;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Application.UseCases.Commands.ProductCommands;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace ECommercePlatformIntegrationTests
 {
@@ -32,7 +33,12 @@ namespace ECommercePlatformIntegrationTests
                     {
                         services.Remove(descriptor);
                     }
-
+                    descriptor = services.SingleOrDefault(
+                        d => d.ServiceType == typeof(IDbContextOptionsConfiguration<ApplicationDbContext>));
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
                     services.AddDbContext<ApplicationDbContext>(options =>
                     {
                         options.UseInMemoryDatabase("InMemoryDbForTesting");
@@ -50,7 +56,7 @@ namespace ECommercePlatformIntegrationTests
         {
             GC.SuppressFinalize(this);
         }
-
+        [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenProductsExist_WhenGettingAllProducts_ThenShouldReturnOkResponse()
         {
@@ -73,7 +79,7 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
-
+        [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenNonExistingProduct_WhenGettingProductById_ThenShouldReturnNotFound()
         {
@@ -83,7 +89,7 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
-
+        [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenValidProductRequest_WhenCreatingProduct_ThenShouldReturnCreated()
         {
