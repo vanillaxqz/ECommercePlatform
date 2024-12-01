@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Commands.PaymentCommands;
 using Application.UseCases.Queries.PaymentQueries;
+using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -88,6 +89,28 @@ namespace ECommercePlatform.Controllers
         {
             await mediator.Send(update);
             return NoContent();
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<PaymentDto>>> GetFilteredPayments(
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] DateTime? paymentDate,
+            [FromQuery] Guid? userId)
+        {
+            var query = new GetFilteredPaymentsQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                PaymentDate = paymentDate,
+                UserId = userId
+            };
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response.Data);
         }
     }
 }

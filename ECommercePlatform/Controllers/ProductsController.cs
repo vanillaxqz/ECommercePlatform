@@ -1,7 +1,9 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Commands.ProductCommands;
 using Application.UseCases.Queries.ProductQueries;
+using Application.Utils;
 using Domain.Common;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,6 +74,35 @@ namespace ECommercePlatform.Controllers
         {
             await mediator.Send(update);
             return NoContent();
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<ProductDto>>> GetFilteredProducts(
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] string? name,
+            [FromQuery] string? description,
+            [FromQuery] decimal? price,
+            [FromQuery] int? stock,
+            [FromQuery] Category? category
+        )
+        {
+            var query = new GetFilteredProductsQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                Name = name,
+                Description = description,
+                Price = price,
+                Stock = stock,
+                Category = category
+            };
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response.Data);
         }
     }
 }

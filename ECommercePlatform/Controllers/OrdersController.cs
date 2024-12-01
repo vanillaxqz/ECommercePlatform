@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Application.UseCases.Commands.OrderCommands;
 using Domain.Common;
 using Application.UseCases.Queries.OrderQueries;
+using Application.Utils;
+using Domain.Entities;
 
 namespace ECommercePlatform.Controllers
 {
@@ -88,6 +90,32 @@ namespace ECommercePlatform.Controllers
         {
             await mediator.Send(update);
             return NoContent();
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<OrderDto>>> GetFilteredOrders(
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] Guid? userId,
+            [FromQuery] DateTime? orderDate,
+            [FromQuery] Status? status,
+            [FromQuery] Guid? paymentId)
+        {
+            var query = new GetFilteredOrdersQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                UserId = userId,
+                OrderDate = orderDate,
+                Status = status,
+                PaymentId = paymentId
+            };
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response.Data);
         }
     }
 }

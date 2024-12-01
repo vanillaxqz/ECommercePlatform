@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.UseCases.Commands.UserCommands;
 using Application.UseCases.Queries.UserQueries;
+using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -72,6 +73,30 @@ namespace ECommercePlatform.Controllers
         {
             await mediator.Send(update);
             return NoContent();
+        }
+
+        [HttpGet("paginated")]
+        public async Task<ActionResult<PagedResult<UserDto>>> GetFilteredUsers(
+            [FromQuery] int page,
+            [FromQuery] int pageSize,
+            [FromQuery] string? name,
+            [FromQuery] string? email,
+            [FromQuery] string? phoneNumber)
+        {
+            var query = new GetFilteredUsersQuery
+            {
+                Page = page,
+                PageSize = pageSize,
+                Name = name,
+                Email = email,
+                PhoneNumber = phoneNumber
+            };
+            var response = await mediator.Send(query);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(response.Data);
         }
     }
 }
