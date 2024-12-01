@@ -1,0 +1,44 @@
+<div class="product-list">
+    <h1>Product List</h1>
+    <button (click)="navigateToCreate()">Create New Product</button>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.Name }}</td>
+          <td>{{ product.Description }}</td>
+          <td>{{ product.Price }}</td>
+          <td>{{ product.Stock }}</td>
+          <td>{{ product.Category }}</td>
+          <td>
+            <button (click)="navigateToDetail(product?.ProductId)">View</button>
+            <button (click)="navigateToUpdate(product?.ProductId)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <button 
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)">
+        Previous
+      </button>
+      
+      <span>Page {{currentPage}} of {{totalPages}}</span>
+      
+      <button 
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)">
+        Next
+      </button>
+    </div>
+  </div>
+  

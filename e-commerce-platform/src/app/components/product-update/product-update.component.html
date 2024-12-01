@@ -1,0 +1,59 @@
+<div class="product-update">
+    <h1>Update Product</h1>
+    <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" formControlName="Name" />
+        <div class="error" *ngIf="productForm.get('Name')?.hasError('required')">
+          Name is required
+        </div>
+        <div class="error" *ngIf="productForm.get('Name')?.hasError('maxlength')">
+          Name cannot be longer than 100 characters
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input id="description" formControlName="Description" />
+        <div class="error" *ngIf="productForm.get('Description')?.hasError('required')">
+          Description is required
+        </div>
+        <div class="error" *ngIf="productForm.get('Description')?.hasError('maxlength')">
+          Description cannot be longer than 100 characters
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="price">Price</label>
+        <input id="price" type="number" formControlName="Price" />
+        <div class="error" *ngIf="productForm.get('Price')?.hasError('required')">
+          Price is required
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input id="stock" type="number" formControlName="Stock" />
+        <div class="error" *ngIf="productForm.get('Stock')?.hasError('required')">
+          Stock is required
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" formControlName="Category">
+          <option value="">Select a category</option>
+          <option value="1">Electronics</option>
+          <option value="2">Clothing</option>
+          <option value="3">Books</option>
+          <option value="4">Home & Garden</option>
+          <option value="5">Sports</option>
+        </select>
+        <div class="error" *ngIf="productForm.get('Category')?.hasError('required')">
+          Category is required
+        </div>
+      </div>
+  
+      <button type="submit" [disabled]="productForm.invalid">Update Product</button>
+    </form>
+  </div>
