@@ -10,21 +10,19 @@ using Gridify;
 namespace Application.UseCases.QueryHandlers.ProductQueryHandlers
 {
     public class GetFilteredProductsQueryHandler(IProductRepository repository, IMapper mapper) :
-        IRequestHandler<GetFilteredProductsQuery, Result<PagedResult<ProductDto>>>
+    IRequestHandler<GetFilteredProductsQuery, Result<PagedResult<ProductDto>>>
     {
         public async Task<Result<PagedResult<ProductDto>>> Handle(GetFilteredProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await repository.GetAllProductsAsync();
             var query = products.Data.AsQueryable();
-
-            // Apply filters
             if (!string.IsNullOrEmpty(request.Name))
             {
-                query = query.Where(p => p.Name.Contains(request.Name));
+                query = query.Where(p => p.Name != null && p.Name.Contains(request.Name));
             }
             if (!string.IsNullOrEmpty(request.Description))
             {
-                query = query.Where(p => p.Description.Contains(request.Description));
+                query = query.Where(p => p.Description != null && p.Description.Contains(request.Description));
             }
             if (request.Price.HasValue)
             {
@@ -38,8 +36,6 @@ namespace Application.UseCases.QueryHandlers.ProductQueryHandlers
             {
                 query = query.Where(p => p.Category == request.Category.Value);
             }
-
-            // Apply paging
             var pagedProducts = query.ApplyPaging(request.Page, request.PageSize);
             var productDtos = mapper.Map<List<ProductDto>>(pagedProducts);
             var pagedResult = new PagedResult<ProductDto>(productDtos, query.Count());

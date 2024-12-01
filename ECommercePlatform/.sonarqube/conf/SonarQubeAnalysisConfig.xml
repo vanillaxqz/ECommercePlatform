@@ -5,7 +5,7 @@
   <SonarBinDir>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\.sonarqube\bin</SonarBinDir>
   <SonarScannerWorkingDirectory>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform</SonarScannerWorkingDirectory>
   <JavaExePath>C:\Users\mihai\.sonar\cache\4bafe2e94439c8193fc8c68247cb0dbaf4e80265b903288f63f128304f129bbe\OpenJDK17U-jre_x64_windows_hotspot_17.0.11_9.zip_extracted\jdk-17.0.11+9-jre/bin/java.exe</JavaExePath>
-  <ScanAllAnalysis>true</ScanAllAnalysis>
+  <ScanAllAnalysis>false</ScanAllAnalysis>
   <HasBeginStepCommandLineCredentials>true</HasBeginStepCommandLineCredentials>
   <SonarQubeHostUrl>http://localhost:9000</SonarQubeHostUrl>
   <SonarQubeVersion>10.7.0.96327</SonarQubeVersion>
@@ -139,10 +139,12 @@
     <Property Name="sonar.java.jvmframeworkconfig.activate">true</Property>
     <Property Name="sonar.updatecenter.url">https://downloads.sonarsource.com/sonarqube/update/update-center.properties</Property>
     <Property Name="sonar.core.id">86E1FA4D-AZMVM1lQvNvah30Hj_gW</Property>
-    <Property Name="sonar.core.startTime">30/11/2024 11:06:41</Property>
+    <Property Name="sonar.core.startTime">01/12/2024 17:34:48</Property>
   </ServerSettings>
   <LocalSettings>
     <Property Name="sonar.host.url">http://localhost:9000</Property>
+    <Property Name="sonar.cs.opencover.reportsPaths">D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\eeca0c51-50a2-4e63-b883-424b7063d9a4\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\1e71d16a-71f3-4120-9698-df4518d60539\coverage.opencover.xml</Property>
+    <Property Name="sonar.scanner.scanAll">false</Property>
   </LocalSettings>
   <AnalyzersSettings>
     <AnalyzerSettings>

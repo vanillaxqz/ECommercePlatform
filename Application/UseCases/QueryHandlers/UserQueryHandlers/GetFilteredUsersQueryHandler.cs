@@ -9,8 +9,7 @@ using Gridify;
 
 namespace Application.UseCases.QueryHandlers.UserQueryHandlers
 {
-    public class GetFilteredUserQueryHandler(IUserRepository repository, IMapper mapper) :
-        IRequestHandler<GetFilteredUsersQuery, Result<PagedResult<UserDto>>>
+    public class GetFilteredUserQueryHandler(IUserRepository repository, IMapper mapper) : IRequestHandler<GetFilteredUsersQuery, Result<PagedResult<UserDto>>>
     {
         public async Task<Result<PagedResult<UserDto>>> Handle(GetFilteredUsersQuery request, CancellationToken cancellationToken)
         {
@@ -20,15 +19,15 @@ namespace Application.UseCases.QueryHandlers.UserQueryHandlers
             // Apply filters
             if (!string.IsNullOrEmpty(request.Name))
             {
-                query = query.Where(u => u.Name.Contains(request.Name));
+                query = query.Where(u => u.Name != null && u.Name.Contains(request.Name));
             }
             if (!string.IsNullOrEmpty(request.Email))
             {
-                query = query.Where(u => u.Email.Contains(request.Email));
+                query = query.Where(u => u.Email != null && u.Email.Contains(request.Email));
             }
             if (!string.IsNullOrEmpty(request.PhoneNumber))
             {
-                query = query.Where(u => u.PhoneNumber.Contains(request.PhoneNumber));
+                query = query.Where(u => u.PhoneNumber != null && u.PhoneNumber.Contains(request.PhoneNumber));
             }
 
             // Apply paging

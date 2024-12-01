@@ -8,4 +8,7 @@ C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\net
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.visualstudio.testadapter.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.utility.netcoreapp10.dll
-D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\6ddea62f-7208-4e85-87a6-bf2d4478a3cb\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\be6d89b3-3799-4525-b838-89d5d83a225d\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\be6d89b3-3799-4525-b838-89d5d83a225d\coverage.opencover.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\eeca0c51-50a2-4e63-b883-424b7063d9a4\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\eeca0c51-50a2-4e63-b883-424b7063d9a4\coverage.opencover.xml
