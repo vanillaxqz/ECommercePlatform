@@ -9,5 +9,7 @@ namespace Application.UseCases.Queries.PaymentQueries
     {
         public int Page { get; set; }
         public int PageSize { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
