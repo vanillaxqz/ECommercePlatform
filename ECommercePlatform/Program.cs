@@ -14,18 +14,6 @@ builder.Services.AddCors(options =>
                       });
 });
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-
-// Modify connection string if necessary for Npgsql (PostgreSQL) compatibility
-if (!string.IsNullOrEmpty(connectionString))
-{
-    var uri = new Uri(connectionString);
-    var userInfo = uri.UserInfo.Split(':');
-    var npgsqlConnectionString = $"Host={uri.Host};Port={uri.Port};Username={userInfo[0]};Password={userInfo[1]};Database={uri.AbsolutePath.TrimStart('/')};SslMode=Require;Trust Server Certificate=true";
-    builder.Configuration["ConnectionStrings:DefaultConnection"] = npgsqlConnectionString;
-}
-
-
 // Add services to the container.
 
 builder.Services.AddControllers();
