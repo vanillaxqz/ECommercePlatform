@@ -1,53 +1,95 @@
 <div class="product-list">
-  <h1>Product List</h1>
-  
-  <button class="create-button" (click)="navigateToCreate()">
-      Create New Product
-  </button>
+    <div class="list-header">
+        <div class="title-section">
+            <h1>Product List</h1>
+        </div>
+        
+        <div class="actions-section">
+            <div class="filter-section">
+                <select 
+                    [ngModel]="selectedCategory"
+                    (change)="onCategoryChange($event)"
+                    class="category-select">
+                    <option value="">All Categories</option>
+                    <option *ngFor="let category of categories" [value]="category.id">
+                        {{category.name}}
+                    </option>
+                </select>
+            </div>
 
-  <table>
-      <thead>
-          <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Category</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let product of products">
-              <td>{{product.name}}</td>
-              <td>{{product.description}}</td>
-              <td>{{product.price | currency}}</td>
-              <td>{{product.stock}}</td>
-              <td>{{getCategoryName(product.category)}}</td>
-              <td>
-                  <div class="action-buttons">
-                      <button class="view-button" (click)="navigateToDetail(product.productId)">
-                          View
-                      </button>
-                      <button class="edit-button" (click)="navigateToUpdate(product.productId)">
-                          Edit
-                      </button>
-                  </div>
-              </td>
-          </tr>
-      </tbody>
-  </table>
+            <button class="create-button" (click)="navigateToCreate()">
+                Create New Product
+            </button>
+        </div>
+    </div>
 
-  <div *ngIf="products.length === 0" class="no-products">
-      No products available.
-  </div>
+    <!-- Error Message -->
+    <div *ngIf="error" class="error-message">
+        {{error}}
+    </div>
 
-  <div *ngIf="totalPages > 1" class="pagination">
-      <button [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
-          Previous
-      </button>
-      <span>Page {{currentPage}} of {{totalPages}}</span>
-      <button [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
-          Next
-      </button>
-  </div>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <span>Loading products...</span>
+    </div>
+
+    <!-- Product Table -->
+    <table *ngIf="!isLoading && products.length > 0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of products">
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.price | currency}}</td>
+                <td>{{product.stock}}</td>
+                <td>{{getCategoryName(product.category)}}</td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="view-button" (click)="navigateToDetail(product.productId)">
+                            View
+                        </button>
+                        <button class="edit-button" (click)="navigateToUpdate(product.productId)">
+                            Edit
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="!isLoading && products.length === 0" class="no-products">
+        No products available
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="totalPages > 1" class="pagination">
+        <button 
+            [disabled]="currentPage === 1 || isLoading" 
+            (click)="onPageChange(currentPage - 1)"
+            class="pagination-button">
+            Previous
+        </button>
+
+        <span class="pagination-info">
+            Page {{currentPage}} of {{totalPages}}
+        </span>
+
+        <button 
+            [disabled]="currentPage === totalPages || isLoading" 
+            (click)="onPageChange(currentPage + 1)"
+            class="pagination-button">
+            Next
+        </button>
+    </div>
 </div>
