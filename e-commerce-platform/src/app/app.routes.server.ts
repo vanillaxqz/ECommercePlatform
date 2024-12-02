@@ -5,18 +5,18 @@ export const serverRoutes: ServerRoute[] = [
     path: 'products/:id',
     renderMode: RenderMode.Prerender,
     getPrerenderParams: async () => {
-      // Example: Fetch all product IDs from a database or API
-      const productIds = await fetchProductIds();
-      return productIds.map(id => ({ id: id.toString() }));
+      // Example: Fetch a single product ID as a string
+      const productId = await fetchProductId();
+      return [{ id: productId }];
     }
   },
   {
     path: 'products/update/:id',
     renderMode: RenderMode.Prerender,
     getPrerenderParams: async () => {
-      // Example: Fetch all product IDs from a database or API
-      const productIds = await fetchProductIds();
-      return productIds.map(id => ({ id: id.toString() }));
+      // Example: Fetch a single product ID as a string
+      const productId = await fetchProductId();
+      return [{ id: productId }];
     }
   },
   {
@@ -25,8 +25,8 @@ export const serverRoutes: ServerRoute[] = [
   }
 ];
 
-// Example function to fetch product IDs
-async function fetchProductIds(): Promise<number[]> {
-  // Replace this with actual logic to fetch product IDs
-  return [1, 2, 3, 4, 5];
+// Example function to fetch a single product ID as a string
+async function fetchProductId(): Promise<string> {
+  // Replace this with actual logic to fetch a product ID
+  return '019387a8-3633-7908-b4ac-ae6b9c0a0716';
 }
