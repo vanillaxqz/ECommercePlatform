@@ -18,6 +18,18 @@ export class ProductListComponent {
   totalItems = 0;
   totalPages = 0;
 
+  categories = [
+    'Electronics',
+    'Fashion',
+    'Garden',
+    'HealthAndBeauty',
+    'Sports',
+    'Toys',
+    'Games',
+    'Books',
+    'Jewelry'
+  ];
+
   constructor(private productService: ProductService, private router: Router) { }
 
   ngOnInit(): void {
@@ -26,35 +38,36 @@ export class ProductListComponent {
 
   loadProducts(): void {
     this.productService.getProducts(this.currentPage, this.pageSize)
-      .subscribe((result) => {
-        this.products = result.data.map(item => ({
-          productId: item.productId, // Map camelCase to PascalCase
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          stock: item.stock,
-          category: item.category
-        }));
-        console.log('Mapped Products:', this.products); // Verify the mapping
+      .subscribe({
+        next: (result) => {
+          if (result.isSuccess && result.data) {
+            this.products = result.data;
+          }
+        },
+        error: (error) => {
+          console.error('Error loading products:', error);
+        }
       });
   }
 
-
+  getCategoryName(categoryId: number): string {
+    return this.categories[categoryId - 1] || 'Unknown';
+  }
 
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadProducts();
   }
 
-  navigateToCreate() {
-    this.router.navigate(['products/create']);
+  navigateToCreate(): void {
+    this.router.navigate(['/products/create']);
   }
 
-  navigateToDetail(id: string | undefined) {
+  navigateToDetail(id: string): void {
     this.router.navigate(['/products', id]);
   }
 
-  navigateToUpdate(id: string | undefined) {
+  navigateToUpdate(id: string): void {
     this.router.navigate(['/products/update', id]);
   }
 }

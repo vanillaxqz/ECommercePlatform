@@ -4,6 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 
+interface ApiResponse<T> {
+  isSuccess: boolean;
+  data: T;
+  errorMessage?: string;
+}
+
 @Component({
   selector: 'app-product-detail',
   standalone: true,
@@ -13,6 +19,18 @@ import { Product } from '../../models/product.model';
 })
 export class ProductDetailComponent implements OnInit {
   product?: Product;
+  error?: string;
+  categories = [
+    'Electronics',
+    'Fashion',
+    'Garden',
+    'HealthAndBeauty',
+    'Sports',
+    'Toys',
+    'Games',
+    'Books',
+    'Jewelry'
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -21,21 +39,55 @@ export class ProductDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.productService.getProductById(id).subscribe(product => {
-      this.product = product;
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.loadProduct(productId);
+    }
+  }
+
+  loadProduct(id: string): void {
+    this.productService.getProductById(id).subscribe({
+      next: (response: ApiResponse<Product>) => {
+        if (response.isSuccess && response.data) {
+          this.product = response.data;
+        } else {
+          this.error = response.errorMessage || 'Failed to load product';
+        }
+      },
+      error: (err) => {
+        this.error = 'Error loading product details';
+        console.error('Error:', err);
+      }
     });
   }
 
+  getCategoryName(categoryId: number): string {
+    return this.categories[categoryId - 1] || 'Unknown';
+  }
+
   deleteProduct(): void {
-    if (this.product && confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(Number(this.product.productId)).subscribe(() => {
-        this.router.navigate(['/products']);
+    if (!this.product?.productId) return;
+
+    if (confirm('Are you sure you want to delete this product?')) {
+      this.productService.deleteProduct(this.product.productId).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (err) => {
+          this.error = 'Error deleting product';
+          console.error('Error:', err);
+        }
       });
     }
   }
 
   navigateToUpdate(): void {
-    this.router.navigate(['/products/update', this.product?.productId]);
+    if (this.product?.productId) {
+      this.router.navigate(['/products/update', this.product.productId]);
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/products']);
   }
 }

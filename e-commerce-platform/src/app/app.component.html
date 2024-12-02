@@ -1,21 +1,18 @@
-<!-- app.component.html -->
 <div class="app-container">
   <nav class="navbar">
-    <div class="nav-content">
-      <a class="logo" routerLink="/">
-        EBUY
-      </a>
-      <div class="nav-links">
-        <a routerLink="/products" routerLinkActive="active">Products</a>
+      <div class="nav-content">
+          <a routerLink="/" class="logo">EBUY</a>
+          <div class="nav-links">
+              <a routerLink="/products" routerLinkActive="active">Products</a>
+          </div>
       </div>
-    </div>
   </nav>
-  
-  <main class="main-content">
-    <router-outlet></router-outlet>
+
+  <main class="main-content" role="main">
+      <router-outlet></router-outlet>
   </main>
 
   <footer class="footer">
-    <p>&copy; 2024 E-Commerce Platform. All rights reserved.</p>
+      © 2024 E-Commerce Platform. All rights reserved.
   </footer>
 </div>

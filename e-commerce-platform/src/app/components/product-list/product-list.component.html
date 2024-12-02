@@ -1,46 +1,53 @@
 <div class="product-list">
   <h1>Product List</h1>
-  <button (click)="navigateToCreate()">Create New Product</button>
+  
+  <button class="create-button" (click)="navigateToCreate()">
+      Create New Product
+  </button>
 
   <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Category</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of products">
-        <td>{{ product.name }}</td>
-        <td>{{ product.description }}</td>
-        <td>{{ product.price | currency }}</td>
-        <td>{{ product.stock }}</td>
-        <td>{{ product.category }}</td>
-        <td>
-          <button (click)="navigateToDetail(product?.productId)" class="btn btn-primary">View</button>
-          <button (click)="navigateToUpdate(product?.productId)" class="btn btn-secondary">Edit</button>
-        </td>
-      </tr>
-    </tbody>
+      <thead>
+          <tr>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Category</th>
+              <th>Actions</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let product of products">
+              <td>{{product.name}}</td>
+              <td>{{product.description}}</td>
+              <td>{{product.price | currency}}</td>
+              <td>{{product.stock}}</td>
+              <td>{{getCategoryName(product.category)}}</td>
+              <td>
+                  <div class="action-buttons">
+                      <button class="view-button" (click)="navigateToDetail(product.productId)">
+                          View
+                      </button>
+                      <button class="edit-button" (click)="navigateToUpdate(product.productId)">
+                          Edit
+                      </button>
+                  </div>
+              </td>
+          </tr>
+      </tbody>
   </table>
 
   <div *ngIf="products.length === 0" class="no-products">
-    <p>No products available.</p>
+      No products available.
   </div>
 
-  <div class="pagination" *ngIf="totalPages > 1">
-    <button [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
-      Previous
-    </button>
-
-    <span>Page {{ currentPage }} of {{ totalPages }}</span>
-
-    <button [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
-      Next
-    </button>
+  <div *ngIf="totalPages > 1" class="pagination">
+      <button [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+          Previous
+      </button>
+      <span>Page {{currentPage}} of {{totalPages}}</span>
+      <button [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+          Next
+      </button>
   </div>
 </div>

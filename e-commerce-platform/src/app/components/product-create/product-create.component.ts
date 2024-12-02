@@ -7,13 +7,26 @@ import { ProductService } from '../../services/product.service';
 @Component({
   selector: 'app-product-create',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './product-create.component.html',
-  styleUrls: ['./product-create.component.css']
+  styleUrl: './product-create.component.css'
 })
 export class ProductCreateComponent {
   productForm: FormGroup;
+  isSubmitting = false;
   serverErrors: string[] = [];
+  
+  categories = [
+    { id: 1, name: 'Electronics' },
+    { id: 2, name: 'Fashion' },
+    { id: 3, name: 'Garden' },
+    { id: 4, name: 'HealthAndBeauty' },
+    { id: 5, name: 'Sports' },
+    { id: 6, name: 'Toys' },
+    { id: 7, name: 'Games' },
+    { id: 8, name: 'Books' },
+    { id: 9, name: 'Jewelry' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -21,28 +34,32 @@ export class ProductCreateComponent {
     private router: Router
   ) {
     this.productForm = this.fb.group({
-      Name: ['', [Validators.required, Validators.maxLength(100)]],
-      Description: ['', [Validators.required, Validators.maxLength(100)]],
-      Price: ['', Validators.required],
-      Stock: ['', Validators.required],
-      Category: ['', Validators.required]
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.maxLength(500)]],
+      price: ['', [Validators.required, Validators.min(0)]],
+      stock: ['', [Validators.required, Validators.min(0)]],
+      category: ['', Validators.required]
     });
   }
 
-  ngOnInit(): void { }
-
   onSubmit(): void {
     if (this.productForm.valid) {
-      const formData = { ...this.productForm.value, Category: parseInt(this.productForm.value.Category, 10) };
+      this.isSubmitting = true;
+      const formData = {
+        ...this.productForm.value,
+        category: parseInt(this.productForm.value.category, 10)
+      };
+
       this.productService.createProduct(formData).subscribe({
         next: () => {
           this.router.navigate(['/products']);
         },
         error: (error) => {
+          this.isSubmitting = false;
           if (error.status === 400 && error.error && error.error.errors) {
             this.serverErrors = Object.values(error.error.errors).flat() as string[];
           } else {
-            console.error('Unexpected error:', error);
+            this.serverErrors = ['An unexpected error occurred'];
           }
         }
       });

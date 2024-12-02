@@ -1,14 +1,48 @@
-<div class="product-detail" *ngIf="product">
+<div class="product-detail">
   <h1>Product Details</h1>
-  <div class="product-info">
-    <p><strong>Name:</strong> {{ product.name }}</p>
-    <p><strong>Description:</strong> {{ product.description }}</p>
-    <p><strong>Price:</strong> {{ product.price }}</p>
-    <p><strong>Stock:</strong> {{ product.stock }}</p>
-    <p><strong>Category:</strong> {{ product.category }}</p>
+  
+  <div *ngIf="product" class="product-info">
+      <div class="info-group">
+          <span class="info-label">Name</span>
+          <div class="info-value">{{product.name}}</div>
+      </div>
+
+      <div class="info-group">
+          <span class="info-label">Description</span>
+          <div class="info-value">{{product.description}}</div>
+      </div>
+
+      <div class="info-group">
+          <span class="info-label">Price</span>
+          <div class="info-value">{{product.price | currency}}</div>
+      </div>
+
+      <div class="info-group">
+          <span class="info-label">Stock</span>
+          <div class="info-value">{{product.stock}}</div>
+      </div>
+
+      <div class="info-group">
+          <span class="info-label">Category</span>
+          <div class="info-value">{{getCategoryName(product.category)}}</div>
+      </div>
   </div>
+
   <div class="actions">
-    <button (click)="navigateToUpdate()" class="edit-btn">Edit</button>
-    <button (click)="deleteProduct()" class="delete-btn">Delete</button>
+      <button class="edit-btn" (click)="navigateToUpdate()">
+          Edit Product
+      </button>
+      
+      <button class="delete-btn" (click)="deleteProduct()">
+          Delete Product
+      </button>
+      
+      <button class="back-btn" (click)="goBack()">
+          Back to List
+      </button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+      {{error}}
   </div>
 </div>

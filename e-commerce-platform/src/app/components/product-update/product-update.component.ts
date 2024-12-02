@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-product-update',
@@ -14,6 +15,21 @@ import { ProductService } from '../../services/product.service';
 export class ProductUpdateComponent implements OnInit {
   productForm: FormGroup;
   productId?: string;
+  product?: Product;
+  error?: string;
+  isSubmitting = false;
+  
+  categories = [
+    { id: 1, name: 'Electronics' },
+    { id: 2, name: 'Fashion' },
+    { id: 3, name: 'Garden' },
+    { id: 4, name: 'HealthAndBeauty' },
+    { id: 5, name: 'Sports' },
+    { id: 6, name: 'Toys' },
+    { id: 7, name: 'Games' },
+    { id: 8, name: 'Books' },
+    { id: 9, name: 'Jewelry' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -22,32 +38,67 @@ export class ProductUpdateComponent implements OnInit {
     private productService: ProductService
   ) {
     this.productForm = this.fb.group({
-      Name: ['', [Validators.required, Validators.maxLength(100)]],
-      Description: ['', [Validators.required, Validators.maxLength(100)]],
-      Price: ['', Validators.required],
-      Stock: ['', Validators.required],
-      Category: ['', Validators.required]
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.required, Validators.maxLength(500)]],
+      price: ['', [Validators.required, Validators.min(0)]],
+      stock: ['', [Validators.required, Validators.min(0)]],
+      category: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id') || undefined;
+    this.productId = this.route.snapshot.paramMap.get('id') ?? undefined;
     if (this.productId) {
-      this.productService.getProductById(Number(this.productId)).subscribe(product => {
-        this.productForm.patchValue(product);
-      });
+      this.loadProduct(this.productId);
     }
+  }
+
+  loadProduct(id: string): void {
+    this.productService.getProductById(id).subscribe({
+      next: (response) => {
+        if (response.isSuccess && response.data) {
+          this.product = response.data;
+          this.productForm.patchValue({
+            name: response.data.name,
+            description: response.data.description,
+            price: response.data.price,
+            stock: response.data.stock,
+            category: response.data.category
+          });
+        } else {
+          this.error = response.errorMessage || 'Failed to load product';
+        }
+      },
+      error: (err) => {
+        this.error = 'Error loading product details';
+        console.error('Error:', err);
+      }
+    });
   }
 
   onSubmit(): void {
     if (this.productForm.valid && this.productId) {
+      this.isSubmitting = true;
       const updatedProduct = {
+        productId: this.productId,
         ...this.productForm.value,
-        ProductId: this.productId
+        category: parseInt(this.productForm.value.category, 10)
       };
-      this.productService.updateProduct(updatedProduct).subscribe(() => {
-        this.router.navigate(['/products']);
+
+      this.productService.updateProduct(updatedProduct).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (err) => {
+          this.isSubmitting = false;
+          this.error = 'Error updating product';
+          console.error('Error:', err);
+        }
       });
     }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/products']);
   }
 }

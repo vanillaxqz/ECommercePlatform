@@ -1,59 +1,83 @@
 <div class="product-create">
   <h1>Create New Product</h1>
+
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input id="name" formControlName="Name" />
-      <div class="error" *ngIf="productForm.get('Name')?.hasError('required')">
-        Name is required
+      <div class="form-group">
+          <label for="name">Name</label>
+          <input 
+              id="name"
+              type="text"
+              formControlName="name"
+              [ngClass]="{'ng-invalid': productForm.get('name')?.invalid && productForm.get('name')?.touched}">
+          <div class="error" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+              <span *ngIf="productForm.get('name')?.errors?.['required']">Name is required</span>
+              <span *ngIf="productForm.get('name')?.errors?.['maxlength']">Name cannot be longer than 100 characters</span>
+          </div>
       </div>
-      <div class="error" *ngIf="productForm.get('Name')?.hasError('maxlength')">
-        Name cannot be longer than 100 characters
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="description">Description</label>
-      <input id="description" formControlName="Description" />
-      <div class="error" *ngIf="productForm.get('Description')?.hasError('required')">
-        Description is required
+      <div class="form-group">
+          <label for="description">Description</label>
+          <textarea 
+              id="description"
+              formControlName="description"
+              rows="3"
+              [ngClass]="{'ng-invalid': productForm.get('description')?.invalid && productForm.get('description')?.touched}">
+          </textarea>
+          <div class="error" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+              <span *ngIf="productForm.get('description')?.errors?.['required']">Description is required</span>
+              <span *ngIf="productForm.get('description')?.errors?.['maxlength']">Description cannot be longer than 500 characters</span>
+          </div>
       </div>
-      <div class="error" *ngIf="productForm.get('Description')?.hasError('maxlength')">
-        Description cannot be longer than 100 characters
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input id="price" type="number" formControlName="Price" />
-      <div class="error" *ngIf="productForm.get('Price')?.hasError('required')">
-        Price is required
+      <div class="form-group">
+          <label for="price">Price</label>
+          <div class="price-input-group">
+              <span class="currency-symbol">$</span>
+              <input 
+                  id="price"
+                  type="number"
+                  step="0.01"
+                  formControlName="price"
+                  [ngClass]="{'ng-invalid': productForm.get('price')?.invalid && productForm.get('price')?.touched}">
+          </div>
+          <div class="error" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+              <span *ngIf="productForm.get('price')?.errors?.['required']">Price is required</span>
+          </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="stock">Stock</label>
-      <input id="stock" type="number" formControlName="Stock" />
-      <div class="error" *ngIf="productForm.get('Stock')?.hasError('required')">
-        Stock is required
+      <div class="form-group">
+          <label for="stock">Stock</label>
+          <input 
+              id="stock"
+              type="number"
+              formControlName="stock"
+              [ngClass]="{'ng-invalid': productForm.get('stock')?.invalid && productForm.get('stock')?.touched}">
+          <div class="error" *ngIf="productForm.get('stock')?.invalid && productForm.get('stock')?.touched">
+              <span *ngIf="productForm.get('stock')?.errors?.['required']">Stock is required</span>
+          </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="category">Category</label>
-      <select id="category" formControlName="Category">
-        <option value="">Select a category</option>
-        <option value="1">Electronics</option>
-        <option value="2">Clothing</option>
-        <option value="3">Books</option>
-        <option value="4">Home & Garden</option>
-        <option value="5">Sports</option>
-      </select>
-      <div class="error" *ngIf="productForm.get('Category')?.hasError('required')">
-        Category is required
+      <div class="form-group">
+          <label for="category">Category</label>
+          <select 
+              id="category"
+              formControlName="category"
+              [ngClass]="{'ng-invalid': productForm.get('category')?.invalid && productForm.get('category')?.touched}">
+              <option value="">Select a category</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                  {{category.name}}
+              </option>
+          </select>
+          <div class="error" *ngIf="productForm.get('category')?.invalid && productForm.get('category')?.touched">
+              <span *ngIf="productForm.get('category')?.errors?.['required']">Category is required</span>
+          </div>
       </div>
-    </div>
 
-    <button type="submit" [disabled]="productForm.invalid">Create Product</button>
+      <button 
+          type="submit" 
+          [disabled]="!productForm.valid || isSubmitting"
+          [class.loading]="isSubmitting">
+          Create Product
+      </button>
   </form>
 </div>
