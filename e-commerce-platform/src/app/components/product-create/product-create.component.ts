@@ -6,17 +6,18 @@ import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-create',
-  standalone  : true,
+  standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './product-create.component.html',
-  styleUrl: './product-create.component.css'
+  styleUrls: ['./product-create.component.css']
 })
 export class ProductCreateComponent {
   productForm: FormGroup;
+  serverErrors: string[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private ProductService: ProductService,
+    private productService: ProductService,
     private router: Router
   ) {
     this.productForm = this.fb.group({
@@ -28,15 +29,23 @@ export class ProductCreateComponent {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(): void {
     if (this.productForm.valid) {
-      this.ProductService.createProduct(this.productForm.value).subscribe(() => {
-        this.router.navigate(['/books']);
+      const formData = { ...this.productForm.value, Category: parseInt(this.productForm.value.Category, 10) };
+      this.productService.createProduct(formData).subscribe({
+        next: () => {
+          this.router.navigate(['/products']);
+        },
+        error: (error) => {
+          if (error.status === 400 && error.error && error.error.errors) {
+            this.serverErrors = Object.values(error.error.errors).flat() as string[];
+          } else {
+            console.error('Unexpected error:', error);
+          }
+        }
       });
     }
   }
-
-
 }
