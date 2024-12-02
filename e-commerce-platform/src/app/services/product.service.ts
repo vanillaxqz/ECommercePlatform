@@ -11,11 +11,11 @@ export class ProductService {
 
   private apiURL = 'http://localhost:5270/api/Products'
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
   }
 
   //GET: /api/Products/{id}
-  //GET: /api/Products
+  //GET: /api/Products/paginated
   //DELETE: /api/Products/{id}
   //PUT: /api/Products
   //POST: /api/Products
@@ -24,8 +24,8 @@ export class ProductService {
     const params = new HttpParams()
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
-      
-    return this.http.get<PaginatedResult<Product>>(this.apiURL, { params });
+
+    return this.http.get<PaginatedResult<Product>>(`${this.apiURL}/paginated`, { params });
   }
 
   public createProduct(product: Product): Observable<any> {
@@ -43,5 +43,5 @@ export class ProductService {
   public getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.apiURL}/${id}`);
   }
-  
+
 }

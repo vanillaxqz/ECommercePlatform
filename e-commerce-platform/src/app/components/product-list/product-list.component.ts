@@ -27,12 +27,20 @@ export class ProductListComponent {
   loadProducts(): void {
     this.productService.getProducts(this.currentPage, this.pageSize)
       .subscribe((result) => {
-        this.products = result.items;
-        this.totalItems = result.totalItems;
-        this.totalPages = result.totalPages;
+        this.products = result.data.map(item => ({
+          productId: item.productId, // Map camelCase to PascalCase
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          stock: item.stock,
+          category: item.category
+        }));
+        console.log('Mapped Products:', this.products); // Verify the mapping
       });
   }
-  
+
+
+
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadProducts();

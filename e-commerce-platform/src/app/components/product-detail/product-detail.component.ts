@@ -29,13 +29,13 @@ export class ProductDetailComponent implements OnInit {
 
   deleteProduct(): void {
     if (this.product && confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(Number(this.product.ProductId)).subscribe(() => {
+      this.productService.deleteProduct(Number(this.product.productId)).subscribe(() => {
         this.router.navigate(['/products']);
       });
     }
   }
 
   navigateToUpdate(): void {
-    this.router.navigate(['/products/update', this.product?.ProductId]);
+    this.router.navigate(['/products/update', this.product?.productId]);
   }
 }
