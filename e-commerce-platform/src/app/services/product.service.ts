@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 
 export interface PaginatedResponse {
@@ -20,27 +21,54 @@ export class ProductService {
     let params = new HttpParams()
       .set('Page', page.toString())
       .set('PageSize', pageSize.toString());
-    
+
     if (category !== undefined && category !== null) {
       params = params.set('Category', category.toString());
     }
-      
-    return this.http.get<PaginatedResponse>(`${this.apiURL}/paginated`, { params });
+
+    return this.http.get<PaginatedResponse>(`${this.apiURL}/paginated`, { params })
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   public createProduct(product: Product): Observable<any> {
-    return this.http.post<any>(this.apiURL, product);
+    return this.http.post<any>(this.apiURL, product)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   public updateProduct(product: Product): Observable<any> {
-    return this.http.put<any>(this.apiURL, product);
+    return this.http.put<any>(this.apiURL, product)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   public deleteProduct(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiURL}/${id}`);
+    return this.http.delete<any>(`${this.apiURL}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   public getProductById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiURL}/${id}`);
+    return this.http.get<any>(`${this.apiURL}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Unknown error!';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side errors
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      // Server-side errors
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    }
+    return throwError(() => new Error(errorMessage));
   }
 }

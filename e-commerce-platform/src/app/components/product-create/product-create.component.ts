@@ -15,7 +15,7 @@ export class ProductCreateComponent {
   productForm: FormGroup;
   isSubmitting = false;
   serverErrors: string[] = [];
-  
+
   categories = [
     { id: 1, name: 'Electronics' },
     { id: 2, name: 'Fashion' },
@@ -34,10 +34,10 @@ export class ProductCreateComponent {
     private router: Router
   ) {
     this.productForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      price: ['', [Validators.required, Validators.min(0)]],
-      stock: ['', [Validators.required, Validators.min(0)]],
+      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      stock: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
       category: ['', Validators.required]
     });
   }
