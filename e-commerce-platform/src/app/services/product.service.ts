@@ -12,7 +12,7 @@ export interface PaginatedResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiURL = 'https://ecommerceproiect.site/api/Products';
+  private apiURL = 'https://ecommerceproiect.site/api/v1/Products';
 
   constructor(private http: HttpClient) { }
 
