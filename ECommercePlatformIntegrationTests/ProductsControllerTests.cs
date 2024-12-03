@@ -18,7 +18,7 @@ namespace ECommercePlatformIntegrationTests
         private readonly WebApplicationFactory<Program> factory;
         private readonly ApplicationDbContext dbContext;
         private readonly HttpClient client;
-        private const string BaseUrl = "/api/products";
+        private const string BaseUrl = "/api/v1/products";
 
         public ProductsControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
