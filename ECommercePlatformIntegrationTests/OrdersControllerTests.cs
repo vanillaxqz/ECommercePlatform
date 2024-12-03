@@ -74,7 +74,7 @@ namespace ECommercePlatformIntegrationTests
             _dbContext.SaveChanges();
 
             // Act
-            var response = await _client.GetAsync("/api/orders");
+            var response = await _client.GetAsync("/api/v1/orders");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -97,7 +97,7 @@ namespace ECommercePlatformIntegrationTests
             _dbContext.SaveChanges();
 
             // Act
-            var response = await _client.GetAsync($"/api/orders/{orderId}");
+            var response = await _client.GetAsync($"/api/v1/orders/{orderId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -110,7 +110,7 @@ namespace ECommercePlatformIntegrationTests
             var orderId = Guid.NewGuid();
 
             // Act
-            var response = await _client.GetAsync($"/api/orders/{orderId}");
+            var response = await _client.GetAsync($"/api/v1/orders/{orderId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -132,7 +132,7 @@ namespace ECommercePlatformIntegrationTests
             var content = new StringContent(JsonSerializer.Serialize(newOrder), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/orders", content);
+            var response = await _client.PostAsync("/api/v1/orders", content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -155,7 +155,7 @@ namespace ECommercePlatformIntegrationTests
             _dbContext.SaveChanges();
 
             // Act
-            var response = await _client.DeleteAsync($"/api/orders/{orderId}");
+            var response = await _client.DeleteAsync($"/api/v1/orders/{orderId}");
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);

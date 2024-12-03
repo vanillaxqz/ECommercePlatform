@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Application.DTOs;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Application.UseCases.Commands.UserCommands;
@@ -18,7 +17,7 @@ namespace ECommercePlatformIntegrationTests
         private readonly WebApplicationFactory<Program> factory;
         private readonly ApplicationDbContext dbContext;
         private readonly HttpClient client;
-        private const string BaseUrl = "/api/users";
+        private const string BaseUrl = "/api/v1/users";
 
         public UsersControllerIntegrationTests(WebApplicationFactory<Program> factory)
         {
