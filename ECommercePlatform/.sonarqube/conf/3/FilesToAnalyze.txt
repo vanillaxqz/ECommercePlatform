@@ -13,8 +13,14 @@ C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\net
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.Development.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\appsettings.json
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\ECommercePlatform.http
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\75c9e027-f472-4daa-b86d-5e04e046e26e\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\75c9e027-f472-4daa-b86d-5e04e046e26e\coverage.opencover.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8c70443d-82f9-457b-81bd-80b60ae11286\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8c70443d-82f9-457b-81bd-80b60ae11286\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\e7386102-77cc-4cfd-be55-8f624c126c14\coverage.cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\e7386102-77cc-4cfd-be55-8f624c126c14\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\fb8cdfc4-fc89-476c-baf3-d48f9c2ac111\coverage.cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\fb8cdfc4-fc89-476c-baf3-d48f9c2ac111\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Properties\launchSettings.json
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Properties\PublishProfiles\burd4444-001-site1 - FTP.pubxml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\Properties\PublishProfiles\burd4444-001-site1 - Web Deploy.pubxml

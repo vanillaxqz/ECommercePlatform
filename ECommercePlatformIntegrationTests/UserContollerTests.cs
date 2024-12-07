@@ -9,6 +9,9 @@ using Domain.Entities;
 using Infrastructure.Persistence;
 using Application.UseCases.Commands.UserCommands;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 
 namespace ECommercePlatformIntegrationTests
 {
@@ -49,9 +52,11 @@ namespace ECommercePlatformIntegrationTests
             dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             dbContext.Database.EnsureCreated();
             client = this.factory.CreateClient();
+            var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+            var token = tokenHandler.GenerateAccessToken(new Guid("3fdd5f93-4ddb-465e-a2e8-3e326175030f"), "testemail@gmail.com");
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
-
-
 
         public void Dispose()
         {
@@ -111,5 +116,55 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
+        [Trait("Category", "ExcludeThis")]
+        [Fact]
+        public async Task GivenValidCredentials_WhenLoggingIn_ThenShouldReturnOkResponse()
+        {
+            // Arrange
+            var user = new User
+            {
+                UserId = Guid.NewGuid(),
+                Name = "Jane Doe",
+                Email = "jane.doe@example.com",
+                Password = "SecurePassword123",
+                Address = "456 Main Street",
+                PhoneNumber = "987654321"
+            };
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+
+            var loginRequest = new
+            {
+                Email = "jane.doe@example.com",
+                Password = "SecurePassword123"
+            };
+            var content = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync($"{BaseUrl}/login", content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [Trait("Category", "ExcludeThis")]
+        [Fact]
+        public async Task GivenInvalidCredentials_WhenLoggingIn_ThenShouldReturnBadRequest()
+        {
+            // Arrange
+            var loginRequest = new
+            {
+                Email = "invalid.email@example.com",
+                Password = "WrongPassword"
+            };
+            var content = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await client.PostAsync($"{BaseUrl}/login", content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
     }
 }

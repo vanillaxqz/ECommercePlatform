@@ -10,6 +10,9 @@ using Domain.Entities;
 using Infrastructure.Persistence;
 using Application.UseCases.Commands.ProductCommands;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 
 namespace ECommercePlatformIntegrationTests
 {
@@ -50,6 +53,10 @@ namespace ECommercePlatformIntegrationTests
             dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             dbContext.Database.EnsureCreated();
             client = this.factory.CreateClient();
+            var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+            var token = tokenHandler.GenerateAccessToken(new Guid("3fdd5f93-4ddb-465e-a2e8-3e326175030f"), "testemail@gmail.com");
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         public void Dispose()
