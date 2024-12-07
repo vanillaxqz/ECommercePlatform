@@ -18,6 +18,7 @@ namespace Application.Utils
             CreateMap<Result<IEnumerable<User>>, Result<IEnumerable<UserDto>>>().ReverseMap();
             CreateMap<CreateUserCommand, User>().ReverseMap();
             CreateMap<UpdateUserCommand, User>().ReverseMap();
+            CreateMap<LoginUserCommand, User>().ReverseMap();
 
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Result<Product>, Result<ProductDto>>().ReverseMap();

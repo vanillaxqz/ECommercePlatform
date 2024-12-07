@@ -7,11 +7,13 @@ using Domain.Common;
 using Application.UseCases.Queries.OrderQueries;
 using Application.Utils;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ECommercePlatform.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly IMediator mediator;
