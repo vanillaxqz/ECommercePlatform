@@ -9,6 +9,9 @@ using Application.DTOs;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using System.Net.Http.Headers;
+using Infrastructure;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ECommercePlatformIntegrationTests
 {
@@ -50,6 +53,10 @@ namespace ECommercePlatformIntegrationTests
             _dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             _dbContext.Database.EnsureCreated();
             _client = _factory.CreateClient();
+            var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+            var token = tokenHandler.GenerateAccessToken(new Guid("3fdd5f93-4ddb-465e-a2e8-3e326175030f"), "testemail@gmail.com");
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         public void Dispose()
@@ -130,7 +137,6 @@ namespace ECommercePlatformIntegrationTests
                 PaymentId = Guid.NewGuid()
             };
             var content = new StringContent(JsonSerializer.Serialize(newOrder), Encoding.UTF8, "application/json");
-
             // Act
             var response = await _client.PostAsync("/api/v1/orders", content);
 
