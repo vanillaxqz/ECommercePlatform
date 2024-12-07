@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using Domain.Entities;
 
 namespace ECommercePlatform.Controllers
 {
@@ -51,7 +52,7 @@ namespace ECommercePlatform.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<String>> LoginUser(LoginUserCommand user)
+        public async Task<ActionResult<Result<IList<String>>>> LoginUser(LoginUserCommand user)
         {
             var response = await mediator.Send(user);
             if (!response.IsSuccess)
@@ -67,7 +68,8 @@ namespace ECommercePlatform.Controllers
                 var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
                 var token = tokenHandler.GenerateAccessToken(response.Data.UserId, response.Data.Email);
                 var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-                return accessToken;
+                List<String> data = [accessToken, response.Data.UserId.ToString()];
+                return Result<IList<String>>.Success(data);
             }
         }
 
