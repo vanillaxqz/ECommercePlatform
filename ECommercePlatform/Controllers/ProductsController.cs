@@ -5,6 +5,7 @@ using Application.Utils;
 using Domain.Common;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommercePlatform.Controllers
@@ -49,6 +50,7 @@ namespace ECommercePlatform.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [Authorize]
         public async Task<ActionResult<Result<Guid>>> CreateProduct(CreateProductCommand command)
         {
             var response = await mediator.Send(command);
@@ -61,6 +63,7 @@ namespace ECommercePlatform.Controllers
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize]
         public async Task<ActionResult> DeleteProductById(Guid id)
         {
             var query = new DeleteProductCommand { Id = id };
@@ -70,6 +73,7 @@ namespace ECommercePlatform.Controllers
 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Authorize]
         public async Task<ActionResult> Update(UpdateProductCommand update)
         {
             await mediator.Send(update);

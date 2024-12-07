@@ -3,16 +3,29 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace Infrastructure.Repositories
 {
     internal class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext context;
+
         public UserRepository(ApplicationDbContext context)
         {
             this.context = context;
+        }
+
+        public async Task<Result<User>> LoginUser(User user)
+        {
+            var userToLogin = await context.Users.FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            if (userToLogin == null)
+            {
+                return Result<User>.Failure($"Invalid email or password");
+            }
+            else
+            {
+                return Result<User>.Success(userToLogin);
+            }
         }
 
         public async Task<Result<Guid>> AddUserAsync(User user)

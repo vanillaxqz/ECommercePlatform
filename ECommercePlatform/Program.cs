@@ -1,5 +1,9 @@
 using Infrastructure;
 using Application;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "MyAllowSpecificOrigins";
@@ -14,9 +18,29 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// Add services to the container.
-
 builder.Services.AddControllers();
+var key = Encoding.ASCII.GetBytes("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
@@ -39,8 +63,9 @@ app.UseRouting();
 
 app.UseStaticFiles();
 
-app.UseCors("MyAllowSpecificOrigins");
+app.UseCors(MyAllowSpecificOrigins);
 
+app.UseAuthentication(); // Ensure this is added before UseAuthorization
 app.UseAuthorization();
 
 app.MapControllers();

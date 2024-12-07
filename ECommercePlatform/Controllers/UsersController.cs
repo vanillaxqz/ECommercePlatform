@@ -5,6 +5,9 @@ using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ECommercePlatform.Controllers
 {
@@ -35,6 +38,7 @@ namespace ECommercePlatform.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<Result<IEnumerable<UserDto>>>> GetAllUsers()
         {
             var query = new GetAllUsersQuery();
@@ -44,6 +48,27 @@ namespace ECommercePlatform.Controllers
                 return BadRequest(response.ErrorMessage);
             }
             return response;
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<String>> LoginUser(LoginUserCommand user)
+        {
+            var response = await mediator.Send(user);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            else
+            {
+                if (response.Data?.Email == null)
+                {
+                    return BadRequest("Email is required to generate access token.");
+                }
+                var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+                var token = tokenHandler.GenerateAccessToken(response.Data.UserId, response.Data.Email);
+                var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+                return accessToken;
+            }
         }
 
         [HttpPost]
