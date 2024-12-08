@@ -6,6 +6,7 @@ using Application.UseCases.Commands.PaymentCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
+using Application.UseCases.Authentication;
 
 namespace Application.Utils
 {
@@ -19,6 +20,7 @@ namespace Application.Utils
             CreateMap<CreateUserCommand, User>().ReverseMap();
             CreateMap<UpdateUserCommand, User>().ReverseMap();
             CreateMap<LoginUserCommand, User>().ReverseMap();
+            CreateMap<RegisterUserCommand, User>().ReverseMap();
 
             CreateMap<Product, ProductDto>().ReverseMap();
             CreateMap<Result<Product>, Result<ProductDto>>().ReverseMap();

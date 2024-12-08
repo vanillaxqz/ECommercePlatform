@@ -1,5 +1,4 @@
 ﻿using Application.DTOs;
-using Application.UseCases.Commands.UserCommands;
 using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
@@ -7,7 +6,7 @@ using Domain.Repositories;
 using MediatR;
 using System.Threading.Tasks;
 
-namespace Application.UseCases.CommandHandlers.UserCommandHandlers
+namespace Application.UseCases.Authentication
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<UserDto>>
     {
