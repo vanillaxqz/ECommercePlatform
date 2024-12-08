@@ -3,14 +3,29 @@ import { HttpInterceptorFn } from '@angular/common/http';
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('token');
   
-  if (token && req.url.includes('api/v1')) {
-    const clonedReq = req.clone({
-      headers: req.headers
-        .set('Authorization', `Bearer ${token}`)
-        .set('Content-Type', 'application/json')
+  console.log('Original Request:', {
+    url: req.url,
+    headers: req.headers.keys(),
+    hasToken: !!token
+  });
+
+  // Match any request to the API domain
+  if (token && req.url.includes('ecommerceproiect.site')) {
+    // Create new headers object with auth token
+    const authReq = req.clone({
+      setHeaders: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
-    console.log('Auth header added:', clonedReq.headers.get('Authorization'));
-    return next(clonedReq);
+
+    console.log('Modified Request:', {
+      url: authReq.url,
+      headers: authReq.headers.keys(),
+      authHeader: authReq.headers.get('Authorization')
+    });
+
+    return next(authReq);
   }
   
   return next(req);
