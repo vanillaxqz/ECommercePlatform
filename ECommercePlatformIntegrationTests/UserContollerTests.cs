@@ -116,55 +116,5 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
-        [Trait("Category", "ExcludeThis")]
-        [Fact]
-        public async Task GivenValidCredentials_WhenLoggingIn_ThenShouldReturnOkResponse()
-        {
-            // Arrange
-            var user = new User
-            {
-                UserId = Guid.NewGuid(),
-                Name = "Jane Doe",
-                Email = "jane.doe@example.com",
-                Password = "SecurePassword123",
-                Address = "456 Main Street",
-                PhoneNumber = "987654321"
-            };
-            dbContext.Users.Add(user);
-            dbContext.SaveChanges();
-
-            var loginRequest = new
-            {
-                Email = "jane.doe@example.com",
-                Password = "SecurePassword123"
-            };
-            var content = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8, "application/json");
-
-            // Act
-            var response = await client.PostAsync($"{BaseUrl}/login", content);
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-
-        [Trait("Category", "ExcludeThis")]
-        [Fact]
-        public async Task GivenInvalidCredentials_WhenLoggingIn_ThenShouldReturnBadRequest()
-        {
-            // Arrange
-            var loginRequest = new
-            {
-                Email = "invalid.email@example.com",
-                Password = "WrongPassword"
-            };
-            var content = new StringContent(JsonSerializer.Serialize(loginRequest), Encoding.UTF8, "application/json");
-
-            // Act
-            var response = await client.PostAsync($"{BaseUrl}/login", content);
-
-            // Assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        }
-
     }
 }

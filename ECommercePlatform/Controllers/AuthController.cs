@@ -1,6 +1,5 @@
 ﻿using Domain.Common;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.UseCases.Authentication;
 using Infrastructure;
@@ -11,10 +10,10 @@ namespace ECommercePlatform.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IMediator mediator;
-        public LoginController(IMediator mediator)
+        public AuthController(IMediator mediator)
         {
             this.mediator = mediator;
         }
