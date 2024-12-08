@@ -3,6 +3,7 @@ import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
+import { AuthInterceptor } from '../interceptors/auth.interceptor';
 
 export interface PaginatedResponse {
   data: Product[];
@@ -47,8 +48,9 @@ export class ProductService {
   }
 
   public deleteProduct(id: string): Observable<any> {
-    
-    return this.http.delete<any>(`${this.apiURL}/${id}`)
+    const headers = new HttpHeaders()
+      .set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
       .pipe(
         catchError(this.handleError)
       );
