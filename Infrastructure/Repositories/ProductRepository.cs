@@ -38,9 +38,16 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<Result<IEnumerable<Product>>> GetAllProductsAsync()
+        public async Task<Result<IEnumerable<Product>>> GetAllProductsAsync(Func<IQueryable<Product>, IQueryable<Product>>? query = null)
         {
-            var products = await context.Products.ToListAsync();
+            IQueryable<Product> productsQuery = context.Products;
+
+            if (query != null)
+            {
+                productsQuery = query(productsQuery);
+            }
+
+            var products = await productsQuery.ToListAsync();
             if (products == null)
             {
                 return Result<IEnumerable<Product>>.Failure($"Error retrieving all products");
