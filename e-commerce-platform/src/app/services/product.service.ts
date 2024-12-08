@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
@@ -13,7 +13,7 @@ export interface PaginatedResponse {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiURL = 'https://localhost:44376/api/v1/Products';
+  private apiURL = 'https://ecommerceproiect.site/api/v1/Products';
 
   constructor(private http: HttpClient) { }
 

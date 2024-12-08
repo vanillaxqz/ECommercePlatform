@@ -77,7 +77,7 @@ export class UserService {
   }
 
   register(user: Omit<User, 'userId'>): Observable<User> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}`, user).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Login/register`, user).pipe(
       map((response) => {
         if (!response.isSuccess) {
           throw new Error(response.errorMessage || 'Registration failed');
