@@ -3,7 +3,6 @@ import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
-import { AuthInterceptor } from '../interceptors/auth.interceptor';
 
 export interface PaginatedResponse {
   data: Product[];
@@ -34,22 +33,23 @@ export class ProductService {
   }
 
   public createProduct(product: Product): Observable<any> {
-    return this.http.post<any>(this.apiURL, product)
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.post<any>(this.apiURL, product,  { headers })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   public updateProduct(product: Product): Observable<any> {
-    return this.http.put<any>(this.apiURL, product)
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.put<any>(this.apiURL, product, { headers })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   public deleteProduct(id: string): Observable<any> {
-    const headers = new HttpHeaders()
-      .set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
     return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
       .pipe(
         catchError(this.handleError)
