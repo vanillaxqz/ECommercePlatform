@@ -1,0 +1,18 @@
+<nav class="navbar">
+  <div class="nav-content" [class.authenticated]="userService.isAuthenticated">
+    <a routerLink="/" class="logo">EBUY</a>
+    
+    <button class="hamburger" (click)="toggleMenu()">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <div class="nav-links" [class.open]="isMenuOpen">
+      <ng-container *ngIf="userService.isAuthenticated">
+        <a routerLink="/products" routerLinkActive="active" (click)="closeMenu()">Products</a>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </ng-container>
+    </div>
+  </div>
+</nav>
