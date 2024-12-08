@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
@@ -8,6 +8,10 @@ export interface PaginatedResponse {
   data: Product[];
   totalCount: number;
 }
+
+const headers = new HttpHeaders({
+  'Authorization': 'Bearer' + localStorage.getItem('token')
+});
 
 @Injectable({
   providedIn: 'root'
@@ -47,7 +51,8 @@ export class ProductService {
   }
 
   public deleteProduct(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiURL}/${id}`)
+    
+    return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
       .pipe(
         catchError(this.handleError)
       );
