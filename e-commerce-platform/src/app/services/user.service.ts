@@ -10,7 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://ecommerceproiect.site/api/v1/Users';
+  private apiUrl = 'https://ecommerceproiect.site/api/v1';
   private currentUserSubject: BehaviorSubject<User | null>;
   private tokenSubject: BehaviorSubject<string | null>;
 
