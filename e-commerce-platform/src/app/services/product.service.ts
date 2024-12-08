@@ -9,10 +9,6 @@ export interface PaginatedResponse {
   totalCount: number;
 }
 
-const headers = new HttpHeaders({
-  'Authorization': 'Bearer' + localStorage.getItem('token')
-});
-
 @Injectable({
   providedIn: 'root'
 })
@@ -52,7 +48,7 @@ export class ProductService {
 
   public deleteProduct(id: string): Observable<any> {
     
-    return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
+    return this.http.delete<any>(`${this.apiURL}/${id}`)
       .pipe(
         catchError(this.handleError)
       );
