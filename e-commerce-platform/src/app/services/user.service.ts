@@ -46,7 +46,7 @@ export class UserService {
   // user.service.ts
   login(email: string, password: string): Observable<User> {
     return this.http
-      .post<AuthResponse>(`${this.apiUrl}/login`, { email, password })
+      .post<AuthResponse>(`${this.apiUrl}/Login/login`, { email, password })
       .pipe(
         map((response) => {
           if (!response.isSuccess) {
@@ -77,7 +77,7 @@ export class UserService {
   }
 
   register(user: Omit<User, 'userId'>): Observable<User> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}`, user).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Login/register`, user).pipe(
       map((response) => {
         if (!response.isSuccess) {
           throw new Error(response.errorMessage || 'Registration failed');
