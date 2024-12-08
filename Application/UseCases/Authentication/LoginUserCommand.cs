@@ -2,7 +2,7 @@
 using Domain.Common;
 using MediatR;
 
-namespace Application.UseCases.Commands.UserCommands
+namespace Application.UseCases.Authentication
 {
     public class LoginUserCommand : IRequest<Result<UserDto>>
     {
