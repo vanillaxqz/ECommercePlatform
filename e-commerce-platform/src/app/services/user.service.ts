@@ -10,7 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'https://ecommerceproiect.site/api/v1/Users';
+  private apiUrl = 'https://localhost:44376/api/v1/Login';
   private currentUserSubject: BehaviorSubject<User | null>;
   private tokenSubject: BehaviorSubject<string | null>;
 
@@ -77,7 +77,7 @@ export class UserService {
   }
 
   register(user: Omit<User, 'userId'>): Observable<User> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}`, user).pipe(
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, user).pipe(
       map((response) => {
         if (!response.isSuccess) {
           throw new Error(response.errorMessage || 'Registration failed');
