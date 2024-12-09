@@ -22,7 +22,7 @@ interface Category {
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
   currentPage = 1;
-  pageSize = 10;
+  pageSize = 9;
   totalItems = 0;
   totalPages = 0;
   isLoading = false;

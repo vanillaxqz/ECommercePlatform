@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   private memoryStorage: Map<string, string>;
@@ -16,15 +16,31 @@ export class StorageService {
   }
 
   getItem(key: string): string | null {
-    console.log('Accessing StorageService:', key, this.isBrowser() ? 'Browser' : 'Server');
+    if (this.isBrowser()) {
+      // Use localStorage in the browser
+      return localStorage.getItem(key);
+    }
+    // Fallback to memory storage on the server
     return this.memoryStorage.get(key) || null;
   }
 
   setItem(key: string, value: string): void {
-    this.memoryStorage.set(key, value);
+    if (this.isBrowser()) {
+      // Use localStorage in the browser
+      localStorage.setItem(key, value);
+    } else {
+      // Fallback to memory storage on the server
+      this.memoryStorage.set(key, value);
+    }
   }
 
   removeItem(key: string): void {
-    this.memoryStorage.delete(key);
+    if (this.isBrowser()) {
+      // Use localStorage in the browser
+      localStorage.removeItem(key);
+    } else {
+      // Fallback to memory storage on the server
+      this.memoryStorage.delete(key);
+    }
   }
 }
