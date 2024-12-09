@@ -12,23 +12,23 @@ export const appRoutes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: UserLoginComponent },
     { path: 'register', component: UserRegisterComponent },
-    { 
-        path: 'products', 
+    {
+        path: 'products',
         component: ProductListComponent,
         canActivate: [AuthGuard]
     },
-    { 
-        path: 'products/create', 
+    {
+        path: 'products/create',
         component: ProductCreateComponent,
         canActivate: [AuthGuard]
     },
-    { 
-        path: 'products/:id', 
+    {
+        path: 'products/:id',
         component: ProductDetailComponent,
         canActivate: [AuthGuard]
     },
-    { 
-        path: 'products/update/:id', 
+    {
+        path: 'products/update/:id',
         component: ProductUpdateComponent,
         canActivate: [AuthGuard]
     }

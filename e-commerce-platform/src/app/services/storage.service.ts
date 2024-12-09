@@ -1,4 +1,3 @@
-// storage.service.ts
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -12,26 +11,20 @@ export class StorageService {
     this.memoryStorage = new Map<string, string>();
   }
 
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
   getItem(key: string): string | null {
-    if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem(key);
-    }
+    console.log('Accessing StorageService:', key, this.isBrowser() ? 'Browser' : 'Server');
     return this.memoryStorage.get(key) || null;
   }
 
   setItem(key: string, value: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(key, value);
-    } else {
-      this.memoryStorage.set(key, value);
-    }
+    this.memoryStorage.set(key, value);
   }
 
   removeItem(key: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(key);
-    } else {
-      this.memoryStorage.delete(key);
-    }
+    this.memoryStorage.delete(key);
   }
 }
