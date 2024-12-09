@@ -1,95 +1,70 @@
-<div class="product-list">
-    <div class="list-header">
-        <div class="title-section">
-            <h1>Product List</h1>
+<div class="container">
+    <div class="filters">
+      <div class="select-wrapper">
+        <select class="category-select" (change)="onCategoryChange($event)">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+        <span class="select-arrow">▼</span>
+      </div>
+      <button class="add-button" *ngIf="!userService.isGuest" (click)="navigateToCreate()">
+        <span class="button-icon">+</span>
+        Add Product
+      </button>
+    </div>
+  
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner"></div>
+    </div>
+  
+    <div *ngIf="error" class="error-message">{{ error }}</div>
+  
+    <div class="product-grid" *ngIf="!isLoading && !error">
+      <div class="product-card" *ngFor="let product of products">
+        <div class="product-image-container">
+          <img
+            [ngSrc]="'https://picsum.photos/seed/' + product.productId + '/400/300'"
+            [width]="400"
+            [height]="300"
+            class="product-image"
+            [alt]="product.name"
+          />
         </div>
-        
-        <div class="actions-section">
-            <div class="filter-section">
-                <select 
-                    [ngModel]="selectedCategory"
-                    (change)="onCategoryChange($event)"
-                    class="category-select">
-                    <option value="">All Categories</option>
-                    <option *ngFor="let category of categories" [value]="category.id">
-                        {{category.name}}
-                    </option>
-                </select>
-            </div>
-
-            <button class="create-button" (click)="navigateToCreate()">
-                Create New Product
+        <div class="product-content">
+          <h3 class="product-title">{{ product.name }}</h3>
+          <span class="product-category">{{ getCategoryName(product.category) }}</span>
+          <p class="product-description">{{ product.description }}</p>
+          <p class="product-price">${{ product.price }}</p>
+          <p class="product-stock" [class.low-stock]="product.stock < 10">
+            Stock: {{ product.stock }}
+          </p>
+          <div class="product-actions">
+            <button class="btn primary" (click)="navigateToDetail(product.productId)">
+              View Details
             </button>
+            <button class="btn secondary" 
+                    *ngIf="!userService.isGuest"
+                    (click)="navigateToUpdate(product.productId)">
+              Edit
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-
-    <!-- Error Message -->
-    <div *ngIf="error" class="error-message">
-        {{error}}
+  
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button class="pagination-btn" 
+              (click)="onPageChange(currentPage - 1)" 
+              [disabled]="currentPage === 1">
+        ←
+      </button>
+      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+      <button class="pagination-btn" 
+              (click)="onPageChange(currentPage + 1)" 
+              [disabled]="currentPage === totalPages">
+        →
+      </button>
     </div>
-
-    <!-- Loading State -->
-    <div *ngIf="isLoading" class="loading-container">
-        <div class="loading-spinner"></div>
-        <span>Loading products...</span>
-    </div>
-
-    <!-- Product Table -->
-    <table *ngIf="!isLoading && products.length > 0">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let product of products">
-                <td>{{product.name}}</td>
-                <td>{{product.description}}</td>
-                <td>{{product.price | currency}}</td>
-                <td>{{product.stock}}</td>
-                <td>{{getCategoryName(product.category)}}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="view-button" (click)="navigateToDetail(product.productId)">
-                            View
-                        </button>
-                        <button class="edit-button" (click)="navigateToUpdate(product.productId)">
-                            Edit
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Empty State -->
-    <div *ngIf="!isLoading && products.length === 0" class="no-products">
-        No products available
-    </div>
-
-    <!-- Pagination -->
-    <div *ngIf="totalPages > 1" class="pagination">
-        <button 
-            [disabled]="currentPage === 1 || isLoading" 
-            (click)="onPageChange(currentPage - 1)"
-            class="pagination-button">
-            Previous
-        </button>
-
-        <span class="pagination-info">
-            Page {{currentPage}} of {{totalPages}}
-        </span>
-
-        <button 
-            [disabled]="currentPage === totalPages || isLoading" 
-            (click)="onPageChange(currentPage + 1)"
-            class="pagination-button">
-            Next
-        </button>
-    </div>
-</div>
+  </div>

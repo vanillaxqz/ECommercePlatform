@@ -1,6 +1,6 @@
 // guards/auth.guard.ts
 import { Injectable } from '@angular/core';
-import { Router, UrlTree } from '@angular/router';
+import { Router, UrlTree, ActivatedRouteSnapshot } from '@angular/router';
 import { UserService } from '../services/user.service';
 
 @Injectable({
@@ -12,7 +12,11 @@ export class AuthGuard {
     private router: Router
   ) {}
 
-  canActivate(): boolean | UrlTree {
+  canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
+    if (route.routeConfig?.path === 'products' || route.routeConfig?.path === 'products/:id') {
+      return true;
+    }
+
     if (this.userService.isAuthenticated) {
       return true;
     }

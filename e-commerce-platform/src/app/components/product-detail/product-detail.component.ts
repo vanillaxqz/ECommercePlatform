@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../services/product.service';
+import { UserService } from '../../services/user.service';
 import { Product } from '../../models/product.model';
+import { NgOptimizedImage } from '@angular/common';
 
 interface ApiResponse<T> {
   isSuccess: boolean;
@@ -13,7 +15,7 @@ interface ApiResponse<T> {
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -35,7 +37,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    public userService: UserService
   ) { }
 
   ngOnInit(): void {

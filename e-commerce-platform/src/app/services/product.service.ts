@@ -28,6 +28,7 @@ export class ProductService {
 
     return this.http.get<PaginatedResponse>(`${this.apiURL}/paginated`, { params })
       .pipe(
+        
         catchError(this.handleError)
       );
   }
@@ -60,15 +61,18 @@ export class ProductService {
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
+  private handleError(error: HttpErrorResponse | Error) {
     let errorMessage = 'Unknown error!';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side errors
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side errors
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+    
+    if (error instanceof HttpErrorResponse) {
+      // Server-side or network error
+      errorMessage = error.error?.message || error.message;
+    } else if (error instanceof Error) {
+      // Client-side error
+      errorMessage = error.message;
     }
+    
+    console.error('Error occurred:', errorMessage);
     return throwError(() => new Error(errorMessage));
   }
 }

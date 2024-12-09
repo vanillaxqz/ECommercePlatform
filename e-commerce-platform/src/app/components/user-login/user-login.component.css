@@ -61,9 +61,31 @@
     cursor: not-allowed;
   }
 
+  .button-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .login-btn, .guest-btn {
+    flex: 1;
+  }
+  
+  .login-btn {
+    background-color: #007bff;
+  }
+  
+  .guest-btn {
+    background-color: #6c757d;
+  }
+
   @media (max-width: 480px) {
     .login-container {
       margin: 1rem auto;
+    }
+
+    .button-group {
+      flex-direction: column;
     }
   
     input, button {

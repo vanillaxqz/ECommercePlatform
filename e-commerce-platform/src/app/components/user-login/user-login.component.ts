@@ -1,3 +1,4 @@
+// user-login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -32,6 +33,11 @@ export class UserLoginComponent implements OnInit {
     if (this.userService.isAuthenticated) {
       this.router.navigate(['/products']);
     }
+  }
+
+  continueAsGuest(): void {
+    this.userService.continueAsGuest();
+    this.router.navigate(['/products']);
   }
 
   onSubmit(): void {

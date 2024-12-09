@@ -6,10 +6,20 @@ import { User } from '../models/user.model';
 import { AuthResponse } from '../models/auth-response.model';
 import { isPlatformBrowser } from '@angular/common';
 
+export interface UserRole {
+  isGuest: boolean;
+  isAuthenticated: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private _userRole: UserRole = {
+    isGuest: false,
+    isAuthenticated: false
+  };
+
   private apiUrl = 'https://ecommerceproiect.site/api/v1';
   private currentUserSubject: BehaviorSubject<User | null>;
   private tokenSubject: BehaviorSubject<string | null>;
@@ -25,25 +35,38 @@ export class UserService {
       this.tokenSubject = new BehaviorSubject<string | null>(
         localStorage.getItem('token')
       );
+      // Set initial authentication state
+      this._userRole.isAuthenticated = !!this.currentUserSubject.value && !!this.tokenSubject.value;
     } else {
       this.currentUserSubject = new BehaviorSubject<User | null>(null);
       this.tokenSubject = new BehaviorSubject<string | null>(null);
     }
   }
 
-  public get currentUser(): User | null {
+  get userRole(): UserRole {
+    return this._userRole;
+  }
+
+  get isAuthenticated(): boolean {
+    return this._userRole.isAuthenticated;
+  }
+
+  get isGuest(): boolean {
+    return this._userRole.isGuest;
+  }
+
+  get currentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  public get token(): string | null {
+  get token(): string | null {
     return this.tokenSubject.value;
   }
 
-  public get isAuthenticated(): boolean {
-    return !!this.currentUser && !!this.token;
+  continueAsGuest(): void {
+    this._userRole = { isGuest: true, isAuthenticated: false };
   }
 
-  // user.service.ts
   login(email: string, password: string): Observable<User> {
     return this.http
       .post<AuthResponse>(`${this.apiUrl}/Login/login`, { email, password })
@@ -63,14 +86,14 @@ export class UserService {
 
             this.currentUserSubject.next(user);
             this.tokenSubject.next(token);
+            this._userRole = { isGuest: false, isAuthenticated: true };
             return user;
           }
 
           throw new Error('Invalid response format');
         }),
         catchError((error) => {
-          this.currentUserSubject.next(null);
-          this.tokenSubject.next(null);
+          this.logout();
           return throwError(() => error);
         })
       );
@@ -84,21 +107,17 @@ export class UserService {
         }
 
         if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem(
-            'currentUser',
-            JSON.stringify(response.data.user)
-          );
+          localStorage.setItem('currentUser', JSON.stringify(response.data.user));
           localStorage.setItem('token', response.data.token);
         }
 
         this.currentUserSubject.next(response.data.user);
         this.tokenSubject.next(response.data.token);
+        this._userRole = { isGuest: false, isAuthenticated: true };
         return response.data.user;
       }),
       catchError((error) => {
-        console.error('Registration error:', error);
-        this.currentUserSubject.next(null);
-        this.tokenSubject.next(null);
+        this.logout();
         return throwError(() => error);
       })
     );
@@ -111,12 +130,11 @@ export class UserService {
     }
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
+    this._userRole = { isGuest: false, isAuthenticated: false };
   }
 
   private handleError(error: any) {
     console.error('Auth error:', error);
-    return throwError(
-      () => new Error(error.error?.message || 'Authentication failed')
-    );
+    return throwError(() => new Error(error.error?.message || 'Authentication failed'));
   }
 }

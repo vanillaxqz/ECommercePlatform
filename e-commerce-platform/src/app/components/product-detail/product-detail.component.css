@@ -5,7 +5,24 @@
   padding: 2.5rem;
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.product-image-container {
+  width: 60%;  /* Reduce container width */
+  max-width: 300px;  /* Set maximum width */
+  margin: 0 auto 2rem auto;  /* Center container horizontally */
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
 }
 
 h1 {
@@ -118,7 +135,7 @@ button:active {
 
 @keyframes spin {
   to {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -135,20 +152,24 @@ button:active {
 /* Responsive design */
 @media (max-width: 768px) {
   .product-detail {
-      margin: 1rem;
-      padding: 1.5rem;
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .product-image {
+    height: 250px;
   }
 
   h1 {
-      font-size: 1.75rem;
-      margin-bottom: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
   }
 
   .actions {
-      flex-direction: column;
+    flex-direction: column;
   }
 
   button {
-      width: 100%;
+    width: 100%;
   }
 }
