@@ -5,6 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
 import { AuthResponse } from '../models/auth-response.model';
 import { isPlatformBrowser } from '@angular/common';
+import { StorageService } from './storage.service';
 
 export interface UserRole {
   isGuest: boolean;
@@ -17,7 +18,7 @@ export interface UserRole {
 export class UserService {
   private _userRole: UserRole = {
     isGuest: false,
-    isAuthenticated: false
+    isAuthenticated: false,
   };
 
   private apiUrl = 'https://ecommerceproiect.site/api/v1';
@@ -26,21 +27,19 @@ export class UserService {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private storageService: StorageService
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.currentUserSubject = new BehaviorSubject<User | null>(
-        JSON.parse(localStorage.getItem('currentUser') || 'null')
-      );
-      this.tokenSubject = new BehaviorSubject<string | null>(
-        localStorage.getItem('token')
-      );
-      // Set initial authentication state
-      this._userRole.isAuthenticated = !!this.currentUserSubject.value && !!this.tokenSubject.value;
-    } else {
-      this.currentUserSubject = new BehaviorSubject<User | null>(null);
-      this.tokenSubject = new BehaviorSubject<string | null>(null);
-    }
+    this.currentUserSubject = new BehaviorSubject<User | null>(
+      JSON.parse(this.storageService.getItem('currentUser') || 'null')
+    );
+    this.tokenSubject = new BehaviorSubject<string | null>(
+      this.storageService.getItem('token')
+    );
+
+    // Set initial authentication state
+    this._userRole.isAuthenticated =
+      !!this.currentUserSubject.value && !!this.tokenSubject.value;
   }
 
   get userRole(): UserRole {
@@ -79,10 +78,8 @@ export class UserService {
           if (Array.isArray(response.data)) {
             const [token, user] = response.data;
 
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('currentUser', JSON.stringify(user));
-              localStorage.setItem('token', token);
-            }
+            this.storageService.setItem('currentUser', JSON.stringify(user));
+            this.storageService.setItem('token', token);
 
             this.currentUserSubject.next(user);
             this.tokenSubject.next(token);
@@ -106,10 +103,8 @@ export class UserService {
           throw new Error(response.errorMessage || 'Registration failed');
         }
 
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('currentUser', JSON.stringify(response.data.user));
-          localStorage.setItem('token', response.data.token);
-        }
+        this.storageService.setItem('currentUser', JSON.stringify(response.data.user));
+        this.storageService.setItem('token', response.data.token);
 
         this.currentUserSubject.next(response.data.user);
         this.tokenSubject.next(response.data.token);
@@ -124,10 +119,9 @@ export class UserService {
   }
 
   logout(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('token');
-    }
+    this.storageService.removeItem('currentUser');
+    this.storageService.removeItem('token');
+
     this.currentUserSubject.next(null);
     this.tokenSubject.next(null);
     this._userRole = { isGuest: false, isAuthenticated: false };
