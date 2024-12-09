@@ -60,6 +60,44 @@
           },
           "defaultConfiguration": "production"
         },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/e-commerce-platform/server",
+            "main": "src/main.server.ts",
+            "tsConfig": "tsconfig.server.json"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "routes": [
+              "/",
+              "/login",
+              "/register",
+              "/products",
+              "/products/create"
+            ],
+            "serverTarget": "e-commerce-platform:server:production"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "e-commerce-platform:build:production",
+              "serverTarget": "e-commerce-platform:server:production"
+            }
+          }
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
