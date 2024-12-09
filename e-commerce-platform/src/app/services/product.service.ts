@@ -18,7 +18,7 @@ export class ProductService {
 
   constructor(private http: HttpClient, private storageService: StorageService) { }
 
-  public getProducts(page: number = 1, pageSize: number = 10, category?: number, name?: string, stock?: number, price?: number): Observable<PaginatedResponse> {
+  public getProducts(page: number = 1, pageSize: number = 9, category?: number, name?: string, stock?: number, price?: number): Observable<PaginatedResponse> {
     let params = new HttpParams()
       .set('Page', page.toString())
       .set('PageSize', pageSize.toString());
@@ -44,6 +44,7 @@ export class ProductService {
 
   public createProduct(product: Product): Observable<any> {
     const token = this.storageService.getItem('token'); // Using StorageService
+    console.log('Retrieved token:', token);
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
     return this.http.post<any>(this.apiURL, product, { headers })
       .pipe(
