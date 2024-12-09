@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Product } from '../models/product.model';
@@ -34,21 +34,24 @@ export class ProductService {
   }
 
   public createProduct(product: Product): Observable<any> {
-    return this.http.post<any>(this.apiURL, product)
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.post<any>(this.apiURL, product,  { headers })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   public updateProduct(product: Product): Observable<any> {
-    return this.http.put<any>(this.apiURL, product)
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.put<any>(this.apiURL, product, { headers })
       .pipe(
         catchError(this.handleError)
       );
   }
 
   public deleteProduct(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiURL}/${id}`)
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
       .pipe(
         catchError(this.handleError)
       );
