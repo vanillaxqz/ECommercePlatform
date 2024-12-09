@@ -15,7 +15,6 @@ export const appRoutes: Routes = [
     {
         path: 'products',
         component: ProductListComponent,
-        canActivate: [AuthGuard]
     },
     {
         path: 'products/create',

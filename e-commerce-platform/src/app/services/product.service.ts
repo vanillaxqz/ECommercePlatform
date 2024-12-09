@@ -54,7 +54,8 @@ export class ProductService {
 
   public updateProduct(product: Product): Observable<any> {
     const token = this.storageService.getItem('token'); // Using StorageService
-    const headers = new HttpHeaders().set('Authorization', `Bearer ` + localStorage.getItem('token'));
+    console.log('Retrieved token:', token);
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
     return this.http.put<any>(this.apiURL, product, { headers })
       .pipe(
         catchError(this.handleError)
@@ -62,6 +63,9 @@ export class ProductService {
   }
 
   public deleteProduct(id: string): Observable<any> {
+    const token = this.storageService.getItem('token'); // Using StorageService
+    console.log('Retrieved token:', token);
+    const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
     return this.http.delete<any>(`${this.apiURL}/${id}`)
       .pipe(
         catchError(this.handleError)
