@@ -66,7 +66,7 @@ export class ProductService {
     const token = this.storageService.getItem('token'); // Using StorageService
     console.log('Retrieved token:', token);
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
-    return this.http.delete<any>(`${this.apiURL}/${id}`)
+    return this.http.delete<any>(`${this.apiURL}/${id}`, { headers })
       .pipe(
         catchError(this.handleError)
       );
