@@ -13,7 +13,7 @@ export const appRoutes: Routes = [
     { path: 'login', component: UserLoginComponent },
     { path: 'register', component: UserRegisterComponent },
     { 
-        path: 'api/v1/Products', 
+        path: 'products', 
         component: ProductListComponent,
         canActivate: [AuthGuard]
     },
@@ -31,5 +31,6 @@ export const appRoutes: Routes = [
         path: 'products/update/:id', 
         component: ProductUpdateComponent,
         canActivate: [AuthGuard]
-    }
+    },
+    {path: '**', redirectTo: '/login'}
 ];
