@@ -13,7 +13,7 @@ export const appRoutes: Routes = [
     { path: 'login', component: UserLoginComponent },
     { path: 'register', component: UserRegisterComponent },
     { 
-        path: 'api/v1/products', 
+        path: 'products', 
         component: ProductListComponent,
         canActivate: [AuthGuard]
     },
