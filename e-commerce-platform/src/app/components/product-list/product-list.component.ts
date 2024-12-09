@@ -29,6 +29,12 @@ export class ProductListComponent implements OnInit {
   error?: string;
   selectedCategory?: number;
 
+  filters = {
+    name: '',
+    stock: undefined as number | undefined,
+    price: undefined as number | undefined
+  };
+
   categories: Category[] = [
     { id: 1, name: 'Electronics' },
     { id: 2, name: 'Fashion' },
@@ -41,7 +47,7 @@ export class ProductListComponent implements OnInit {
     { id: 9, name: 'Jewelry' },
   ];
 
-  constructor(private productService: ProductService, private router: Router, public userService: UserService) {}
+  constructor(private productService: ProductService, private router: Router, public userService: UserService) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -52,7 +58,7 @@ export class ProductListComponent implements OnInit {
     this.error = undefined;
 
     this.productService
-      .getProducts(this.currentPage, this.pageSize, this.selectedCategory)
+      .getProducts(this.currentPage, this.pageSize, this.selectedCategory, this.filters.name, this.filters.stock, this.filters.price)
       .subscribe({
         next: (response) => {
           this.products = response.data;
@@ -66,6 +72,11 @@ export class ProductListComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+
+  applyFilters(): void {
+    this.currentPage = 1;
+    this.loadProducts();
   }
 
   onCategoryChange(event: Event): void {

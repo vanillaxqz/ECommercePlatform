@@ -1,8 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { StorageService } from '../services/storage.service'; // Import StorageService
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = localStorage.getItem('token');
-  
+  const storageService = inject(StorageService); // Inject StorageService
+  const token = storageService.getItem('token'); // Use StorageService to get the token
+
   console.log('Original Request:', {
     url: req.url,
     headers: req.headers.keys(),
@@ -27,6 +30,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
     return next(authReq);
   }
-  
+
   return next(req);
 };

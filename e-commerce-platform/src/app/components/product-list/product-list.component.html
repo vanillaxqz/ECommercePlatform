@@ -1,70 +1,67 @@
 <div class="container">
-    <div class="filters">
-      <div class="select-wrapper">
-        <select class="category-select" (change)="onCategoryChange($event)">
-          <option value="">All Categories</option>
-          <option *ngFor="let category of categories" [value]="category.id">
-            {{ category.name }}
-          </option>
-        </select>
-        <span class="select-arrow">▼</span>
+  <div class="filters">
+    <div class="select-wrapper">
+      <select class="category-select" (change)="onCategoryChange($event)">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </option>
+      </select>
+      <span class="select-arrow">▼</span>
+    </div>
+    <button class="add-button" *ngIf="!userService.isGuest" (click)="navigateToCreate()">
+      <span class="button-icon">+</span>
+      Add Product
+    </button>
+  </div>
+
+  <!-- New filter fields -->
+  <div class="filters">
+    <input type="text" placeholder="Name" [(ngModel)]="filters.name">
+    <input type="number" placeholder="Stock" [(ngModel)]="filters.stock">
+    <input type="number" placeholder="Price" [(ngModel)]="filters.price">
+    <button class="btn primary" (click)="applyFilters()">Apply Filters</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div class="product-grid" *ngIf="!isLoading && !error">
+    <div class="product-card" *ngFor="let product of products">
+      <div class="product-image-container">
+        <img [ngSrc]="'https://picsum.photos/seed/' + product.productId + '/400/300'" [width]="400" [height]="300"
+          class="product-image" [alt]="product.name" />
       </div>
-      <button class="add-button" *ngIf="!userService.isGuest" (click)="navigateToCreate()">
-        <span class="button-icon">+</span>
-        Add Product
-      </button>
-    </div>
-  
-    <div *ngIf="isLoading" class="loading-spinner">
-      <div class="spinner"></div>
-    </div>
-  
-    <div *ngIf="error" class="error-message">{{ error }}</div>
-  
-    <div class="product-grid" *ngIf="!isLoading && !error">
-      <div class="product-card" *ngFor="let product of products">
-        <div class="product-image-container">
-          <img
-            [ngSrc]="'https://picsum.photos/seed/' + product.productId + '/400/300'"
-            [width]="400"
-            [height]="300"
-            class="product-image"
-            [alt]="product.name"
-          />
-        </div>
-        <div class="product-content">
-          <h3 class="product-title">{{ product.name }}</h3>
-          <span class="product-category">{{ getCategoryName(product.category) }}</span>
-          <p class="product-description">{{ product.description }}</p>
-          <p class="product-price">${{ product.price }}</p>
-          <p class="product-stock" [class.low-stock]="product.stock < 10">
-            Stock: {{ product.stock }}
-          </p>
-          <div class="product-actions">
-            <button class="btn primary" (click)="navigateToDetail(product.productId)">
-              View Details
-            </button>
-            <button class="btn secondary" 
-                    *ngIf="!userService.isGuest"
-                    (click)="navigateToUpdate(product.productId)">
-              Edit
-            </button>
-          </div>
+      <div class="product-content">
+        <h3 class="product-title">{{ product.name }}</h3>
+        <span class="product-category">{{ getCategoryName(product.category) }}</span>
+        <p class="product-description">{{ product.description }}</p>
+        <p class="product-price">${{ product.price }}</p>
+        <p class="product-stock" [class.low-stock]="product.stock < 10">
+          Stock: {{ product.stock }}
+        </p>
+        <div class="product-actions">
+          <button class="btn primary" (click)="navigateToDetail(product.productId)">
+            View Details
+          </button>
+          <button class="btn secondary" *ngIf="!userService.isGuest" (click)="navigateToUpdate(product.productId)">
+            Edit
+          </button>
         </div>
       </div>
-    </div>
-  
-    <div class="pagination" *ngIf="totalPages > 1">
-      <button class="pagination-btn" 
-              (click)="onPageChange(currentPage - 1)" 
-              [disabled]="currentPage === 1">
-        ←
-      </button>
-      <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
-      <button class="pagination-btn" 
-              (click)="onPageChange(currentPage + 1)" 
-              [disabled]="currentPage === totalPages">
-        →
-      </button>
     </div>
   </div>
+
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="pagination-btn" (click)="onPageChange(currentPage - 1)" [disabled]="currentPage === 1">
+      ←
+    </button>
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="pagination-btn" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
+      →
+    </button>
+  </div>
+</div>
