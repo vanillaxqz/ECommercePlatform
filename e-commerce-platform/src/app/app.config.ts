@@ -12,9 +12,6 @@ export const appConfig: ApplicationConfig = {
       eventCoalescing: true 
     }),
     provideRouter(appRoutes),
-    provideClientHydration(
-      withEventReplay()
-    ),
     provideHttpClient(
       withFetch(),
       withInterceptors([AuthInterceptor]),
