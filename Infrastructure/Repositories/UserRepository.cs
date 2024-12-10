@@ -17,21 +17,26 @@ namespace Infrastructure.Repositories
 
         public async Task<Result<User>> LoginUser(User user)
         {
-            var userToLogin = await context.Users.FirstOrDefaultAsync(x => x.Email == user.Email && x.Password == user.Password);
+            var userToLogin = await context.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
             if (userToLogin == null)
             {
                 return Result<User>.Failure($"Invalid email or password");
             }
-            else
+
+            bool isPasswordValid = Hasher.VerifyPassword(user.Password, userToLogin.Password);
+            if (!isPasswordValid)
             {
-                return Result<User>.Success(userToLogin);
+                return Result<User>.Failure($"Invalid email or password");
             }
+
+            return Result<User>.Success(userToLogin);
         }
 
         public async Task<Result<Guid>> AddUserAsync(User user)
         {
             try
             {
+                user.Password = Hasher.HashPassword(user.Password);
                 await context.Users.AddAsync(user);
                 await context.SaveChangesAsync();
                 return Result<Guid>.Success(user.UserId);

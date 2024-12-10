@@ -4,8 +4,6 @@ using Domain.Common;
 using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
-using System.Threading.Tasks;
-
 namespace Application.UseCases.Authentication
 {
     public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<UserDto>>

@@ -5,11 +5,6 @@ using Application.Utils;
 using Domain.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
-using Domain.Entities;
-using Application.UseCases.Authentication;
 
 namespace ECommercePlatform.Controllers
 {
