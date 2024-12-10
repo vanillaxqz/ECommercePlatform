@@ -5,9 +5,11 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 
 import { appRoutes } from './app.routes';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     provideZoneChangeDetection({ 
       eventCoalescing: true 
     }),
