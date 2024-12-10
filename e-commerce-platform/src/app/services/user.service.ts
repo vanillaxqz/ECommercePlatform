@@ -50,7 +50,8 @@ export class UserService {
     return this._userRole.isAuthenticated;
   }
 
-  get isGuest(): boolean {
+  get isGuest(): boolean 
+  {
     return this._userRole.isGuest;
   }
 
