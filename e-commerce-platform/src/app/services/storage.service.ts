@@ -15,7 +15,8 @@ export class StorageService {
     return isPlatformBrowser(this.platformId);
   }
 
-  getItem(key: string): string | null {
+  getItem(key: string): string | null 
+  {
     if (this.isBrowser()) {
       // Use localStorage in the browser
       return localStorage.getItem(key);
