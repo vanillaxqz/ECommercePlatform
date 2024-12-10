@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "dist/e-commerce-platform/server/main.js",
+        "use": "@vercel/node"
+      },
+      {
+        "src": "dist/e-commerce-platform/browser/**",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/assets/(.*)",
+        "dest": "/dist/e-commerce-platform/browser/assets/$1"
+      },
+      {
+        "src": "/(.*/)?index.html",
+        "dest": "/dist/e-commerce-platform/browser/index.html"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/dist/e-commerce-platform/server/main.js"
+      }
+    ]
+  }
