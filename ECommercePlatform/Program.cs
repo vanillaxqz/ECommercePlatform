@@ -3,6 +3,8 @@ using Application;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Domain.Services;
+using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 var key = Encoding.ASCII.GetBytes("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+builder.Configuration["Jwt:Secret"] = "3fdd5f93-4ddb-465e-a2e8-3e326175030f";
 
 builder.Services.AddAuthentication(x =>
 {
@@ -41,6 +44,7 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 

@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace Infrastructure.Repositories
 {
@@ -13,6 +14,16 @@ namespace Infrastructure.Repositories
         public UserRepository(ApplicationDbContext context)
         {
             this.context = context;
+        }
+
+        public async Task<Result<User>> GetUserByEmailAsync(string email)
+        {
+            var user = await context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null)
+            {
+                return Result<User>.Failure("User not found");
+            }
+            return Result<User>.Success(user);
         }
 
         public async Task<Result<User>> LoginUser(User user)
@@ -81,6 +92,16 @@ namespace Infrastructure.Repositories
         {
             context.Entry(user).State = EntityState.Modified;
             await context.SaveChangesAsync();
+        }
+
+        public string GeneratePasswordResetToken(User user)
+        {
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var tokenData = new byte[32];
+                rng.GetBytes(tokenData);
+                return Convert.ToBase64String(tokenData);
+            }
         }
     }
 }

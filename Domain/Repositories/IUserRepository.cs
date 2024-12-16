@@ -11,5 +11,6 @@ namespace Domain.Repositories
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(Guid userId);
         Task<Result<User>> LoginUser(User user);
+        Task<Result<User>> GetUserByEmailAsync(string email);
     }
 }

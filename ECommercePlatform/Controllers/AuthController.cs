@@ -50,5 +50,16 @@ namespace ECommercePlatform.Controllers
             }
             return Result<Guid>.Success(response.Data);
         }
+
+        [HttpPost("initiate-password-reset")]
+        public async Task<ActionResult<Result<string>>> InitiatePasswordReset(InitiatePasswordResetCommand command)
+        {
+            var response = await mediator.Send(command);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response.ErrorMessage);
+            }
+            return Ok(Result<string>.Success(response.Data));
+        }
     }
 }

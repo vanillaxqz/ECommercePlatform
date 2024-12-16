@@ -24,6 +24,9 @@ namespace Infrastructure
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
 
+            var jwtSecret = configuration["Jwt:Secret"];
+            services.AddSingleton(new JwtTokenGenerator(jwtSecret));
+
             return services;
         }
     }
@@ -47,6 +50,21 @@ namespace Infrastructure
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)), SecurityAlgorithms.HmacSha256)
+            );
+            return token;
+        }
+
+        public JwtSecurityToken GeneratePasswordResetToken(Guid userId)
+        {
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+            new Claim("TokenType", "PasswordReset")
+        };
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(15),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)), SecurityAlgorithms.HmacSha256)
             );
             return token;
