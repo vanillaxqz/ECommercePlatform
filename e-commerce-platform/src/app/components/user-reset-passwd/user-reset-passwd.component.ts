@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { PasswordValidatorService } from '../../services/password-validator.service';
+import { PasswordStrengthComponent } from '../password-strenght/password-strenght.component';
 
 @Component({
   selector: 'app-user-reset-passwd',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PasswordStrengthComponent],
   templateUrl: './user-reset-passwd.component.html',
   styleUrl: './user-reset-passwd.component.css'
 })
@@ -22,11 +24,15 @@ export class UserResetPasswdComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private passwordValidator: PasswordValidatorService
   ) {
     this.resetForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]]
+      password: ['', [
+        Validators.required,
+        this.passwordValidator.validatePassword.bind(this.passwordValidator)
+      ]],
+      confirmPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 

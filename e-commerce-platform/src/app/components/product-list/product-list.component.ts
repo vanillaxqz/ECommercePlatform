@@ -56,7 +56,7 @@ export class ProductListComponent implements OnInit {
   loadProducts(): void {
     this.isLoading = true;
     this.error = undefined;
-
+  
     this.productService
       .getProducts(this.currentPage, this.pageSize, this.selectedCategory, this.filters.name, this.filters.stock, this.filters.price)
       .subscribe({
@@ -67,10 +67,23 @@ export class ProductListComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('API Error:', error);
-          this.error = 'Error loading products';
           this.isLoading = false;
-        },
+          
+          if (error.status === 401 && !this.userService.isAuthenticated) {
+            this.error = 'Please log in to access all features. Some functionality may be limited for guests';
+          } else if (error.status === 401) {
+            this.error = 'Your session has expired. Please log in again';
+          } else if (error.status === 403) {
+            this.error = 'You do not have permission to view these products';
+          } else if (error.status === 0) {
+            this.error = 'Unable to connect to server. Please check your internet connection';
+          } else if (error.status === 404) {
+            this.error = 'No products found';
+          } else {
+            this.error = 'Unable to load products. Please try again later';
+          }
+          console.error('Error loading products:', error);
+        }
       });
   }
 

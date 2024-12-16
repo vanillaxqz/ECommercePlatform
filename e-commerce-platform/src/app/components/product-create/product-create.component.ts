@@ -92,9 +92,38 @@ export class ProductCreateComponent {
         error: (error) => {
           this.isSubmitting = false;
           if (error.status === 400 && error.error && error.error.errors) {
-            this.serverErrors = Object.values(error.error.errors).flat() as string[];
+            // Convert validation errors to user-friendly messages
+            const errorMessages = [];
+            const errors = error.error.errors;
+            
+            for (const key in errors) {
+              const message = errors[key];
+              switch (key.toLowerCase()) {
+                case 'name':
+                  errorMessages.push('Product name: ' + message);
+                  break;
+                case 'description':
+                  errorMessages.push('Description: ' + message);
+                  break;
+                case 'price':
+                  errorMessages.push('Price: ' + message);
+                  break;
+                case 'stock':
+                  errorMessages.push('Stock: ' + message);
+                  break;
+                default:
+                  errorMessages.push(message);
+              }
+            }
+            this.serverErrors = errorMessages;
+          } else if (error.status === 401) {
+            this.serverErrors = ['Please log in to create a product'];
+          } else if (error.status === 403) {
+            this.serverErrors = ['You do not have permission to create products'];
+          } else if (error.status === 0) {
+            this.serverErrors = ['Unable to connect to server. Please check your internet connection'];
           } else {
-            this.serverErrors = ['An unexpected error occurred'];
+            this.serverErrors = ['Unable to create product. Please try again later'];
           }
         }
       });

@@ -64,7 +64,13 @@ export class UserLoginComponent implements OnInit {
       },
       error: error => {
         this.loading = false;
-        this.error = error.message;
+        if (error.status === 400 || error.status === 401) {
+          this.error = 'Invalid email or password';
+        } else if (error.status === 0) {
+          this.error = 'Unable to connect to server. Please check your internet connection';
+        } else {
+          this.error = 'Something went wrong. Please try again later';
+        }
       }
     });
   }
@@ -98,9 +104,15 @@ export class UserLoginComponent implements OnInit {
               this.closeResetModal();
             }, 2000);
           },
-          error: (error) => {
+          error: error => {
             this.resetLoading = false;
-            this.resetError = error.message;
+            if (error.status === 400) {
+              this.resetError = 'Email address not found';
+            } else if (error.status === 0) {
+              this.resetError = 'Unable to connect to server. Please check your internet connection';
+            } else {
+              this.resetError = 'Unable to send reset email. Please try again later';
+            }
           }
         });
     }
