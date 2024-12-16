@@ -1,0 +1,68 @@
+<div class="container">
+    <div class="reset-card">
+      <h2 class="title">Reset Password</h2>
+      
+      @if (errorMessage) {
+        <div class="error-message">{{ errorMessage }}</div>
+      }
+  
+      @if (successMessage) {
+        <div class="success-message">{{ successMessage }}</div>
+      }
+  
+      @if (!errorMessage && !successMessage) {
+        <form [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form">
+          <div class="form-group">
+            <label for="password">New Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              formControlName="password"
+              [class.invalid]="passwordControl?.invalid && passwordControl?.touched"
+              class="form-input"
+            >
+            @if (passwordControl?.invalid && passwordControl?.touched) {
+              <div class="error-text">
+                @if (passwordControl?.errors?.['required']) {
+                  Password is required
+                }
+                @if (passwordControl?.errors?.['minlength']) {
+                  Password must be at least 8 characters
+                }
+              </div>
+            }
+          </div>
+  
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              formControlName="confirmPassword"
+              [class.invalid]="resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched"
+              class="form-input"
+            >
+            @if (resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched) {
+              <div class="error-text">
+                Passwords do not match
+              </div>
+            }
+          </div>
+  
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              [disabled]="resetForm.invalid || isLoading"
+              class="btn primary"
+            >
+              @if (isLoading) {
+                <div class="spinner"></div>
+              } @else {
+                Reset Password
+              }
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </div>

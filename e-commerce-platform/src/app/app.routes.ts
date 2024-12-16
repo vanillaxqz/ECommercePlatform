@@ -6,12 +6,14 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { ProductUpdateComponent } from './components/product-update/product-update.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { UserRegisterComponent } from './components/user-register/user-register.component';
+import { UserResetPasswdComponent } from './components/user-reset-passwd/user-reset-passwd.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const appRoutes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: UserLoginComponent },
     { path: 'register', component: UserRegisterComponent },
+    { path: 'reset-password', component: UserResetPasswdComponent },
     {
         path: 'products',
         component: ProductListComponent,

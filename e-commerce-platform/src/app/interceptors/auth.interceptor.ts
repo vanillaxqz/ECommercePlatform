@@ -1,9 +1,9 @@
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { StorageService } from '../services/storage.service'; // Import StorageService
+import { StorageService } from '../services/storage.service';
 
 export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
-  const storageService = inject(StorageService); // Inject StorageService
+  const storageService = inject(StorageService);
   var token = storageService.getItem('token');
 
   console.log(`Original Request ${token}:`, {
@@ -11,6 +11,11 @@ export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: 
     headers: req.headers.keys(),
     hasToken: !!token
   });
+
+  // Skip token for reset password endpoint
+  if (req.url.includes('reset-password')) {
+    return next(req);
+  }
 
   // Match any request to the API domain
   if (token && req.url.includes('v1')) {
