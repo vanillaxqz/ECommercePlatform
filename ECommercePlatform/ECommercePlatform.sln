@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommercePlatform", "ECommercePlatform.csproj", "{0F0B0EF9-DCEF-4416-AD90-058725DC2F43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPI", "WebAPI", "{614291CC-2996-4904-90D6-36DE6905F9A9}"
+	ProjectSection(SolutionItems) = preProject
+		Controllers\products.csv = Controllers\products.csv
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{5218CF06-7031-42D7-90C3-309FC446FD06}"
 EndProject
