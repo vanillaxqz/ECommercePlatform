@@ -5,6 +5,7 @@ using Application.UseCases.Authentication;
 using Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
 using Application.UseCases.Commands.UserCommands;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ECommercePlatform.Controllers
 {
@@ -60,6 +61,19 @@ namespace ECommercePlatform.Controllers
                 return BadRequest(response.ErrorMessage);
             }
             return Ok(Result<string>.Success(response.Data));
+        }
+
+        [HttpPost("reset-password")]
+        [Authorize]
+        public async Task<ActionResult<Result<string>>> ResetPassword(ResetPasswordCommand command)
+        {
+            var result = await mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

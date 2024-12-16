@@ -34,6 +34,7 @@ namespace Application
             services.AddValidatorsFromAssemblyContaining<DeleteUserCommandValidator>();
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddHttpContextAccessor();
             return services;
         }
     }

@@ -26,6 +26,7 @@ namespace Infrastructure
 
             var jwtSecret = configuration["Jwt:Secret"];
             services.AddSingleton(new JwtTokenGenerator(jwtSecret));
+            services.AddHttpContextAccessor();
 
             return services;
         }
