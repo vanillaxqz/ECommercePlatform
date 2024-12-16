@@ -79,6 +79,21 @@ export class ProductService {
       );
   }
 
+  public predictPrice(product: Product): Observable<any> {
+    const url = 'https://ecommerceproiect.site/api/v1/ProductPricePrediction/predict';
+    const requestBody = {
+      name: product.name,
+      description: product.description,
+      price: 0,
+      stock: product.stock,
+      category: product.category
+    };
+    return this.http.post<any>(url, requestBody)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse | Error) {
     let errorMessage = 'Unknown error!';
 

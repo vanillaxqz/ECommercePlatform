@@ -18,6 +18,8 @@ export class ProductUpdateComponent implements OnInit {
   product?: Product;
   error?: string;
   isSubmitting = false;
+  predictedPrice?: number;
+  isPredicting = false;
 
   categories = [
     { id: 1, name: 'Electronics' },
@@ -51,6 +53,28 @@ export class ProductUpdateComponent implements OnInit {
     if (this.productId) {
       this.loadProduct(this.productId);
     }
+  }
+
+  predictPrice(): void {
+    if (!this.productForm.get('name')?.valid || !this.productForm.get('description')?.valid) return;
+    
+    this.isPredicting = true;
+    const formData = {
+      ...this.productForm.value,
+      price: 0
+    };
+
+    this.productService.predictPrice(formData).subscribe({
+      next: (response) => {
+        this.predictedPrice = response;
+        this.productForm.patchValue({ price: response });
+        this.isPredicting = false;
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isPredicting = false;
+      }
+    });
   }
 
   loadProduct(id: string): void {

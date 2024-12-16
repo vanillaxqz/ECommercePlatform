@@ -56,6 +56,47 @@ textarea:focus {
   background-color: #fff;
 }
 
+.price-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.price-input-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.predict-btn {
+  padding: 0.5rem 1rem;
+  background-color: #4c51bf;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: fit-content;
+}
+
+.predict-btn:hover:not(:disabled) {
+  background-color: #434190;
+}
+
+.predict-btn:disabled {
+  background-color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.predicted-price {
+  margin-top: 0.5rem;
+  color: #4c51bf;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
 .error {
   color: #e53e3e;
   font-size: 0.875rem;

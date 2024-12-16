@@ -112,6 +112,11 @@ button {
   transform: translateY(-1px);
 }
 
+.price-container {
+  display: flex;
+  align-items: center;
+}
+
 button:active {
   transform: translateY(0);
 }

@@ -15,6 +15,9 @@ export class ProductCreateComponent {
   productForm: FormGroup;
   isSubmitting = false;
   serverErrors: string[] = [];
+  predictedPrice?: number;
+  isPredicting = false;
+  predictionError?: string;
 
   categories = [
     { id: 1, name: 'Electronics' },
@@ -36,9 +39,41 @@ export class ProductCreateComponent {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(200)]],
       description: ['', [Validators.required, Validators.maxLength(500)]],
-      price: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
+      price: [0, [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{1,2})?$/)]],
       stock: ['', [Validators.required, Validators.min(0), Validators.pattern(/^\d+$/)]],
       category: ['', Validators.required]
+    });
+  }
+
+  predictPrice(): void {
+    const name = this.productForm.get('name')?.value;
+    const description = this.productForm.get('description')?.value;
+    const category = this.productForm.get('category')?.value;
+    
+    if (!name || !description || !category) {
+      this.predictionError = 'Please provide name, description and category';
+      return;
+    }
+    
+    this.predictionError = undefined;
+    this.isPredicting = true;
+    
+    const formData = {
+      ...this.productForm.value,
+      category: parseInt(this.productForm.value.category, 10),
+      price: 0
+    };
+
+    this.productService.predictPrice(formData).subscribe({
+      next: (response) => {
+        this.predictedPrice = response;
+        this.productForm.patchValue({ price: response });
+        this.isPredicting = false;
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        this.isPredicting = false;
+      }
     });
   }
 
