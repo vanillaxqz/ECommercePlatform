@@ -1,68 +1,49 @@
 <div class="container">
-    <div class="reset-card">
-      <h2 class="title">Reset Password</h2>
-      
-      @if (errorMessage) {
-        <div class="error-message">{{ errorMessage }}</div>
-      }
+  <h2 class="title">Reset Password</h2>
   
-      @if (successMessage) {
-        <div class="success-message">{{ successMessage }}</div>
-      }
-  
-      @if (!errorMessage && !successMessage) {
-        <form [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form">
-          <div class="form-group">
-            <label for="password">New Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              formControlName="password"
-              [class.invalid]="passwordControl?.invalid && passwordControl?.touched"
-              class="form-input"
-            >
-            @if (passwordControl?.invalid && passwordControl?.touched) {
-              <div class="error-text">
-                @if (passwordControl?.errors?.['required']) {
-                  Password is required
-                }
-                @if (passwordControl?.errors?.['minlength']) {
-                  Password must be at least 8 characters
-                }
-              </div>
-            }
-          </div>
-  
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input 
-              type="password" 
-              id="confirmPassword" 
-              formControlName="confirmPassword"
-              [class.invalid]="resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched"
-              class="form-input"
-            >
-            @if (resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched) {
-              <div class="error-text">
-                Passwords do not match
-              </div>
-            }
-          </div>
-  
-          <div class="form-actions">
-            <button 
-              type="submit" 
-              [disabled]="resetForm.invalid || isLoading"
-              class="btn primary"
-            >
-              @if (isLoading) {
-                <div class="spinner"></div>
-              } @else {
-                Reset Password
-              }
-            </button>
-          </div>
-        </form>
-      }
+  <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+  <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+
+  <form [formGroup]="resetForm" (ngSubmit)="onSubmit()" class="reset-form" *ngIf="!errorMessage && !successMessage">
+    <div class="form-group">
+      <label for="password">New Password</label>
+      <input 
+        type="password" 
+        id="password" 
+        formControlName="password"
+        [class.invalid]="passwordControl?.invalid && passwordControl?.touched"
+        class="form-input"
+      >
+      <div class="error-text" *ngIf="passwordControl?.invalid && passwordControl?.touched">
+        <span *ngIf="passwordControl?.errors?.['required']">Password is required</span>
+        <span *ngIf="passwordControl?.errors?.['minlength']">Password must be at least 8 characters</span>
+      </div>
     </div>
-  </div>
+
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <input 
+        type="password" 
+        id="confirmPassword" 
+        formControlName="confirmPassword"
+        [class.invalid]="resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched"
+        class="form-input"
+      >
+      <div class="error-text" *ngIf="resetForm.errors?.['passwordMismatch'] && confirmPasswordControl?.touched">
+        Passwords do not match
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        [disabled]="resetForm.invalid || isLoading"
+        class="btn primary"
+      >
+        <div class="spinner" *ngIf="isLoading"></div>
+        <span *ngIf="!isLoading">Reset Password</span>
+      </button>
+    </div>
+  </form>
+</div>

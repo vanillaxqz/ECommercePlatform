@@ -1,4 +1,3 @@
-// user-login.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -14,22 +13,30 @@ import { UserService } from '../../services/user.service';
 })
 export class UserLoginComponent implements OnInit {
   loginForm: FormGroup;
+  resetForm: FormGroup;
   loading = false;
   error = '';
+  showResetModal = false;
+  resetLoading = false;
+  resetError = '';
+  resetSuccess = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserService,
+    public userService: UserService,
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+
+    this.resetForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
   }
 
   ngOnInit(): void {
-    // Redirect if already logged in
     if (this.userService.isAuthenticated) {
       this.router.navigate(['/products']);
     }
@@ -60,5 +67,42 @@ export class UserLoginComponent implements OnInit {
         this.error = error.message;
       }
     });
+  }
+
+  openResetModal() {
+    this.showResetModal = true;
+    this.resetForm.reset();
+    this.resetError = '';
+    this.resetSuccess = false;
+  }
+
+  closeResetModal() {
+    this.showResetModal = false;
+    setTimeout(() => {
+      this.resetSuccess = false;
+      this.resetError = '';
+    }, 300);
+  }
+
+  onResetSubmit() {
+    if (this.resetForm.valid && !this.resetLoading) {
+      this.resetLoading = true;
+      this.resetError = '';
+
+      this.userService.requestPasswordReset(this.resetForm.get('email')?.value)
+        .subscribe({
+          next: () => {
+            this.resetLoading = false;
+            this.resetSuccess = true;
+            setTimeout(() => {
+              this.closeResetModal();
+            }, 2000);
+          },
+          error: (error) => {
+            this.resetLoading = false;
+            this.resetError = error.message;
+          }
+        });
+    }
   }
 }

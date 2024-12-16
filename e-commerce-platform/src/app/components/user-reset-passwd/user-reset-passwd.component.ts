@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-reset-passwd',
@@ -22,7 +22,7 @@ export class UserResetPasswdComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private userService: UserService
   ) {
     this.resetForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -31,12 +31,10 @@ export class UserResetPasswdComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Get token from URL query parameters
     this.route.queryParams.subscribe(params => {
       this.token = params['token'];
       if (!this.token) {
         this.errorMessage = 'Invalid or missing reset token';
-        // Optionally redirect to home page after a delay
         setTimeout(() => {
           this.router.navigate(['/']);
         }, 3000);
@@ -56,25 +54,22 @@ export class UserResetPasswdComponent implements OnInit {
       this.errorMessage = '';
       this.successMessage = '';
 
-      const payload = {
-        token: this.token,
-        newPassword: this.resetForm.get('password')?.value
-      };
-
-      this.http.post('/api/reset-password', payload)
-        .subscribe({
-          next: (response) => {
-            this.isLoading = false;
-            this.successMessage = 'Password successfully reset. Redirecting to login...';
-            setTimeout(() => {
-              this.router.navigate(['/login']);
-            }, 2000);
-          },
-          error: (error) => {
-            this.isLoading = false;
-            this.errorMessage = error.error?.message || 'Failed to reset password. Please try again.';
-          }
-        });
+      this.userService.resetPassword(
+        this.token,
+        this.resetForm.get('password')?.value
+      ).subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.successMessage = 'Password successfully reset. Redirecting to login...';
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.errorMessage = error.message;
+        }
+      });
     }
   }
 

@@ -1,48 +1,89 @@
 <!-- user-login.component.html -->
 <div class="login-container">
-    <h2>Login</h2>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          formControlName="email"
-          [ngClass]="{ 'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.errors }"
-        />
-        <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
-          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
-          <span *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email</span>
-        </div>
+  <h2>Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        [ngClass]="{ 'is-invalid': loginForm.get('email')?.touched && loginForm.get('email')?.errors }"
+      />
+      <div class="error-message" *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors">
+        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="loginForm.get('email')?.errors?.['email']">Enter a valid email</span>
       </div>
-  
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          formControlName="password"
-          [ngClass]="{ 'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.errors }"
-        />
-        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
-          Password is required
-        </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        [ngClass]="{ 'is-invalid': loginForm.get('password')?.touched && loginForm.get('password')?.errors }"
+      />
+      <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+        Password is required
       </div>
-  
-      <div class="error-message" *ngIf="error">{{ error }}</div>
-  
-      <div class="button-group">
-        <button type="submit" [disabled]="loginForm.invalid || loading" class="login-btn">
-          {{ loading ? 'Logging in...' : 'Login' }}
-        </button>
-        
-        <button type="button" (click)="continueAsGuest()" class="guest-btn" [disabled]="loading">
-          Continue as Guest
-        </button>
-      </div>
-  
+    </div>
+
+    <div class="error-message" *ngIf="error">{{ error }}</div>
+
+    <div class="button-group">
+      <button type="submit" [disabled]="loginForm.invalid || loading" class="login-btn">
+        {{ loading ? 'Logging in...' : 'Login' }}
+      </button>
+      
+      <button type="button" (click)="continueAsGuest()" class="guest-btn" [disabled]="loading">
+        Continue as Guest
+      </button>
+    </div>
+
+    <div class="links-group">
       <div class="register-link">
         Don't have an account? <a routerLink="/register">Create account</a>
       </div>
+      <div class="reset-link">
+        <a href="#" (click)="openResetModal(); $event.preventDefault()">Forgot password?</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- Reset Password Modal -->
+<div class="modal-overlay" *ngIf="showResetModal" (click)="closeResetModal()">
+<div class="modal-content" (click)="$event.stopPropagation()">
+  <button class="close-button" (click)="closeResetModal()">×</button>
+  
+  <div class="success-message" *ngIf="resetSuccess">
+    Reset password email sent!
+  </div>
+
+  <ng-container *ngIf="!resetSuccess">
+    <h3>Reset Password</h3>
+    <form [formGroup]="resetForm" (ngSubmit)="onResetSubmit()">
+      <div class="form-group">
+        <label for="reset-email">Email</label>
+        <input
+          type="email"
+          id="reset-email"
+          formControlName="email"
+          [ngClass]="{ 'is-invalid': resetForm.get('email')?.touched && resetForm.get('email')?.errors }"
+        />
+        <div class="error-message" *ngIf="resetForm.get('email')?.touched && resetForm.get('email')?.errors">
+          <span *ngIf="resetForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="resetForm.get('email')?.errors?.['email']">Enter a valid email</span>
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="resetError">{{ resetError }}</div>
+
+      <button type="submit" [disabled]="resetForm.invalid || resetLoading" class="login-btn">
+        {{ resetLoading ? 'Sending...' : 'Send Reset Link' }}
+      </button>
     </form>
+  </ng-container>
+</div>
 </div>

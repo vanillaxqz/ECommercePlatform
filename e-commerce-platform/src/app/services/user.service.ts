@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
@@ -64,6 +64,38 @@ export class UserService {
 
   continueAsGuest(): void {
     this._userRole = { isGuest: true, isAuthenticated: false };
+  }
+
+  requestPasswordReset(email: string): Observable<any> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/Auth/initiate-password-reset`, { email })
+      .pipe(
+        map(response => {
+          if (!response.isSuccess) {
+            throw new Error(response.errorMessage || 'Failed to send reset email');
+          }
+          return response.data;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  resetPassword(resetToken: string, newPassword: string): Observable<any> {
+    console.log('Reset token:', resetToken);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${resetToken}`);
+
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}/Auth/reset-password`, 
+      { newPassword },
+      { headers }
+    ).pipe(
+      map(response => {
+        if (!response.isSuccess) {
+          throw new Error(response.errorMessage || 'Password reset failed');
+        }
+        return response.data;
+      }),
+      catchError(this.handleError)
+    );
   }
 
   login(email: string, password: string): Observable<User> {
