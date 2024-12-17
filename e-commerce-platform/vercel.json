@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "ng build",
-  "devCommand": "ng serve",
-  "outputDirectory": "dist/e-commerce-platform",
+  "buildCommand": "ng build --configuration=production",
+  "devCommand": "ng serve --configuration=production",
+  "outputDirectory": "dist/e-commerce-platform/browser",
   "rewrites": [
     {
       "source": "/(.*)",
