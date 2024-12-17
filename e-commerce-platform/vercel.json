@@ -1,12 +1,12 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "handle": "filesystem"
-      },
-      {
-        "src": "/.*",
-        "dest": "/index.html"
-      }
-    ]
-  }
+  "version": 2,
+  "buildCommand": "ng build",
+  "devCommand": "ng serve",
+  "outputDirectory": "dist/e-commerce-platform",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
