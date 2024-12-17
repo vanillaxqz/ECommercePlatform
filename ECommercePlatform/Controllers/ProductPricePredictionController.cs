@@ -14,7 +14,8 @@ namespace ECommercePlatform.Controllers
             productPricePredictionModel.TrainModel();
         }
         [HttpPost("predict")]
-        public ActionResult<float> PredictPrice(ProductData productData){
+        public ActionResult<float> PredictPrice(ProductData productData)
+        {
             var price = productPricePredictionModel.PredictPrice(productData);
             return Ok((float)Math.Round(price, 2));
         }
