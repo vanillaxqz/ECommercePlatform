@@ -17,7 +17,7 @@ namespace ECommercePlatform.Controllers
         public ActionResult<float> PredictPrice(ProductData productData)
         {
             var price = productPricePredictionModel.PredictPrice(productData);
-            return Ok(price);
+            return Ok((float)Math.Round(price, 2));
         }
     }
 }

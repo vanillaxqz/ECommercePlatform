@@ -19,7 +19,7 @@ namespace Application.AIML
                 .Append(mlContext.Transforms.Conversion.ConvertType(nameof(ProductData.Category), outputKind: DataKind.Single))
                 .Append(mlContext.Transforms.Concatenate("Features",
                     "NameFeaturized", "DescriptionFeaturized", nameof(ProductData.Stock), nameof(ProductData.Category)))
-                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: nameof(ProductData.Price), maximumNumberOfIterations: 100));
+                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: nameof(ProductData.Price), maximumNumberOfIterations: 200));
             model = pipeline.Fit(dataView);
         }
 
