@@ -7,10 +7,14 @@ namespace Application.UseCases.Commands.PaymentCommands
         public CreatePaymentCommandValidator() 
         {
             RuleFor(x => x.PaymentDate).NotEmpty();
-            RuleFor(x => x.UserId).NotEmpty().Must(BeAValidGuid).WithMessage("Must be a valid guid");
+            RuleFor(x => x.UserId).Must(BeAValidGuid).WithMessage("Must be a valid guid");
         }
         private static bool BeAValidGuid(Guid guid)
         {
+            if(guid == Guid.Empty)
+            {
+                return false;
+            }
             return Guid.TryParse(guid.ToString(), out _);
         }
     }

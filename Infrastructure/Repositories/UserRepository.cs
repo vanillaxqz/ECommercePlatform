@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace Infrastructure.Repositories
 {
-    internal class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext context;
 
@@ -94,7 +94,7 @@ namespace Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public string GeneratePasswordResetToken(User user)
+        public static string GeneratePasswordResetToken(User user)
         {
             using (var rng = new RNGCryptoServiceProvider())
             {

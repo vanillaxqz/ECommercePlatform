@@ -1,4 +1,5 @@
-﻿D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\OrdersControllerTests.cs
+﻿D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\AuthControllerTests.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\OrdersControllerTests.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\PaymentControllerTests.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\ProductsControllerTests.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\UserContollerTests.cs
@@ -8,5 +9,5 @@ C:\Users\mihai\.nuget\packages\microsoft.testplatform.testhost\17.12.0\build\net
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.visualstudio.testadapter.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.reporters.netcoreapp10.dll
 C:\Users\mihai\.nuget\packages\xunit.runner.visualstudio\2.8.2\build\net6.0\xunit.runner.utility.netcoreapp10.dll
-D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\3ffb4db0-6dac-47c6-8bf6-0b3af3aa21fb\coverage.cobertura.xml
-D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\3ffb4db0-6dac-47c6-8bf6-0b3af3aa21fb\coverage.opencover.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\5c4a290f-1b7a-47f2-9e4c-d124a606d85f\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\5c4a290f-1b7a-47f2-9e4c-d124a606d85f\coverage.opencover.xml

@@ -139,11 +139,11 @@
     <Property Name="sonar.java.jvmframeworkconfig.activate">true</Property>
     <Property Name="sonar.updatecenter.url">https://downloads.sonarsource.com/sonarqube/update/update-center.properties</Property>
     <Property Name="sonar.core.id">86E1FA4D-AZMVM1lQvNvah30Hj_gW</Property>
-    <Property Name="sonar.core.startTime">07/12/2024 13:46:48</Property>
+    <Property Name="sonar.core.startTime">11/01/2025 18:34:05</Property>
   </ServerSettings>
   <LocalSettings>
     <Property Name="sonar.host.url">http://localhost:9000</Property>
-    <Property Name="sonar.cs.opencover.reportsPaths">D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\3ffb4db0-6dac-47c6-8bf6-0b3af3aa21fb\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\7b5d373d-c726-4c72-bddf-41db433031f1\coverage.opencover.xml</Property>
+    <Property Name="sonar.cs.opencover.reportsPaths">D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\b7c8f0f3-7621-4de8-a988-974072234f3d\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\5c4a290f-1b7a-47f2-9e4c-d124a606d85f\coverage.opencover.xml</Property>
     <Property Name="sonar.scanner.scanAll">false</Property>
   </LocalSettings>
   <AnalyzersSettings>
@@ -154,20 +154,22 @@
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>
@@ -182,20 +184,22 @@
       <AnalyzerPlugins>
         <AnalyzerPlugin Key="csharp" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.CSharp.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\2\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.CSharp.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\0\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
         <AnalyzerPlugin Key="vbnet" Version="9.32.0.97167" StaticResourceName="SonarAnalyzer-9.32.0.97167.zip">
           <AssemblyPaths>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\Google.Protobuf.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.CFG.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.ShimLayer.dll</Path>
-            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\3\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\Google.Protobuf.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.CFG.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.ShimLayer.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\SonarAnalyzer.VisualBasic.dll</Path>
+            <Path>C:\Users\mihai\AppData\Local\Temp\.sonarqube\resources\1\THIRD-PARTY-NOTICES.txt</Path>
           </AssemblyPaths>
         </AnalyzerPlugin>
       </AnalyzerPlugins>

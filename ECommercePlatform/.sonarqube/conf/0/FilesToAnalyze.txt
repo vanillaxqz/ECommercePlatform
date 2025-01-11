@@ -13,3 +13,4 @@ D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IOrderReposito
 D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IPaymentRepository.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IProductRepository.cs
 D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Repositories\IUserRepository.cs
+D:\Documents\Dotnet\Project\ECommercePlatform\Domain\Services\IEmailService.cs

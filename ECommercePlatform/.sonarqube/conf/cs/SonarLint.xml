@@ -3,7 +3,7 @@
   <Settings>
     <Setting>
       <Key>sonar.cs.opencover.reportsPaths</Key>
-      <Value>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\3ffb4db0-6dac-47c6-8bf6-0b3af3aa21fb\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\7b5d373d-c726-4c72-bddf-41db433031f1\coverage.opencover.xml</Value>
+      <Value>D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\b7c8f0f3-7621-4de8-a988-974072234f3d\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\5c4a290f-1b7a-47f2-9e4c-d124a606d85f\coverage.opencover.xml</Value>
     </Setting>
     <Setting>
       <Key>sonar.cs.ignoreHeaderComments</Key>
