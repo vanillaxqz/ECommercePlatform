@@ -4,144 +4,210 @@ using Domain.Repositories;
 using FluentAssertions;
 using NSubstitute;
 
-namespace ECommercePlatformUnitTests.OrderTests;
-
-public class OrderRepositoryTests
+namespace ECommercePlatformUnitTests.OrderTests
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public OrderRepositoryTests()
+    public class OrderRepositoryTests
     {
-        _orderRepository = Substitute.For<IOrderRepository>();
-    }
+        private readonly IOrderRepository _orderRepository;
 
-    [Fact]
-    public async Task GivenValidOrder_WhenAddingOrder_ThenShouldReturnSuccessResult()
-    {
-        // Arrange
-        var orderId = Guid.NewGuid();
-        var order = new Order { OrderId = orderId, UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow };
-
-        _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Success(orderId));
-
-        // Act
-        var result = await _orderRepository.AddOrderAsync(order);
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Data.Should().Be(orderId);
-    }
-
-    [Fact]
-    public async Task GivenExistingOrders_WhenGettingAllOrders_ThenShouldReturnAllOrders()
-    {
-        // Arrange
-        var orders = new List<Order>
+        public OrderRepositoryTests()
         {
-            new() { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow },
-            new() { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow }
-        };
+            _orderRepository = Substitute.For<IOrderRepository>();
+        }
 
-        _orderRepository.GetAllOrdersAsync().Returns(Result<IEnumerable<Order>>.Success(orders));
-
-        // Act
-        var result = await _orderRepository.GetAllOrdersAsync();
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Data.Should().HaveCount(2);
-    }
-
-    [Fact]
-    public async Task GivenExistingOrder_WhenGettingOrderById_ThenShouldReturnMatchingOrder()
-    {
-        // Arrange
-        var orderId = Guid.NewGuid();
-        var order = new Order { OrderId = orderId, UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow };
-
-        _orderRepository.GetOrderByIdAsync(orderId).Returns(Result<Order>.Success(order));
-
-        // Act
-        var result = await _orderRepository.GetOrderByIdAsync(orderId);
-
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Data.Should().BeEquivalentTo(order);
-    }
-
-    [Theory]
-    [InlineData(Status.Pending)]
-    [InlineData(Status.Shipped)]
-    [InlineData(Status.Completed)]
-    public async Task GivenDifferentStatuses_WhenAddingOrder_ThenShouldSucceed(Status status)
-    {
-        // Arrange
-        var order = new Order
+        [Fact]
+        public async Task GivenValidOrder_WhenAddingOrder_ThenShouldReturnSuccessResult()
         {
-            OrderId = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
-            OrderDate = DateTime.UtcNow,
-            Status = status,
-            PaymentId = Guid.NewGuid()
-        };
+            // Arrange
+            var orderId = Guid.NewGuid();
+            var order = new Order { OrderId = orderId, UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow };
 
-        _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Success(order.OrderId));
+            _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Success(orderId));
 
-        // Act
-        var result = await _orderRepository.AddOrderAsync(order);
+            // Act
+            var result = await _orderRepository.AddOrderAsync(order);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Data.Should().Be(order.OrderId);
-    }
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().Be(orderId);
+        }
 
-    [Fact]
-    public async Task GivenUpdateOrder_WhenUpdatingStatus_ThenShouldUpdateSuccessfully()
-    {
-        // Arrange
-        var order = new Order
+        [Fact]
+        public async Task GivenExistingOrders_WhenGettingAllOrders_ThenShouldReturnAllOrders()
         {
-            OrderId = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
-            OrderDate = DateTime.UtcNow,
-            Status = Status.Pending,
-            PaymentId = Guid.NewGuid()
-        };
+            // Arrange
+            var orders = new List<Order>
+            {
+                new() { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow },
+                new() { OrderId = Guid.NewGuid(), UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow }
+            };
 
-        // Act
-        await _orderRepository.UpdateOrderAsync(order);
+            _orderRepository.GetAllOrdersAsync().Returns(Result<IEnumerable<Order>>.Success(orders));
 
-        // Initial status should be Pending
-        order.Status = Status.Shipped;
-        await _orderRepository.UpdateOrderAsync(order);
+            // Act
+            var result = await _orderRepository.GetAllOrdersAsync();
 
-        // Update to Shipped
-        order.Status = Status.Completed;
-        await _orderRepository.UpdateOrderAsync(order);
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().HaveCount(2);
+        }
 
-        // Assert
-        await _orderRepository.Received(3).UpdateOrderAsync(Arg.Any<Order>());
-    }
-
-    [Fact]
-    public async Task GivenOrderWithInvalidPaymentId_WhenAdding_ThenShouldFail()
-    {
-        // Arrange
-        var order = new Order
+        [Fact]
+        public async Task GivenExistingOrder_WhenGettingOrderById_ThenShouldReturnMatchingOrder()
         {
-            OrderId = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
-            OrderDate = DateTime.UtcNow,
-            Status = Status.Pending,
-            PaymentId = Guid.Empty // Invalid payment ID
-        };
+            // Arrange
+            var orderId = Guid.NewGuid();
+            var order = new Order { OrderId = orderId, UserId = Guid.NewGuid(), OrderDate = DateTime.UtcNow };
 
-        _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Failure("Invalid payment ID"));
+            _orderRepository.GetOrderByIdAsync(orderId).Returns(Result<Order>.Success(order));
 
-        // Act
-        var result = await _orderRepository.AddOrderAsync(order);
+            // Act
+            var result = await _orderRepository.GetOrderByIdAsync(orderId);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().BeEquivalentTo(order);
+        }
+
+        [Theory]
+        [InlineData(Status.Pending)]
+        [InlineData(Status.Shipped)]
+        [InlineData(Status.Completed)]
+        public async Task GivenDifferentStatuses_WhenAddingOrder_ThenShouldSucceed(Status status)
+        {
+            // Arrange
+            var order = new Order
+            {
+                OrderId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = status,
+                PaymentId = Guid.NewGuid()
+            };
+
+            _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Success(order.OrderId));
+
+            // Act
+            var result = await _orderRepository.AddOrderAsync(order);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().Be(order.OrderId);
+        }
+
+        [Fact]
+        public async Task GivenUpdateOrder_WhenUpdatingStatus_ThenShouldUpdateSuccessfully()
+        {
+            // Arrange
+            var order = new Order
+            {
+                OrderId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+
+            // Act
+            await _orderRepository.UpdateOrderAsync(order);
+
+            // Initial status should be Pending
+            order.Status = Status.Shipped;
+            await _orderRepository.UpdateOrderAsync(order);
+
+            // Update to Shipped
+            order.Status = Status.Completed;
+            await _orderRepository.UpdateOrderAsync(order);
+
+            // Assert
+            await _orderRepository.Received(3).UpdateOrderAsync(Arg.Any<Order>());
+        }
+
+        [Fact]
+        public async Task GivenOrderWithInvalidPaymentId_WhenAdding_ThenShouldFail()
+        {
+            // Arrange
+            var order = new Order
+            {
+                OrderId = Guid.NewGuid(),
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.Empty // Invalid payment ID
+            };
+
+            _orderRepository.AddOrderAsync(order).Returns(Result<Guid>.Failure("Invalid payment ID"));
+
+            // Act
+            var result = await _orderRepository.AddOrderAsync(order);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task GivenExistingOrder_WhenDeletingOrder_ThenShouldDeleteSuccessfully()
+        {
+            // Arrange
+            var orderId = Guid.NewGuid();
+            _orderRepository.DeleteOrderAsync(orderId).Returns(Task.CompletedTask);
+
+            // Act
+            await _orderRepository.DeleteOrderAsync(orderId);
+
+            // Assert
+            await _orderRepository.Received(1).DeleteOrderAsync(orderId);
+        }
+
+        [Fact]
+        public async Task GivenNonExistingOrder_WhenGettingOrderById_ThenShouldReturnFailure()
+        {
+            // Arrange
+            var orderId = Guid.NewGuid();
+            _orderRepository.GetOrderByIdAsync(orderId).Returns(Result<Order>.Failure("Order not found"));
+
+            // Act
+            var result = await _orderRepository.GetOrderByIdAsync(orderId);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Order not found");
+        }
+
+        [Fact]
+        public async Task GivenExistingUserId_WhenGettingOrdersByUserId_ThenShouldReturnOrders()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            var orders = new List<Order>
+            {
+                new() { OrderId = Guid.NewGuid(), UserId = userId, OrderDate = DateTime.UtcNow },
+                new() { OrderId = Guid.NewGuid(), UserId = userId, OrderDate = DateTime.UtcNow }
+            };
+
+            _orderRepository.GetOrdersByUserIdAsync(userId).Returns(Result<IEnumerable<Order>>.Success(orders));
+
+            // Act
+            var result = await _orderRepository.GetOrdersByUserIdAsync(userId);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task GivenNonExistingUserId_WhenGettingOrdersByUserId_ThenShouldReturnEmptyList()
+        {
+            // Arrange
+            var userId = Guid.NewGuid();
+            _orderRepository.GetOrdersByUserIdAsync(userId).Returns(Result<IEnumerable<Order>>.Success(new List<Order>()));
+
+            // Act
+            var result = await _orderRepository.GetOrdersByUserIdAsync(userId);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Should().BeEmpty();
+        }
     }
 }

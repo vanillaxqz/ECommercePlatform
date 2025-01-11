@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.UseCases.CommandHandlers.UserCommandHandlers
 {
-    internal class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
+    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, Unit>
     {
         private readonly IUserRepository repository;
         private readonly IMapper mapper;

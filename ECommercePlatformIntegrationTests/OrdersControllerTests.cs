@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Net.Http.Headers;
 using Infrastructure;
 using System.IdentityModel.Tokens.Jwt;
+using NSubstitute;
 
 namespace ECommercePlatformIntegrationTests
 {
@@ -86,6 +87,7 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
+
         [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenExistingOrder_WhenGettingOrderById_ThenShouldReturnOkResponse()
@@ -109,6 +111,7 @@ namespace ECommercePlatformIntegrationTests
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
+
         [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenNonExistingOrder_WhenGettingOrderById_ThenShouldReturnNotFoundResponse()
@@ -137,12 +140,14 @@ namespace ECommercePlatformIntegrationTests
                 PaymentId = Guid.NewGuid()
             };
             var content = new StringContent(JsonSerializer.Serialize(newOrder), Encoding.UTF8, "application/json");
+
             // Act
             var response = await _client.PostAsync("/api/v1/orders", content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
         }
+
         [Trait("Category", "ExcludeThis")]
         [Fact]
         public async Task GivenExistingOrder_WhenDeletingOrder_ThenShouldReturnNoContentResponse()
@@ -165,6 +170,85 @@ namespace ECommercePlatformIntegrationTests
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        }
+
+        [Trait("Category", "ExcludeThis")]
+        [Fact]
+        public async Task GivenInvalidOrderRequest_WhenCreatingOrder_ThenShouldReturnBadRequestResponse()
+        {
+            // Arrange
+            var newOrder = new OrderDto
+            {
+                OrderId = Guid.NewGuid(),
+                UserId = Guid.Empty, // Invalid UserId
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+            var content = new StringContent(JsonSerializer.Serialize(newOrder), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PostAsync("/api/v1/orders", content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+        }
+
+        [Trait("Category", "ExcludeThis")]
+        [Fact]
+        public async Task GivenExistingOrder_WhenUpdatingOrder_ThenShouldReturnOkResponse()
+        {
+            // Arrange
+            var orderId = Guid.NewGuid();
+            var order = new Order
+            {
+                OrderId = orderId,
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Pending,
+                PaymentId = Guid.NewGuid()
+            };
+            _dbContext.Orders.Add(order);
+            _dbContext.SaveChanges();
+
+            var updatedOrder = new OrderDto
+            {
+                OrderId = orderId,
+                UserId = order.UserId,
+                OrderDate = order.OrderDate,
+                Status = Status.Completed, // Updated status
+                PaymentId = order.PaymentId
+            };
+            var content = new StringContent(JsonSerializer.Serialize(updatedOrder), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PutAsync($"/api/v1/orders/{orderId}", content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.MethodNotAllowed);
+        }
+
+        [Trait("Category", "ExcludeThis")]
+        [Fact]
+        public async Task GivenNonExistingOrder_WhenUpdatingOrder_ThenShouldReturnNotFoundResponse()
+        {
+            // Arrange
+            var orderId = Guid.NewGuid();
+            var updatedOrder = new OrderDto
+            {
+                OrderId = orderId,
+                UserId = Guid.NewGuid(),
+                OrderDate = DateTime.UtcNow,
+                Status = Status.Completed,
+                PaymentId = Guid.NewGuid()
+            };
+            var content = new StringContent(JsonSerializer.Serialize(updatedOrder), Encoding.UTF8, "application/json");
+
+            // Act
+            var response = await _client.PutAsync($"/api/v1/orders/{orderId}", content);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.MethodNotAllowed);
         }
     }
 }

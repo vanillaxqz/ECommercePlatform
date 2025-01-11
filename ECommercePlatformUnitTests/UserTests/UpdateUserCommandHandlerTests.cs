@@ -1,79 +1,71 @@
+using Application.UseCases.CommandHandlers.UserCommandHandlers;
 using Application.UseCases.Commands.UserCommands;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Repositories;
+using FluentAssertions;
+using MediatR;
 using NSubstitute;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Xunit;
 
-namespace ECommercePlatformUnitTests.UserTests;
-
-public class UpdateUserCommandHandlerTests
+namespace ECommercePlatformUnitTests.UserTests
 {
-    private readonly IMapper _mapper;
-    private readonly IUserRepository _userRepository;
-
-    public UpdateUserCommandHandlerTests()
+    public class UpdateUserCommandHandlerTests
     {
-        _userRepository = Substitute.For<IUserRepository>();
-        _mapper = Substitute.For<IMapper>();
-    }
+        private readonly UpdateUserCommandHandler _handler;
+        private readonly IMapper _mapper;
+        private readonly IUserRepository _userRepository;
 
-    [Fact]
-    public async Task GivenValidCommand_WhenHandlingUpdateUser_ThenShouldUpdateSuccessfully()
-    {
-        // Arrange
-        var userId = Guid.NewGuid();
-        var command = new UpdateUserCommand
+        public UpdateUserCommandHandlerTests()
         {
-            UserId = userId,
-            Name = "Updated Name",
-            Email = "updated@example.com",
-            Password = "newpassword123",
-            Address = "New Address",
-            PhoneNumber = "9876543210"
-        };
+            _userRepository = Substitute.For<IUserRepository>();
+            _mapper = Substitute.For<IMapper>();
+            _handler = new UpdateUserCommandHandler(_userRepository, _mapper);
+        }
 
-        var user = new User
+        [Fact]
+        public async Task GivenValidCommand_WhenHandlingUpdateUser_ThenShouldCallUpdateUserAsync()
         {
-            UserId = userId,
-            Name = command.Name,
-            Email = command.Email,
-            Password = command.Password,
-            Address = command.Address,
-            PhoneNumber = command.PhoneNumber
-        };
+            // Arrange
+            var command = new UpdateUserCommand
+            {
+                UserId = Guid.NewGuid(),
+                Name = "Test User",
+                Email = "test@example.com",
+                Password = "password",
+                Address = "123 Test St",
+                PhoneNumber = "123-456-7890"
+            };
 
-        _mapper.Map<User>(command).Returns(user);
+            var user = new User
+            {
+                UserId = command.UserId,
+                Name = command.Name,
+                Email = command.Email,
+                Password = command.Password,
+                Address = command.Address,
+                PhoneNumber = command.PhoneNumber
+            };
 
-        // Act & Assert
-        await _userRepository.Received(0).UpdateUserAsync(Arg.Any<User>());
-        await _userRepository.UpdateUserAsync(Arg.Is<User>(u =>
-            u.UserId == userId &&
-            u.Name == command.Name &&
-            u.Email == command.Email &&
-            u.Password == command.Password &&
-            u.Address == command.Address &&
-            u.PhoneNumber == command.PhoneNumber
-        ));
-    }
+            _mapper.Map<User>(command).Returns(user);
 
-    [Fact]
-    public async Task GivenInvalidCommand_WhenHandlingUpdateUser_ThenRepositoryShouldNotBeCalled()
-    {
-        // Arrange
-        var command = new UpdateUserCommand
-        {
-            UserId = Guid.Empty,
-            Name = "",
-            Email = "",
-            Password = "",
-            Address = "",
-            PhoneNumber = ""
-        };
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Act
-        await Task.CompletedTask; // Placeholder for actual action
-
-        // Assert
-        await _userRepository.Received(0).UpdateUserAsync(Arg.Any<User>());
+            // Assert
+            await _userRepository.Received(1).UpdateUserAsync(user);
+            result.Should().Be(Unit.Value);
+        }
     }
 }
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.Commands.ProductCommands
 {
-    internal class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+    public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
     {
         public UpdateProductCommandValidator()
         {
@@ -11,10 +11,14 @@ namespace Application.UseCases.Commands.ProductCommands
             RuleFor(x => x.Price).NotEmpty();
             RuleFor(x => x.Category).NotEmpty();
             RuleFor(x => x.Stock).NotEmpty();
-            RuleFor(x => x.ProductId).NotEmpty().Must(BeAValidGuid).WithMessage("Must be a valid guid");
+            RuleFor(x => x.ProductId).Must(BeAValidGuid).WithMessage("Must be a valid guid");
         }
         private static bool BeAValidGuid(Guid guid)
         {
+            if (guid == Guid.Empty)
+            {
+                return false;
+            }
             return Guid.TryParse(guid.ToString(), out _);
         }
     }
