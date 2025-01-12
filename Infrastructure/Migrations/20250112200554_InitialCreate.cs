@@ -31,10 +31,11 @@ namespace Infrastructure.Migrations
                 {
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Stock = table.Column<int>(type: "integer", nullable: false),
-                    Category = table.Column<int>(type: "integer", nullable: false)
+                    Category = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,8 +50,8 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Password = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Address = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    PhoneNumber = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false)
+                    Address = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -148,9 +149,9 @@ namespace Infrastructure.Migrations
                     OrderItemId = table.Column<Guid>(type: "uuid", nullable: false),
                     OrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    ImagePath = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
+                    ImagePath = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {

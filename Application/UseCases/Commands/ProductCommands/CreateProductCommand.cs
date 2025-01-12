@@ -11,5 +11,6 @@ namespace Application.UseCases.Commands.ProductCommands
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public Category Category { get; set; }
+        public Guid UserId { get; set; }
     }
 }
