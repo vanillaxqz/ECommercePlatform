@@ -43,10 +43,35 @@ export class ProductService {
   }
 
   public createProduct(product: Product): Observable<any> {
-    const token = this.storageService.getItem('token'); // Using StorageService
-    console.log('Retrieved token:', token);
+    const token = this.storageService.getItem('token');
+    const currentUser = this.storageService.getItem('currentUser'); // Get the current user from local storage
+
+    if (!currentUser) {
+      return throwError(() => new Error('User data not found in local storage'));
+    }
+
+    // Parse the currentUser object to get the userId
+    let parsedUser: { userId: string } | null = null;
+    try {
+      parsedUser = JSON.parse(currentUser);
+    } catch (e) {
+      console.error('Error parsing user data:', e);
+      return throwError(() => new Error('Invalid user data in local storage'));
+    }
+
+    if (!parsedUser || !parsedUser.userId) {
+      return throwError(() => new Error('User ID not found in parsed user data'));
+    }
+
     const headers = token ? new HttpHeaders().set('Authorization', `Bearer ${token}`) : new HttpHeaders();
-    return this.http.post<any>(this.apiURL, product, { headers })
+
+    // Add the userId to the product object
+    const productWithUserId = {
+      ...product,
+      userId: parsedUser.userId // Include the userId in the request payload
+    };
+
+    return this.http.post<any>(this.apiURL, productWithUserId, { headers })
       .pipe(
         catchError(this.handleError)
       );

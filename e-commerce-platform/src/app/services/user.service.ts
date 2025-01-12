@@ -93,8 +93,12 @@ export class UserService {
   private refreshUserData(userId: string): void {
     this.getUserById(userId).subscribe({
       next: (user) => {
-        this.storageService.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
+        const userWithoutPassword: User = {
+          ...user,
+          password: "",
+        };
+        this.storageService.setItem('currentUser', JSON.stringify(userWithoutPassword));
+        this.currentUserSubject.next(userWithoutPassword);
         this._userRole = { isGuest: false, isAuthenticated: true };
       },
       error: (error) => {
@@ -222,9 +226,13 @@ export class UserService {
         return response.data;
       }),
       tap(user => {
-        // Update stored user data when we get fresh data
         if (user && user.userId) {
-          this.storageService.setItem('currentUser', JSON.stringify(user));
+          const userWithoutPassword: User = {
+            ...user,
+            password: "",
+          };
+
+          this.storageService.setItem('currentUser', JSON.stringify(userWithoutPassword));
         }
       }),
       catchError(this.handleError)
@@ -235,16 +243,21 @@ export class UserService {
     if (!this.currentUser?.userId) {
       return throwError(() => new Error('No user ID available'));
     }
-
-    return this.http.post<UserResponse>(`${this.apiUrl}/Users`, {
+    const requestBody: User = {
       ...userData,
-      userId: this.currentUser.userId
-    }).pipe(
+      userId: this.currentUser.userId,
+    };
+  
+    return this.http.put<UserResponse>(`${this.apiUrl}/Users`, requestBody).pipe(
       map(response => {
         if (!response.isSuccess) {
           throw new Error(response.errorMessage || 'Failed to update user data');
         }
-        const updatedUser = response.data;
+        const updatedUser: User = {
+          ...response.data,
+          password: "",
+        };
+  
         this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
         this.currentUserSubject.next(updatedUser);
         return updatedUser;

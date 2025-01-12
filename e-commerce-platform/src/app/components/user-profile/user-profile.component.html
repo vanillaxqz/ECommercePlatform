@@ -1,4 +1,6 @@
+<!-- user-profile.component.html -->
 <div class="profile-container">
+  <!-- Existing profile header and user info sections remain unchanged -->
   <div class="profile-header">
     <h1>My Profile</h1>
     <div class="header-actions">
@@ -59,28 +61,28 @@
     </ng-container>
   </div>
 
+  <!-- Order History Section -->
   <div class="order-history">
     <h2>Order History</h2>
-    <div class="orders">
-      <div class="order-card">
+    <div *ngIf="orderHistoryLoading" class="loading">
+      Loading order history...
+    </div>
+    <div *ngIf="orderHistoryError" class="error">
+      {{ orderHistoryError }}
+    </div>
+    <div *ngIf="!orderHistoryLoading && !orderHistoryError" class="orders">
+      <div *ngFor="let order of orderHistory" class="order-card">
         <div class="order-header">
-          <span class="order-id">Order #1234</span>
-          <span class="order-date">Jan 10, 2024</span>
+          <span class="order-id">Order #{{ order.orderId }}</span>
+          <span class="order-date">{{ order.orderDate | date }}</span>
         </div>
         <div class="order-details">
-          <p class="payment-info">Paid with: •••• 4242</p>
-          <p class="order-total">Total: $129.99</p>
-        </div>
-      </div>
-
-      <div class="order-card">
-        <div class="order-header">
-          <span class="order-id">Order #1189</span>
-          <span class="order-date">Dec 28, 2023</span>
-        </div>
-        <div class="order-details">
-          <p class="payment-info">Paid with: •••• 5678</p>
-          <p class="order-total">Total: $89.99</p>
+          <p class="payment-info">Payment ID: {{ order.paymentId }}</p>
+          <p class="order-total">Status: 
+            <span class="status-badge" [class]="getStatusClasses(order.status)">
+              {{ getStatusText(order.status) }}
+            </span>
+          </p>
         </div>
       </div>
     </div>

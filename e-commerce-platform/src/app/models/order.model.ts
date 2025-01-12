@@ -4,7 +4,6 @@ export interface OrderDetails {
     status: number;
     paymentId: string;
     userId: string;
-    total?: number;
   }
   
   export interface OrderRequest {

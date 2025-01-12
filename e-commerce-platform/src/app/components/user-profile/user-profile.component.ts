@@ -1,3 +1,4 @@
+// user-profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -5,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
+import { OrderService } from '../../services/order.service';
+import { OrderDetails } from '../../models/order.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -20,9 +23,14 @@ export class UserProfileComponent implements OnInit {
   isEditing = false;
   editedData: Partial<User> = {};
 
+  orderHistory: OrderDetails[] = [];
+  orderHistoryLoading = true;
+  orderHistoryError: string | null = null;
+
   constructor(
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private orderService: OrderService // Inject the OrderService
   ) {}
 
   ngOnInit() {
@@ -31,22 +39,21 @@ export class UserProfileComponent implements OnInit {
         if (typeof currentUser === 'string') {
           this.userService.getUserById(currentUser).subscribe({
             next: (user) => {
-              console.log('Fetched user details:', user);
               this.userData = user;
               this.editedData = { ...user };
               this.loading = false;
+              this.loadOrderHistory(user.userId); // Load order history for the user
             },
             error: (error) => {
-              console.error('Error fetching user details:', error);
               this.error = 'Failed to load user data: ' + error.message;
               this.loading = false;
             }
           });
         } else if (currentUser?.userId) {
-          console.log('Fetching user details for complete user object:', currentUser);
           this.userData = currentUser;
           this.editedData = { ...currentUser };
           this.loading = false;
+          this.loadOrderHistory(currentUser.userId); // Load order history for the user
         } else {
           this.error = 'No user ID available';
           this.userData = null;
@@ -57,6 +64,49 @@ export class UserProfileComponent implements OnInit {
         console.error('Error in user subscription:', error);
       }
     });
+  }
+
+  // Add this method to load order history
+  loadOrderHistory(userId: string): void {
+    this.orderHistoryLoading = true;
+    this.orderHistoryError = null;
+
+    this.orderService.getOrderHistory(userId).subscribe({
+      next: (response) => {
+        this.orderHistory = response.data;
+        this.orderHistoryLoading = false;
+      },
+      error: (error) => {
+        this.orderHistoryError = 'Failed to load order history: ' + error.message;
+        this.orderHistoryLoading = false;
+      }
+    });
+  }
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1:
+        return 'Confirmed';
+      case 2:
+        return 'Processing';
+      case 3:
+        return 'Shipped';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getStatusClasses(status: number): string {
+    switch (status) {
+      case 1:
+        return 'status-1'; // Confirmed
+      case 2:
+        return 'status-2'; // Processing
+      case 3:
+        return 'status-3'; // Shipped
+      default:
+        return ''; // Unknown
+    }
   }
 
   startEditing(): void {
