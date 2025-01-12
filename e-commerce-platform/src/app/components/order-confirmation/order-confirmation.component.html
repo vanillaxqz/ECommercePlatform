@@ -1,0 +1,65 @@
+<!-- order-confirmation.component.html -->
+<div class="container">
+  <div class="card">
+    <!-- Status Header -->
+    <div class="header">
+      <div class="check-icon">✓</div>
+      <h1>Order Confirmed</h1>
+      <p>Thank you for your purchase</p>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error" class="error">
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="!isLoading && !error && orderDetails" class="content">
+      <!-- Progress -->
+      <div class="progress">
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="getProgressWidth()"></div>
+        </div>
+        <div class="steps">
+          <div *ngFor="let step of steps" class="step" [class.active]="step.complete">
+            <div class="step-icon">✓</div>
+            <div class="step-label">{{ step.label }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Info -->
+      <div class="order-info">
+        <div class="info-row">
+          <span>Order Number</span>
+          <span>{{ orderDetails.orderId }}</span>
+        </div>
+        <div class="info-row">
+          <span>Order Date</span>
+          <span>{{ orderDetails.orderDate | date:'medium' }}</span>
+        </div>
+        <div class="info-row">
+          <span>Status</span>
+          <span class="status-badge" [class]="'status-' + orderDetails.status">
+            {{ getStatusText(orderDetails.status) }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button (click)="goToOrderHistory()" class="btn primary">
+          Order History
+        </button>
+        <button (click)="continueShopping()" class="btn secondary">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

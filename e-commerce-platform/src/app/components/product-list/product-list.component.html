@@ -9,12 +9,30 @@
       </select>
       <span class="select-arrow">▼</span>
     </div>
-    <button class="add-button" *ngIf="!userService.isGuest" (click)="navigateToCreate()">
-      <span class="button-icon">+</span>
-      Add Product
-    </button>
+    <ng-container *ngIf="userService.isAuthenticated">
+      <button class="add-button" (click)="navigateToCreate()">
+        <span class="button-icon">+</span>
+        Add Product
+      </button>
+    </ng-container>
+    <ng-container *ngIf="!userService.isAuthenticated">
+      <button class="add-button guest" (click)="showAuthModal = true">
+        <span class="button-icon">+</span>
+        Add Product
+      </button>
+    </ng-container>
   </div>
-
+  <!-- Auth Modal -->
+  <div *ngIf="showAuthModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Account Required</h3>
+      <p>You need an account to add a product. Create one now!</p>
+      <div class="modal-buttons">
+        <button class="register-btn" (click)="navigateToRegister()">Create Account</button>
+        <button class="close-btn" (click)="showAuthModal = false">Close</button>
+      </div>
+    </div>
+  </div>
   <!-- New filter fields -->
   <div class="filters">
     <input type="text" placeholder="Name" [(ngModel)]="filters.name">
@@ -31,6 +49,14 @@
 
   <div class="product-grid" *ngIf="!isLoading && !error">
     <div class="product-card" *ngFor="let product of products">
+      <div class="product-admin-actions" *ngIf="userService.isAuthenticated">
+        <button class="btn-icon edit" (click)="navigateToUpdate(product.productId)" title="Edit Product">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
+      </div>
+      
       <div class="product-image-container">
         <img [ngSrc]="'https://picsum.photos/seed/' + product.productId + '/400/300'" [width]="400" [height]="300"
           class="product-image" [alt]="product.name" />
@@ -47,8 +73,8 @@
           <button class="btn primary" (click)="navigateToDetail(product.productId)">
             View Details
           </button>
-          <button class="btn secondary" *ngIf="!userService.isGuest" (click)="navigateToUpdate(product.productId)">
-            Edit
+          <button class="btn secondary" (click)="addToCart(product)">
+            Add to Cart
           </button>
         </div>
       </div>
@@ -63,5 +89,18 @@
     <button class="pagination-btn" (click)="onPageChange(currentPage + 1)" [disabled]="currentPage === totalPages">
       →
     </button>
+  </div>
+
+  <!-- Cart Notification -->
+  <div class="notifications-container">
+    <div class="cart-notification" *ngFor="let notification of cartNotifications; let i = index">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+      </svg>
+      <span>{{ notification.productName }} added to cart</span>
+      <div class="notification-progress"></div>
+    </div>
   </div>
 </div>

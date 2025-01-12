@@ -1,0 +1,88 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>My Profile</h1>
+    <div class="header-actions">
+      <button *ngIf="!isEditing" class="edit-btn" (click)="startEditing()">Edit Profile</button>
+      <button class="delete-btn" (click)="deleteAccount()">Delete Account</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading user data...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="user-info">
+    <ng-container *ngIf="!isEditing">
+      <div class="info-group">
+        <label>Name</label>
+        <p>{{ userData?.name }}</p>
+      </div>
+      <div class="info-group">
+        <label>Email</label>
+        <p>{{ userData?.email }}</p>
+      </div>
+      <div class="info-group">
+        <label>Address</label>
+        <p>{{ userData?.address }}</p>
+      </div>
+      <div class="info-group">
+        <label>Phone Number</label>
+        <p>{{ userData?.phoneNumber }}</p>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isEditing">
+      <div class="info-group">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="editedData.name" class="edit-input">
+      </div>
+      <div class="info-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="editedData.email" class="edit-input">
+      </div>
+      <div class="info-group">
+        <label>Address</label>
+        <input type="text" [(ngModel)]="editedData.address" class="edit-input">
+      </div>
+      <div class="info-group">
+        <label>Phone Number</label>
+        <input type="tel" [(ngModel)]="editedData.phoneNumber" class="edit-input">
+      </div>
+      <div class="edit-actions">
+        <button class="save-btn" (click)="saveChanges()">Save Changes</button>
+        <button class="cancel-btn" (click)="cancelEditing()">Cancel</button>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="order-history">
+    <h2>Order History</h2>
+    <div class="orders">
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">Order #1234</span>
+          <span class="order-date">Jan 10, 2024</span>
+        </div>
+        <div class="order-details">
+          <p class="payment-info">Paid with: •••• 4242</p>
+          <p class="order-total">Total: $129.99</p>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-header">
+          <span class="order-id">Order #1189</span>
+          <span class="order-date">Dec 28, 2023</span>
+        </div>
+        <div class="order-details">
+          <p class="payment-info">Paid with: •••• 5678</p>
+          <p class="order-total">Total: $89.99</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

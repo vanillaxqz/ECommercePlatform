@@ -5,11 +5,19 @@ import { FormsModule } from '@angular/forms';
 import { Product } from '../../models/product.model';
 import { ProductService } from '../../services/product.service';
 import { UserService } from '../../services/user.service';
+import { CartComponent } from '../cart/cart.component';
+import { CartService } from '../../services/cart.service';
 import { NgOptimizedImage } from '@angular/common';
 
 interface Category {
   id: number;
   name: string;
+}
+
+interface CartNotification {
+  id: number;
+  productName: string;
+  timestamp: number;
 }
 
 @Component({
@@ -20,6 +28,7 @@ interface Category {
   styleUrl: './product-list.component.css',
 })
 export class ProductListComponent implements OnInit {
+  showAuthModal = false;
   products: Product[] = [];
   currentPage = 1;
   pageSize = 9;
@@ -28,6 +37,9 @@ export class ProductListComponent implements OnInit {
   isLoading = false;
   error?: string;
   selectedCategory?: number;
+  cartNotifications: CartNotification[] = [];
+  private nextNotificationId = 0;
+  private readonly MAX_NOTIFICATIONS = 4;
 
   filters = {
     name: '',
@@ -47,7 +59,7 @@ export class ProductListComponent implements OnInit {
     { id: 9, name: 'Jewelry' },
   ];
 
-  constructor(private productService: ProductService, private router: Router, public userService: UserService) { }
+  constructor(private productService: ProductService, private router: Router, public userService: UserService, private cartService:CartService) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -92,10 +104,32 @@ export class ProductListComponent implements OnInit {
     this.loadProducts();
   }
 
+  addToCart(product: Product): void {
+    CartComponent.addToCart(product);
+    this.showCartNotification(product.name);
+    this.cartService.updateCartCount();
+  }
+
+  private showCartNotification(productName: string): void {
+    const notification: CartNotification = {
+      id: this.nextNotificationId++,
+      productName,
+      timestamp: Date.now()
+    };
+    
+    this.cartNotifications = [notification, ...this.cartNotifications]
+      .slice(0, this.MAX_NOTIFICATIONS);
+    
+    setTimeout(() => {
+      this.cartNotifications = this.cartNotifications
+        .filter(n => n.id !== notification.id);
+    }, 3000);
+  }
+
   onCategoryChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedCategory = select.value ? Number(select.value) : undefined;
-    this.currentPage = 1; // Reset to first page when category changes
+    this.currentPage = 1;
     this.loadProducts();
   }
 
@@ -121,6 +155,11 @@ export class ProductListComponent implements OnInit {
 
   navigateToUpdate(id: string): void {
     this.router.navigate(['/products/update', id]);
+  }
+
+  navigateToRegister(): void {
+    this.showAuthModal = false;
+    this.router.navigate(['/register']);
   }
 
   get startIndex(): number {

@@ -13,7 +13,7 @@ export class AuthGuard {
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
-    if (route.routeConfig?.path === 'products' || route.routeConfig?.path === 'products/:id') {
+    if (route.routeConfig?.path === 'products' || route.routeConfig?.path === 'products/:id' || route.routeConfig?.path === 'cart') {
       return true;
     }
 

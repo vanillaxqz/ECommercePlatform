@@ -8,3 +8,9 @@ export interface AuthResponse {
   isSuccess: boolean;
   errorMessage?: string;
 }
+
+export interface UserResponse {
+  data: User;
+  isSuccess: boolean;
+  errorMessage: string;
+}

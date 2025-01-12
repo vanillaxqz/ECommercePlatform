@@ -1,8 +1,7 @@
-/* navbar.component.css */
 .navbar {
   padding: 1rem;
   background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1000;
 }
@@ -28,8 +27,7 @@
   gap: 1rem;
 }
 
-.nav-links a,
-.logout-btn {
+.nav-links a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
@@ -43,15 +41,13 @@
   font-size: 1rem;
 }
 
-.nav-links a:hover,
-.logout-btn:hover {
+.nav-links a:hover {
   color: #007bff;
   background-color: rgba(0, 123, 255, 0.08);
   transform: translateY(-1px);
 }
 
-.nav-links a:active,
-.logout-btn:active {
+.nav-links a:active {
   transform: translateY(0);
 }
 
@@ -60,21 +56,93 @@
   background-color: rgba(0, 123, 255, 0.1);
 }
 
+.profile-link,
+.products-link,
+.cart-link,
+.register-link,
+.login-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-icon,
+.products-icon,
+.cart-icon,
+.register-icon,
+.login-icon,
+.logout-icon {
+  transition: transform 0.2s ease;
+}
+
+.profile-link:hover .profile-icon,
+.products-link:hover .products-icon,
+.cart-link:hover .cart-icon,
+.register-link:hover .register-icon,
+.login-link:hover .login-icon,
+.logout-btn:hover .logout-icon {
+  transform: scale(1.1);
+}
+
+.nav-links a.active .profile-icon,
+.nav-links a.active .products-icon,
+.nav-links a.active .cart-icon,
+.nav-links a.active .register-icon,
+.nav-links a.active .login-icon {
+  color: #007bff;
+}
+
 .logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 8px 16px;
+  border-radius: 6px;
   border: 1px solid rgba(220, 53, 69, 0.2);
+  background: transparent;
   color: #dc3545;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1rem;
 }
 
 .logout-btn:hover {
   color: #dc3545;
   background-color: rgba(220, 53, 69, 0.08);
   border-color: rgba(220, 53, 69, 0.4);
+  transform: translateY(-1px);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+}
+
+.cart-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
 
 .hamburger {
   display: none;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   background: none;
   border: none;
   cursor: pointer;
@@ -85,35 +153,86 @@
   width: 25px;
   height: 3px;
   background-color: #333;
-  transition: all 0.3s ease;
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
 }
 
+.hamburger.open .bar:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open .bar:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.logout-popup {
+  position: fixed;
+  top: -50px; /* Start hidden above the viewport */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+
+  /* Combined animation: slide down, hold, and fade out */
+  animation: slideHoldFade 3.5s ease-in-out;
+  animation-fill-mode: forwards; /* Ensure it doesn't reset to initial position */
+}
+
+/* Combined keyframes for sliding down, holding, and fading out */
+@keyframes slideHoldFade {
+  0% {
+    top: -50px; /* Hidden above viewport */
+    opacity: 0; /* Invisible */
+  }
+  20% {
+    top: 10px; /* Slide down to visible position */
+    opacity: 1; /* Fully visible */
+  }
+  80% {
+    top: 10px; /* Stay in visible position */
+    opacity: 1; /* Fully visible */
+  }
+  100% {
+    top: 10px; /* Stay in position */
+    opacity: 0; /* Fade out */
+  }
+}
+
+
 @media (max-width: 768px) {
-  .nav-content.authenticated .hamburger {
+  .hamburger {
     display: flex;
-    position: relative;
-    z-index: 1001;
   }
 
-  .nav-content.authenticated .nav-links {
+  .nav-links {
     display: none;
+    flex-direction: column;
     position: fixed;
     top: 70px;
     left: 0;
     right: 0;
-    background: white;
-    flex-direction: column;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     z-index: 999;
   }
 
-  .nav-content.authenticated .nav-links.open {
+  .nav-links.open {
     display: flex;
   }
 
-  .nav-content.authenticated .nav-links a,
-  .nav-content.authenticated .logout-btn {
+  .nav-links a,
+  .nav-links button {
     margin: 0.5rem 0;
   }
 }
