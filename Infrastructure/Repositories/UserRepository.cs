@@ -90,8 +90,15 @@ namespace Infrastructure.Repositories
 
         public async Task UpdateUserAsync(User user)
         {
-            context.Entry(user).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            var existingUser = await context.Users.FirstOrDefaultAsync(x => x.UserId == user.UserId);
+            if (existingUser != null)
+            { 
+                existingUser.Name = user.Name;
+                existingUser.Email = user.Email;
+                existingUser.Address = user.Address;
+                existingUser.PhoneNumber = user.PhoneNumber;
+                await context.SaveChangesAsync();
+            }
         }
 
         public static string GeneratePasswordResetToken(User user)
