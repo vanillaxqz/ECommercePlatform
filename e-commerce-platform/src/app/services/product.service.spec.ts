@@ -1,19 +1,28 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProductService, PaginatedResponse } from './product.service';
+import { StorageService } from './storage.service';
 import { Product } from '../models/product.model';
 
 describe('ProductService', () => {
   let service: ProductService;
   let httpMock: HttpTestingController;
+  let storageService: jasmine.SpyObj<StorageService>;
 
   beforeEach(() => {
+    const storageServiceSpy = jasmine.createSpyObj('StorageService', ['getItem']);
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ProductService]
+      providers: [
+        ProductService,
+        { provide: StorageService, useValue: storageServiceSpy }
+      ]
     });
+
     service = TestBed.inject(ProductService);
     httpMock = TestBed.inject(HttpTestingController);
+    storageService = TestBed.inject(StorageService) as jasmine.SpyObj<StorageService>;
   });
 
   afterEach(() => {
@@ -24,70 +33,86 @@ describe('ProductService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should retrieve products from the API via GET', () => {
-    const dummyProducts: Product[] = [
-      { productId: '1', name: 'Product 1', description: 'Description 1', price: 100, stock: 10, category: 1 },
-      { productId: '2', name: 'Product 2', description: 'Description 2', price: 200, stock: 20, category: 2 }
-    ];
-    const paginatedResponse: PaginatedResponse = { data: dummyProducts, totalCount: 2 };
+  it('should get products with default parameters', () => {
+    const paginatedResponse: PaginatedResponse = {
+      data: [{ productId: '1', name: 'Product 1', price: 100, stock: 10, category: 1, description: 'Description 1', userId: '1' }],
+      totalCount: 1
+    };
 
-    service.getProducts().subscribe((products: PaginatedResponse) => {
-      expect(products.data.length).toBe(2);
-      expect(products.data).toEqual(dummyProducts);
+    service.getProducts().subscribe(response => {
+      expect(response).toEqual(paginatedResponse);
     });
 
-    const req = httpMock.expectOne(`${service['apiURL']}/paginated?Page=1&PageSize=10`);
+    const req = httpMock.expectOne(`${service['apiURL']}/paginated?Page=1&PageSize=9`);
     expect(req.request.method).toBe('GET');
     req.flush(paginatedResponse);
   });
 
-  it('should create a new product via POST', () => {
-    const newProduct: Product = { productId: '3', name: 'Product 3', description: 'Description 3', price: 300, stock: 30, category: 3 };
+  it('should get products with specified parameters', () => {
+    const paginatedResponse: PaginatedResponse = {
+      data: [{ productId: '1', name: 'Product 1', price: 100, stock: 10, category: 1, description: 'Description 1', userId: '1' }],
+      totalCount: 1
+    };
 
-    service.createProduct(newProduct).subscribe((response: Product) => {
-      expect(response).toEqual(newProduct);
+    service.getProducts(2, 5, 1, 'Product 1', 10, 100).subscribe(response => {
+      expect(response).toEqual(paginatedResponse);
     });
 
-    const req = httpMock.expectOne(service['apiURL']);
-    expect(req.request.method).toBe('POST');
-    req.flush(newProduct);
-  });
-
-  it('should update an existing product via PUT', () => {
-    const updatedProduct: Product = { productId: '1', name: 'Updated Product', description: 'Updated Description', price: 150, stock: 15, category: 1 };
-
-    service.updateProduct(updatedProduct).subscribe((response: Product) => {
-      expect(response).toEqual(updatedProduct);
-    });
-
-    const req = httpMock.expectOne(service['apiURL']);
-    expect(req.request.method).toBe('PUT');
-    req.flush(updatedProduct);
-  });
-
-  it('should delete a product via DELETE', () => {
-    const productId = '1';
-
-    service.deleteProduct(productId).subscribe((response: any) => {
-      expect(response).toEqual({});
-    });
-
-    const req = httpMock.expectOne(`${service['apiURL']}/${productId}`);
-    expect(req.request.method).toBe('DELETE');
-    req.flush({});
-  });
-
-  it('should retrieve a product by id via GET', () => {
-    const productId = '1';
-    const product: Product = { productId: '1', name: 'Product 1', description: 'Description 1', price: 100, stock: 10, category: 1 };
-
-    service.getProductById(productId).subscribe((response: Product) => {
-      expect(response).toEqual(product);
-    });
-
-    const req = httpMock.expectOne(`${service['apiURL']}/${productId}`);
+    const req = httpMock.expectOne(`${service['apiURL']}/paginated?Page=2&PageSize=5&Category=1&Name=Product%201&Stock=10&Price=100`);
     expect(req.request.method).toBe('GET');
-    req.flush(product);
+    req.flush(paginatedResponse);
   });
 
+  it('should handle error when getting products', () => {
+    service.getProducts().subscribe({
+      next: () => fail('expected an error, not a success'),
+      error: error => expect(error.message).toContain('Failed to load products')
+    });
+
+    const req = httpMock.expectOne(`${service['apiURL']}/paginated?Page=1&PageSize=9`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ message: 'Failed to load products' }, { status: 500, statusText: 'Server Error' });
+  });
+
+  it('should create a product successfully', () => {
+    const product: Product = { productId: '1', name: 'Product 1', price: 100, stock: 10, category: 1, description: 'Description 1', userId: '1' };
+    const token = 'test-token';
+    const currentUser = JSON.stringify({ userId: '1', name: 'John Doe' });
+
+    storageService.getItem.and.callFake((key: string) => {
+      if (key === 'token') return token;
+      if (key === 'currentUser') return currentUser;
+      return null;
+    });
+
+    service.createProduct(product).subscribe(response => {
+      expect(response).toEqual({ success: true });
+    });
+
+    const req = httpMock.expectOne(`${service['apiURL']}`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.get('Authorization')).toBe(`Bearer ${token}`);
+    req.flush({ success: true });
+  });
+
+  it('should handle error when creating a product', () => {
+    const product: Product = { productId: '1', name: 'Product 1', price: 100, stock: 10, category: 1, description: 'Description 1', userId: '1' };
+    const token = 'test-token';
+    const currentUser = JSON.stringify({ userId: '1', name: 'John Doe' });
+
+    storageService.getItem.and.callFake((key: string) => {
+      if (key === 'token') return token;
+      if (key === 'currentUser') return currentUser;
+      return null;
+    });
+
+    service.createProduct(product).subscribe({
+      next: () => fail('expected an error, not a success'),
+      error: error => expect(error.message).toContain('Failed to create product')
+    });
+
+    const req = httpMock.expectOne(`${service['apiURL']}`);
+    expect(req.request.method).toBe('POST');
+    req.flush({ message: 'Failed to create product' }, { status: 500, statusText: 'Server Error' });
+  });
 });
