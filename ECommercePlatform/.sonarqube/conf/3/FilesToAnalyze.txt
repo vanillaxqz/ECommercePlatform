@@ -26,8 +26,12 @@ D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\75c9
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\75c9e027-f472-4daa-b86d-5e04e046e26e\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\7fb602aa-c90f-44ab-9c55-f428fe416802\coverage.cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\7fb602aa-c90f-44ab-9c55-f428fe416802\coverage.opencover.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\868a929f-eef1-4179-8b97-7bb34116c68d\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\868a929f-eef1-4179-8b97-7bb34116c68d\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8c70443d-82f9-457b-81bd-80b60ae11286\coverage.cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8c70443d-82f9-457b-81bd-80b60ae11286\coverage.opencover.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8ed4e00d-1007-4bb8-91a8-2f85894d2ce9\coverage.cobertura.xml
+D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\8ed4e00d-1007-4bb8-91a8-2f85894d2ce9\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\d7e2aa71-4c73-4944-a7a4-d89dc6fe590c\coverage.cobertura.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\d7e2aa71-4c73-4944-a7a4-d89dc6fe590c\coverage.opencover.xml
 D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatform\TestResults\d837bc80-b11d-43cc-acfc-84d7d19220a9\coverage.cobertura.xml

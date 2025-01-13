@@ -35,7 +35,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "123-456-7890"
             };
@@ -45,7 +44,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = command.UserId,
                 Name = command.Name,
                 Email = command.Email,
-                Password = command.Password,
                 Address = command.Address,
                 PhoneNumber = command.PhoneNumber
             };

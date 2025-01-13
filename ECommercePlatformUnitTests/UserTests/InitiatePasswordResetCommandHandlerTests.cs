@@ -7,6 +7,7 @@ using Domain.Services;
 using FluentAssertions;
 using Infrastructure;
 using NSubstitute;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ECommercePlatformUnitTests.UserTests
 {
@@ -40,6 +41,25 @@ namespace ECommercePlatformUnitTests.UserTests
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("User not found");
             await _emailService.DidNotReceive().SendEmailAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task Handle_UserFound_SendsEmailAndReturnsSuccess()
+        {
+            // Arrange
+            var user = new User { UserId = Guid.NewGuid(), Email = "burd@yahoo.com" };
+            var command = new InitiatePasswordResetCommand { Email = user.Email };
+            var token = new JwtSecurityToken();
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            _userRepository.GetUserByEmailAsync(command.Email).Returns(Result<User>.Success(user));
+            var tok = _jwtTokenGenerator.GeneratePasswordResetToken(user.UserId);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsSuccess);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "1234567890"
             };
@@ -42,7 +41,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.Empty,
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "1234567890"
             };
@@ -64,7 +62,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = string.Empty,
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "1234567890"
             };
@@ -85,7 +82,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = string.Empty,
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "1234567890"
             };
@@ -106,7 +102,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "invalid-email",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "1234567890"
             };
@@ -120,27 +115,6 @@ namespace ECommercePlatformUnitTests.UserTests
         }
 
         [Fact]
-        public void GivenEmptyPassword_WhenValidating_ThenShouldHaveValidationError()
-        {
-            // Arrange
-            var command = new UpdateUserCommand
-            {
-                UserId = Guid.NewGuid(),
-                Name = "Test User",
-                Email = "test@example.com",
-                Password = string.Empty,
-                Address = "123 Test St",
-                PhoneNumber = "1234567890"
-            };
-
-            // Act
-            var result = _validator.TestValidate(command);
-
-            // Assert
-            result.ShouldHaveValidationErrorFor(c => c.Password);
-        }
-
-        [Fact]
         public void GivenEmptyAddress_WhenValidating_ThenShouldHaveValidationError()
         {
             // Arrange
@@ -149,7 +123,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = string.Empty,
                 PhoneNumber = "1234567890"
             };
@@ -170,7 +143,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = string.Empty
             };
@@ -191,7 +163,6 @@ namespace ECommercePlatformUnitTests.UserTests
                 UserId = Guid.NewGuid(),
                 Name = "Test User",
                 Email = "test@example.com",
-                Password = "password",
                 Address = "123 Test St",
                 PhoneNumber = "12345678901" // More than 10 characters
             };
