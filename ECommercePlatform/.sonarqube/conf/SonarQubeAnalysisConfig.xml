@@ -139,11 +139,12 @@
     <Property Name="sonar.java.jvmframeworkconfig.activate">true</Property>
     <Property Name="sonar.updatecenter.url">https://downloads.sonarsource.com/sonarqube/update/update-center.properties</Property>
     <Property Name="sonar.core.id">86E1FA4D-AZMVM1lQvNvah30Hj_gW</Property>
-    <Property Name="sonar.core.startTime">11/01/2025 18:34:05</Property>
+    <Property Name="sonar.core.startTime">13/01/2025 11:07:35</Property>
+    <Property Name="sonar.coverage.exclusions">Infrastructure/Migrations/20250112200554_InitialCreate.cs</Property>
   </ServerSettings>
   <LocalSettings>
     <Property Name="sonar.host.url">http://localhost:9000</Property>
-    <Property Name="sonar.cs.opencover.reportsPaths">D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\b7c8f0f3-7621-4de8-a988-974072234f3d\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\5c4a290f-1b7a-47f2-9e4c-d124a606d85f\coverage.opencover.xml</Property>
+    <Property Name="sonar.cs.opencover.reportsPaths">D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformUnitTests\TestResults\a232101a-62d3-4c39-8a3a-7deb74c783de\coverage.opencover.xml,D:\Documents\Dotnet\Project\ECommercePlatform\ECommercePlatformIntegrationTests\TestResults\1a37616a-8baf-4aab-91a4-f52fb0b30dcb\coverage.opencover.xml</Property>
     <Property Name="sonar.scanner.scanAll">false</Property>
   </LocalSettings>
   <AnalyzersSettings>

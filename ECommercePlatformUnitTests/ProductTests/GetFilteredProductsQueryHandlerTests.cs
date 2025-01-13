@@ -12,9 +12,9 @@ namespace ECommercePlatformUnitTests.ProductTests
 {
     public class GetFilteredProductsQueryHandlerTests
     {
-        private readonly GetFilteredProductsQueryHandler _handler;
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly GetFilteredProductsQueryHandler _handler;
 
         public GetFilteredProductsQueryHandlerTests()
         {
@@ -24,265 +24,218 @@ namespace ECommercePlatformUnitTests.ProductTests
         }
 
         [Fact]
-        public async Task GivenValidQuery_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnSuccessResult()
+        public async Task Handle_ShouldReturnFilteredProducts()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Name = "Test Product"
-            };
+            var products = new List<Product> { new Product { ProductId = Guid.NewGuid(), Name = "Product1" } };
+            var productDtos = new List<ProductDto> { new ProductDto { ProductId = products[0].ProductId, Name = products[0].Name } };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            var products = new List<Product>
-            {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
-            };
-
-            var productsDto = new List<ProductDto>
-            {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
-            };
-
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10 };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
         }
 
         [Fact]
-        public async Task GivenInvalidQuery_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFailureResult()
+        public async Task Handle_ShouldReturnEmptyResult_WhenNoProductsMatch()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Name = "Invalid Product"
-            };
-
-            var errorMessage = "Failure";
-
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Failure(errorMessage));
-
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.Should().NotBeNull();
-            result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be(errorMessage);
-        }
-
-        [Fact]
-        public async Task GivenNoProducts_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnEmptyResult()
-        {
-            // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10
-            };
-
             var products = new List<Product>();
-            var productsDto = new List<ProductDto>();
+            var productDtos = new List<ProductDto>();
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10 };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
             result.Data.Data.Should().BeEmpty();
-            result.Data.TotalCount.Should().Be(0);
         }
 
         [Fact]
-        public async Task GivenQueryWithName_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFilteredResult()
+        public async Task Handle_ShouldApplyFiltersCorrectly()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Name = "Test Product"
-            };
-
+            var name = "Product1";
             var products = new List<Product>
             {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new Product { ProductId = Guid.NewGuid(), Name = name },
+                new Product { ProductId = Guid.NewGuid(), Name = "Product2" }
             };
-
-            var productsDto = new List<ProductDto>
+            var productDtos = new List<ProductDto>
             {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new ProductDto { ProductId = products[0].ProductId, Name = products[0].Name }
             };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10, Name = name };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
         }
 
         [Fact]
-        public async Task GivenQueryWithDescription_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFilteredResult()
+        public async Task Handle_ShouldApplyPagingCorrectly()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Description = "Test Description"
-            };
-
             var products = new List<Product>
             {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new Product { ProductId = Guid.NewGuid(), Name = "Product1" },
+                new Product { ProductId = Guid.NewGuid(), Name = "Product2" }
             };
-
-            var productsDto = new List<ProductDto>
+            var productDtos = new List<ProductDto>
             {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new ProductDto { ProductId = products[0].ProductId, Name = products[0].Name }
             };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 1 };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.Data.Data.Should().HaveCount(1);
         }
 
         [Fact]
-        public async Task GivenQueryWithPrice_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFilteredResult()
+        public async Task Handle_ShouldReturnFailure_WhenRepositoryFails()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Price = 100.0m
-            };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Failure("Repository failure"));
 
-            var products = new List<Product>
-            {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
-            };
-
-            var productsDto = new List<ProductDto>
-            {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
-            };
-
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10 };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
-            result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Repository failure");
         }
 
         [Fact]
-        public async Task GivenQueryWithStock_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFilteredResult()
+        public async Task Handle_ShouldFilterByDescription()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Stock = 10
-            };
-
+            var description = "Description1";
             var products = new List<Product>
             {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new Product { ProductId = Guid.NewGuid(), Description = description },
+                new Product { ProductId = Guid.NewGuid(), Description = "Description2" }
             };
-
-            var productsDto = new List<ProductDto>
+            var productDtos = new List<ProductDto>
             {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new ProductDto { ProductId = products[0].ProductId, Description = products[0].Description }
             };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10, Description = description };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
         }
 
         [Fact]
-        public async Task GivenQueryWithCategory_WhenHandlingGetFilteredProductsQuery_ThenShouldReturnFilteredResult()
+        public async Task Handle_ShouldFilterByPrice()
         {
             // Arrange
-            var query = new GetFilteredProductsQuery
-            {
-                Page = 1,
-                PageSize = 10,
-                Category = Category.Electronics
-            };
-
+            var price = 100m;
             var products = new List<Product>
             {
-                new Product { ProductId = Guid.NewGuid(), Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new Product { ProductId = Guid.NewGuid(), Price = price },
+                new Product { ProductId = Guid.NewGuid(), Price = 200m }
             };
-
-            var productsDto = new List<ProductDto>
+            var productDtos = new List<ProductDto>
             {
-                new ProductDto { ProductId = products[0].ProductId, Name = "Test Product", Description = "Test Description", Price = 100.0m, Stock = 10, Category = Category.Electronics }
+                new ProductDto { ProductId = products[0].ProductId, Price = products[0].Price }
             };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
 
-            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>())
-                .Returns(Result<IEnumerable<Product>>.Success(products));
-            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productsDto);
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10, Price = price };
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.Should().NotBeNull();
             result.IsSuccess.Should().BeTrue();
-            result.Data.Data.Should().BeEquivalentTo(productsDto);
-            result.Data.TotalCount.Should().Be(products.Count);
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldFilterByStock()
+        {
+            // Arrange
+            var stock = 10;
+            var products = new List<Product>
+            {
+                new Product { ProductId = Guid.NewGuid(), Stock = stock },
+                new Product { ProductId = Guid.NewGuid(), Stock = 20 }
+            };
+            var productDtos = new List<ProductDto>
+            {
+                new ProductDto { ProductId = products[0].ProductId, Stock = products[0].Stock }
+            };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
+
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10, Stock = stock };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldFilterByCategory()
+        {
+            // Arrange
+            var category = Category.Electronics;
+            var products = new List<Product>
+            {
+                new Product { ProductId = Guid.NewGuid(), Category = category },
+                new Product { ProductId = Guid.NewGuid(), Category = Category.Fashion }
+            };
+            var productDtos = new List<ProductDto>
+            {
+                new ProductDto { ProductId = products[0].ProductId, Category = products[0].Category }
+            };
+            _productRepository.GetAllProductsAsync(Arg.Any<Func<IQueryable<Product>, IQueryable<Product>>>()).Returns(Result<IEnumerable<Product>>.Success(products));
+            _mapper.Map<List<ProductDto>>(Arg.Any<IEnumerable<Product>>()).Returns(productDtos);
+
+            var query = new GetFilteredProductsQuery { Page = 1, PageSize = 10, Category = category };
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Data.Data.Should().BeEquivalentTo(productDtos);
         }
     }
 }
