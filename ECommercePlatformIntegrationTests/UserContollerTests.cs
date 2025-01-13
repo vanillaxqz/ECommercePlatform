@@ -52,7 +52,7 @@ namespace ECommercePlatformIntegrationTests
             dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             dbContext.Database.EnsureCreated();
             client = this.factory.CreateClient();
-            var tokenHandler = new JwtTokenGenerator("3fdd5f93-4ddb-465e-a2e8-3e326175030f");
+            var tokenHandler = new JwtTokenGenerator("averylongsecretkeythatisrequiredtobeused");
             var token = tokenHandler.GenerateAccessToken(new Guid("3fdd5f93-4ddb-465e-a2e8-3e326175030f"), "testemail@gmail.com");
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
