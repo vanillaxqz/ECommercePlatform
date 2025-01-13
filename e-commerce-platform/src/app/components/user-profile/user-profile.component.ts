@@ -126,7 +126,6 @@ export class UserProfileComponent implements OnInit {
       const updateData = {
         name: this.editedData.name || '',
         email: this.editedData.email || '',
-        password: this.editedData.password || '',
         address: this.editedData.address || '',
         phoneNumber: this.editedData.phoneNumber || ''
       };
@@ -145,10 +144,18 @@ export class UserProfileComponent implements OnInit {
   }
 
   deleteAccount(): void {
-    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      // Add actual delete account logic here
-      this.userService.logout();
-      this.router.navigate(['/login']);
+    if(confirm('Are you sure you want to delete your account?')) {
+      if (this.userData) {
+        this.userService.deleteUser(this.userData.userId).subscribe({
+          next: () => {
+            this.userService.logout();
+            this.router.navigate(['/products']);
+          },
+          error: (error) => {
+            this.error = 'Failed to delete account: ' + error.message;
+          }
+        });
+      }
     }
   }
 }

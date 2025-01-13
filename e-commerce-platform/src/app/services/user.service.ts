@@ -239,28 +239,68 @@ export class UserService {
     );
   }
 
-  editUser(userData: Omit<User, 'userId'>): Observable<User> {
+  editUser(userData: Omit<User, 'userId' | 'password'>): Observable<User> {
     if (!this.currentUser?.userId) {
       return throwError(() => new Error('No user ID available'));
     }
-    const requestBody: User = {
+  
+    const requestBody: Omit<User, 'password'> = {
       ...userData,
       userId: this.currentUser.userId,
     };
   
-    return this.http.put<UserResponse>(`${this.apiUrl}/Users`, requestBody).pipe(
-      map(response => {
-        if (!response.isSuccess) {
-          throw new Error(response.errorMessage || 'Failed to update user data');
-        }
-        const updatedUser: User = {
-          ...response.data,
-          password: "",
-        };
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`
+    });
   
-        this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
-        this.currentUserSubject.next(updatedUser);
-        return updatedUser;
+    return this.http.put<UserResponse>(`${this.apiUrl}/Users`, requestBody, { headers, observe: 'response' }).pipe(
+      map(response => {
+        if (response.status === 204) {
+          const updatedUser: User = {
+            ...requestBody,
+            password: "", // Ensure password is not stored in the frontend
+          };
+  
+          this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
+          this.currentUserSubject.next(updatedUser);
+          return updatedUser;
+        }
+        if (response.body && response.body.isSuccess) {
+          const updatedUser: User = {
+            ...response.body.data,
+            password: "", // Ensure password is not stored in the frontend
+          };
+  
+          this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
+          this.currentUserSubject.next(updatedUser);
+          return updatedUser;
+        }
+        throw new Error(response.body?.errorMessage || 'Failed to update user data');
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  deleteUser(userId: string): Observable<void> {
+    console.log('Deleting user:', userId);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`
+    });
+  
+    return this.http.delete<UserResponse>(`${this.apiUrl}/Users/${userId}`, { headers, observe: 'response' }).pipe(
+      map(response => {
+        // Handle 204 No Content response
+        if (response.status === 204) {
+          this.logout();
+          return;
+        }
+  
+        // Handle other success responses (if any)
+        if (response.body && response.body.isSuccess) {
+          this.logout();
+          return;
+        }
+        throw new Error(response.body?.errorMessage || 'Failed to delete user');
       }),
       catchError(this.handleError)
     );
