@@ -112,6 +112,16 @@ button {
   transform: translateY(-1px);
 }
 
+.add-to-cart-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-1px);
+}
+
 .price-container {
   display: flex;
   align-items: center;
@@ -136,6 +146,58 @@ button:active {
   border-top-color: #3182ce;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+/* Notifications Container */
+.notifications-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+}
+
+.cart-notification {
+  position: relative;
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  width: 320px;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+}
+
+.cart-notification svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.cart-notification span {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes spin {

@@ -76,9 +76,11 @@
           <button class="btn primary" (click)="navigateToDetail(product.productId)">
             View Details
           </button>
-          <button class="btn secondary" (click)="addToCart(product)">
-            Add to Cart
-          </button>
+          <ng-container *ngIf="product && userService.getCurrentUserId() != product.userId">
+            <button class="btn secondary" (click)="addToCart(product)">
+              Add to Cart
+            </button>
+          </ng-container>
         </div>
       </div>
     </div>
