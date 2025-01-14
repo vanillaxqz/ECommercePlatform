@@ -53,6 +53,7 @@ export class ProductDetailComponent implements OnInit {
       next: (response: ApiResponse<Product>) => {
         if (response.isSuccess && response.data) {
           this.product = response.data;
+          // console.log('IDs match?', this.userService.getCurrentUserId() === this.product.userId);
         } else {
           this.error = response.errorMessage || 'Failed to load product';
         }

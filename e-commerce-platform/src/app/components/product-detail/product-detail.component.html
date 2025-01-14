@@ -4,13 +4,8 @@
 
   <div *ngIf="product" class="product-info">
     <div class="product-image-container">
-      <img
-        ngSrc="https://picsum.photos/seed/{{ product.productId }}/400/300"
-        width="400"
-        height="300"
-        [alt]="product.name"
-        class="product-image"
-      />
+      <img ngSrc="https://picsum.photos/seed/{{ product.productId }}/400/300" width="400" height="300"
+        [alt]="product.name" class="product-image" />
     </div>
     <div class="info-group">
       <span class="info-label">Name</span>
@@ -42,7 +37,7 @@
 
   <div class="actions">
     <!-- Only show edit/delete for authenticated users -->
-    <ng-container *ngIf="!userService.isGuest">
+    <ng-container *ngIf="product && !userService.isGuest && userService.getCurrentUserId() === product.userId">
       <button class="edit-btn" (click)="navigateToUpdate()">
         Edit Product
       </button>

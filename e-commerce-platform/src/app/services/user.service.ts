@@ -72,10 +72,10 @@ export class UserService {
       address: '',
       phoneNumber: ''
     };
-    
+
     // Set the partial user immediately
     this.currentUserSubject.next(partialUser);
-    
+
     // Fetch complete user data
     this.getUserById(userId).subscribe({
       next: (fullUser) => {
@@ -88,6 +88,10 @@ export class UserService {
         // Don't logout here, keep the partial user data
       }
     });
+  }
+
+  public getCurrentUserId(): string | undefined {
+    return this.currentUserSubject?.value?.userId;
   }
 
   private refreshUserData(userId: string): void {
@@ -153,7 +157,7 @@ export class UserService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${resetToken}`);
 
     return this.http.post<AuthResponse>(
-      `${this.apiUrl}/Auth/reset-password`, 
+      `${this.apiUrl}/Auth/reset-password`,
       { newPassword },
       { headers }
     ).pipe(
@@ -243,16 +247,16 @@ export class UserService {
     if (!this.currentUser?.userId) {
       return throwError(() => new Error('No user ID available'));
     }
-  
+
     const requestBody: Omit<User, 'password'> = {
       ...userData,
       userId: this.currentUser.userId,
     };
-  
+
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`
     });
-  
+
     return this.http.put<UserResponse>(`${this.apiUrl}/Users`, requestBody, { headers, observe: 'response' }).pipe(
       map(response => {
         if (response.status === 204) {
@@ -260,7 +264,7 @@ export class UserService {
             ...requestBody,
             password: "", // Ensure password is not stored in the frontend
           };
-  
+
           this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
           this.currentUserSubject.next(updatedUser);
           return updatedUser;
@@ -270,7 +274,7 @@ export class UserService {
             ...response.body.data,
             password: "", // Ensure password is not stored in the frontend
           };
-  
+
           this.storageService.setItem('currentUser', JSON.stringify(updatedUser));
           this.currentUserSubject.next(updatedUser);
           return updatedUser;
@@ -286,7 +290,7 @@ export class UserService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.token}`
     });
-  
+
     return this.http.delete<UserResponse>(`${this.apiUrl}/Users/${userId}`, { headers, observe: 'response' }).pipe(
       map(response => {
         // Handle 204 No Content response
@@ -294,7 +298,7 @@ export class UserService {
           this.logout();
           return;
         }
-  
+
         // Handle other success responses (if any)
         if (response.body && response.body.isSuccess) {
           this.logout();
